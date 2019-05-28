@@ -71,7 +71,7 @@ public class PlanetFunctionalTests extends TestCase {
         // all planets
         List planets = mgr.getWebloggers();
         assertNotNull(planets);
-        assertEquals(1, planets.size());
+        assertEquals(2, planets.size());
     }
     
 }

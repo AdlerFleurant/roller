@@ -54,8 +54,8 @@ public class SQLScriptRunnerTest extends TestCase {
             dbname = "mysql";
         }
         
-        String scriptPath = System.getProperty("project.build.directory")
-                + "/test-classes/WEB-INF/dbscripts/dummydb/createdb-"+dbname+".sql";
+        String scriptPath = System.getProperty("buildDir")
+                + "/resources/test/WEB-INF/dbscripts/dummydb/createdb-"+dbname+".sql";
         SQLScriptRunner runner = new SQLScriptRunner(scriptPath);
         assertTrue(runner != null);
         assertTrue(runner.getCommandCount() == 5);        
@@ -75,8 +75,8 @@ public class SQLScriptRunnerTest extends TestCase {
         
         // run script to create tables
         SQLScriptRunner create = 
-            new SQLScriptRunner(System.getProperty("project.build.directory")
-                    + "/test-classes/WEB-INF/dbscripts/dummydb/createdb-"+dbname+".sql");
+            new SQLScriptRunner(System.getProperty("buildDir")
+                    + "/resources/test/WEB-INF/dbscripts/dummydb/createdb-"+dbname+".sql");
         create.runScript(con, true);
         
         // check to ensure tables were created
@@ -85,7 +85,7 @@ public class SQLScriptRunnerTest extends TestCase {
         
         // drop tables
         SQLScriptRunner drop = 
-            new SQLScriptRunner(System.getProperty("project.build.directory") + "/test-classes/WEB-INF/dbscripts/dummydb/droptables.sql");
+            new SQLScriptRunner(System.getProperty("buildDir") + "/resources/test/WEB-INF/dbscripts/dummydb/droptables.sql");
         drop.runScript(con, false);
 
         // check to ensure tables were dropped
