@@ -34,6 +34,7 @@ public class GroupBasicTests extends TestCase {
     protected void setUp() throws Exception {
         // setup planet
         TestUtils.setupWeblogger();
+        testPlanet = TestUtils.setupPlanet("test_handle");
     }
     
     
@@ -51,7 +52,7 @@ public class GroupBasicTests extends TestCase {
         testGroup.setHandle("test_handle");
         testGroup.setTitle("test_title");
         testGroup.setPlanet(testPlanet);
-        PlanetGroup group = null;
+        PlanetGroup group;
         
         group = mgr.getGroup(testPlanet, "test_handle");
         assertNull(group);

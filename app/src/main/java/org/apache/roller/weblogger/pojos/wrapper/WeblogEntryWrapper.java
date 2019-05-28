@@ -291,13 +291,23 @@ public final class WeblogEntryWrapper {
     public String getPermalink() {
         return this.pojo.getPermalink();
     }
-    
-    
+
+    /**
+     * @deprecated Use getPermalink() instead
+     * @return entry permalink, relative to Roller context.
+     */
+    @SuppressWarnings("removal")
+    @Deprecated(forRemoval = true, since = "6.0.0")
     public String getPermaLink() {
         return this.pojo.getPermaLink();
     }
-    
-    
+
+    /**
+     * @deprecated Use commentLink() instead
+     * @return the relative URL to comments page.
+     */
+    @SuppressWarnings("removal")
+    @Deprecated(forRemoval = true, since = "6.0.0")
     public String getCommentsLink() {
         return this.pojo.getCommentsLink();
     }
