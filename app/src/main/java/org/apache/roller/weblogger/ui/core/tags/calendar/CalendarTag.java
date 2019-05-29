@@ -338,7 +338,7 @@ public class CalendarTag extends TagSupport {
     
     
     public String toString() {
-        String ret = null;
+        String ret;
         try {
             StringWriter sw = new StringWriter();
             doStartTag( new PrintWriter( sw, true ));

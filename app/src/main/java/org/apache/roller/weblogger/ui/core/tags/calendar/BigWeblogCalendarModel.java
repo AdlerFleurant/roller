@@ -97,22 +97,22 @@ public class BigWeblogCalendarModel extends WeblogCalendarModel {
                 sb.append("\">");
                 sb.append(singleDayFormat.format(day));
                 sb.append("</a></div>");
-                
-                for ( int i=0; i<entries.size(); i++ ) {
+
+                for (Object entry : entries) {
                     sb.append("<div class=\"bCalendarDayContentBig\">");
                     sb.append("<a href=\"");
-                    sb.append(((WeblogEntry)entries.get(i)).getPermalink());
+                    sb.append(((WeblogEntry) entry).getPermalink());
                     sb.append("\">");
-                    
-                    String title = ((WeblogEntry)entries.get(i)).getTitle().trim();
-                    if ( title.length()==0 ) {
-                        title = ((WeblogEntry)entries.get(i)).getAnchor();
+
+                    String title = ((WeblogEntry) entry).getTitle().trim();
+                    if (title.length() == 0) {
+                        title = ((WeblogEntry) entry).getAnchor();
                     }
-                    if ( title.length() > 20 ) {
-                        title = title.substring(0,20)+"...";
+                    if (title.length() > 20) {
+                        title = title.substring(0, 20) + "...";
                     }
-                    
-                    sb.append( title );
+
+                    sb.append(title);
                     sb.append("</a></div>");
                 }
                 

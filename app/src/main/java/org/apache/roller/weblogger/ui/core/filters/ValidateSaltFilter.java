@@ -19,6 +19,7 @@
 package org.apache.roller.weblogger.ui.core.filters;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,7 +46,7 @@ public class ValidateSaltFilter implements Filter {
 
     private static Log log = LogFactory.getLog(ValidateSaltFilter.class);
 
-    private Set<String> ignored = new HashSet<String>();
+    private Set<String> ignored = new HashSet<>();
 
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
@@ -79,9 +80,7 @@ public class ValidateSaltFilter implements Filter {
         // Construct our list of ignored urls
         String urls = WebloggerConfig.getProperty("salt.ignored.urls");
         String[] urlsArray = StringUtils.stripAll(StringUtils.split(urls, ","));
-        for (int i = 0; i < urlsArray.length; i++) {
-            this.ignored.add(urlsArray[i]);
-        }
+        Collections.addAll(this.ignored, urlsArray);
     }
 
     public void destroy() {

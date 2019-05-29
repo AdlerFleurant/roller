@@ -88,14 +88,14 @@ public class MailUtil {
             
             String userName = entry.getCreator().getUserName();
             String from = entry.getCreator().getEmailAddress();
-            String cc[] = new String[] {from};
-            String bcc[] = new String[0];
-            String to[];
+            String[] cc = new String[]{from};
+            String[] bcc = new String[0];
+            String[] to;
             String subject;
             String content;
             
             // list of enabled website authors and admins
-            List<String> reviewers = new ArrayList<String>();
+            List<String> reviewers = new ArrayList<>();
             List<User> websiteUsers = wmgr.getWeblogUsers(entry.getWebsite(), true);
             
             // build list of reviewers (website users with author permission)
@@ -107,7 +107,7 @@ public class MailUtil {
                 }
             }
 
-            to = (String[])reviewers.toArray(new String[reviewers.size()]);
+            to = reviewers.toArray(new String[0]);
             
             // Figure URL to entry edit page
             String editURL = WebloggerFactory.getWeblogger().getUrlStrategy().getEntryEditURL(entry.getWebsite().getHandle(), entry.getId(), true);
@@ -118,16 +118,14 @@ public class MailUtil {
             sb.append(
                     MessageFormat.format(
                     resources.getString("weblogEntry.pendingEntrySubject"),
-                    new Object[] {
-                entry.getWebsite().getName(),
-                entry.getWebsite().getHandle()
-            }));
+                            entry.getWebsite().getName(),
+                            entry.getWebsite().getHandle()));
             subject = sb.toString();
             sb = new StringBuilder();
             sb.append(
                     MessageFormat.format(
                     resources.getString("weblogEntry.pendingEntryContent"),
-                    new Object[] { userName, userName, editURL })
+                            userName, userName, editURL)
                     );
             content = sb.toString();
             MailUtil.sendTextMessage(
@@ -154,9 +152,9 @@ public class MailUtil {
         
         try {
             String from = website.getEmailAddress();
-            String cc[] = new String[] {from};
-            String bcc[] = new String[0];
-            String to[] = new String[] {user.getEmailAddress()};
+            String[] cc = new String[]{from};
+            String[] bcc = new String[0];
+            String[] to = new String[]{user.getEmailAddress()};
             String subject;
             String content;
             
@@ -170,20 +168,17 @@ public class MailUtil {
             StringBuilder sb = new StringBuilder();
             sb.append(MessageFormat.format(
                     resources.getString("inviteMember.notificationSubject"),
-                    new Object[] {
-                website.getName(),
-                website.getHandle()})
+                    website.getName(),
+                    website.getHandle())
                 );
             subject = sb.toString();
             sb = new StringBuilder();
             sb.append(MessageFormat.format(
                     resources.getString("inviteMember.notificationContent"),
-                    new Object[] {
-                website.getName(),
-                website.getHandle(),
-                user.getUserName(),
-                url
-            }));
+                    website.getName(),
+                    website.getHandle(),
+                    user.getUserName(),
+                    url));
             content = sb.toString();
             MailUtil.sendTextMessage(
                     from, to, cc, bcc, subject, content);
@@ -214,10 +209,10 @@ public class MailUtil {
             
             String from = WebloggerRuntimeConfig.getProperty(
                     "user.account.activation.mail.from");
-            
-            String cc[] = new String[0];
-            String bcc[] = new String[0];
-            String to[] = new String[] { user.getEmailAddress() };
+
+            String[] cc = new String[0];
+            String[] bcc = new String[0];
+            String[] to = new String[]{user.getEmailAddress()};
             String subject = resources.getString(
                     "user.account.activation.mail.subject");
             String content;
@@ -232,8 +227,8 @@ public class MailUtil {
                     + user.getActivationCode();
             sb.append(MessageFormat.format(
                     resources.getString("user.account.activation.mail.content"),
-                    new Object[] { user.getFullName(), user.getUserName(),
-                    activationURL }));
+                    user.getFullName(), user.getUserName(),
+                    activationURL));
             content = sb.toString();
             
             sendHTMLMessage(from, to, cc, bcc, subject, content);
@@ -277,7 +272,7 @@ public class MailUtil {
         }
 
         // build list of email addresses to send notification to
-        Set<String> subscribers = new TreeSet<String>();
+        Set<String> subscribers = new TreeSet<>();
         
         // If we are to notify subscribers, then...
         if (commentObject.getApproved() && notifySubscribers) {
@@ -322,10 +317,9 @@ public class MailUtil {
         }
         
         if (!StringUtils.isEmpty(commentObject.getName())) {
-            msg.append(commentObject.getName() + " "
-                    + resources.getString("email.comment.wrote")+": ");
+            msg.append(commentObject.getName()).append(" ").append(resources.getString("email.comment.wrote")).append(": ");
         } else {
-            msg.append(resources.getString("email.comment.anonymous")+": ");
+            msg.append(resources.getString("email.comment.anonymous")).append(": ");
         }
         
         msg.append((isPlainText) ? "\n\n" : "<br /><br />");
@@ -336,7 +330,7 @@ public class MailUtil {
         
         msg.append((isPlainText) ? "\n\n----\n"
                 : "<br /><br /><hr /><span style=\"font-size: 11px\">");
-        msg.append(resources.getString("email.comment.respond") + ": ");
+        msg.append(resources.getString("email.comment.respond")).append(": ");
         msg.append((isPlainText) ? "\n" : "<br />");
         
         // Build link back to comment
@@ -346,7 +340,7 @@ public class MailUtil {
         if (isPlainText) {
             msg.append(commentURL);
         } else {
-            msg.append("<a href=\""+commentURL+"\">"+commentURL+"</a></span>");
+            msg.append("<a href=\"").append(commentURL).append("\">").append(commentURL).append("</a></span>");
         }
         
         // next the additional information that is sent to the blog owner
@@ -395,14 +389,14 @@ public class MailUtil {
 
             // commenter email address: allow blog owner to reply via email instead of blog comment
             if (!StringUtils.isBlank(commentObject.getEmail())) {
-                ownermsg.append(resources.getString("email.comment.commenter.email") + ": " + commentObject.getEmail());
+                ownermsg.append(resources.getString("email.comment.commenter.email")).append(": ").append(commentObject.getEmail());
                 ownermsg.append((isPlainText) ? "\n\n" : "<br/><br/>");
             }
             // add link to weblog edit page so user can login to manage comments
-            ownermsg.append(resources.getString("email.comment.management.link") + ": ");
+            ownermsg.append(resources.getString("email.comment.management.link")).append(": ");
             ownermsg.append((isPlainText) ? "\n" : "<br/>");
 
-            Map<String, String> parameters = new HashMap<String, String>();
+            Map<String, String> parameters = new HashMap<>();
             parameters.put("bean.entryId", entry.getId());
             String deleteURL = WebloggerFactory.getWeblogger().getUrlStrategy().getActionURL(
                     "comments", "/roller-ui/authoring", weblog.getHandle(), parameters, true);
@@ -410,8 +404,7 @@ public class MailUtil {
             if (isPlainText) {
                 ownermsg.append(deleteURL);
             } else {
-                ownermsg.append(
-                        "<a href=\"" + deleteURL + "\">" + deleteURL + "</a></span>");
+                ownermsg.append("<a href=\"").append(deleteURL).append("\">").append(deleteURL).append("</a></span>");
                 msg.append("</Body></html>");
                 ownermsg.append("</Body></html>");
             }
@@ -464,7 +457,7 @@ public class MailUtil {
             // now send to subscribers
             if (notifySubscribers && subscribers.size() > 0) {
                 // Form array of commenter addrs
-                String[] commenterAddrs = subscribers.toArray(new String[subscribers.size()]);
+                String[] commenterAddrs = subscribers.toArray(new String[0]);
 
                 if (isHtml) {
                     sendHTMLMessage(
@@ -626,7 +619,7 @@ public class MailUtil {
         
         // First collect all the addresses together.
         Address[] remainingAddresses = message.getAllRecipients();
-        int nAddresses = remainingAddresses.length;
+        int nAddresses;
         boolean bFailedToSome = false;
         
         SendFailedException sendex = new SendFailedException("Unable to send message to some recipients");

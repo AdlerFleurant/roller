@@ -24,7 +24,6 @@ import java.util.Map;
 import org.apache.roller.weblogger.pojos.GlobalPermission;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
 import org.apache.roller.weblogger.util.cache.CacheManager;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 
 
 /**

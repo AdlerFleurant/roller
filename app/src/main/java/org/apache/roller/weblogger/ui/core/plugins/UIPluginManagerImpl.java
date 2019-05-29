@@ -36,7 +36,7 @@ public final class UIPluginManagerImpl implements UIPluginManager {
     private static Log log = LogFactory.getLog(UIPluginManagerImpl.class);
     
     // singleton instance
-    private static UIPluginManagerImpl instance = null;
+    private static UIPluginManagerImpl instance;
     
     // list of configured WeblogEntryEditor classes
     Map editors = new LinkedHashMap();
@@ -70,7 +70,7 @@ public final class UIPluginManagerImpl implements UIPluginManager {
     
     public WeblogEntryEditor getWeblogEntryEditor(String id) {
         
-        WeblogEntryEditor editor = null;
+        WeblogEntryEditor editor;
         
         // see if this editor is configured
         editor = (id == null) ? null : (WeblogEntryEditor) this.editors.get(id);
@@ -93,22 +93,22 @@ public final class UIPluginManagerImpl implements UIPluginManager {
         if (editorStr != null) {
             
             String[] editorList = StringUtils.stripAll(StringUtils.split(editorStr, ","));
-            for (int i=0; i < editorList.length; i++) {
-                
-                log.debug("trying editor " + editorList[i]);
-                
+            for (String s : editorList) {
+
+                log.debug("trying editor " + s);
+
                 try {
-                    Class editorClass = Class.forName(editorList[i]);
+                    Class editorClass = Class.forName(s);
                     WeblogEntryEditor editor = (WeblogEntryEditor) editorClass.newInstance();
-                    
+
                     // looks okay, add it to the map
                     this.editors.put(editor.getId(), editor);
-                    
-                } catch(ClassCastException cce) {
-                    log.error("It appears that your editor does not implement "+
+
+                } catch (ClassCastException cce) {
+                    log.error("It appears that your editor does not implement " +
                             "the WeblogEntryEditor interface", cce);
-                } catch(Exception e) {
-                    log.error("Unable to instantiate editor ["+editorList[i]+"]", e);
+                } catch (Exception e) {
+                    log.error("Unable to instantiate editor [" + s + "]", e);
                 }
             }
         }

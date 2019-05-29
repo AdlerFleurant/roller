@@ -90,7 +90,7 @@ public class CalendarModel implements Model {
         }
         String ret = null;
         try {
-            org.apache.roller.weblogger.ui.core.tags.calendar.CalendarModel model = null;
+            org.apache.roller.weblogger.ui.core.tags.calendar.CalendarModel model;
             if (big) {
                 model = new BigWeblogCalendarModel(pageRequest, catArgument);
             } else {

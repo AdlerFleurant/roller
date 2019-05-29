@@ -50,7 +50,7 @@ public class JPAUserManagerImpl implements UserManager {
     private final JPAPersistenceStrategy strategy;
     
     // cached mapping of userNames -> userIds
-    private Map<String, String> userNameToIdMap = Collections.synchronizedMap(new HashMap<String, String>());
+    private Map<String, String> userNameToIdMap = Collections.synchronizedMap(new HashMap<>());
     
 
     @com.google.inject.Inject
@@ -284,7 +284,7 @@ public class JPAUserManagerImpl implements UserManager {
     
     public Map<String, Long> getUserNameLetterMap() throws WebloggerException {
         String lc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        Map<String, Long> results = new TreeMap<String, Long>();
+        Map<String, Long> results = new TreeMap<>();
         TypedQuery<Long> query = strategy.getNamedQuery(
                 "User.getCountByUserNameLike", Long.class);
         for (int i=0; i<26; i++) {
@@ -566,7 +566,7 @@ public class JPAUserManagerImpl implements UserManager {
         TypedQuery<UserRole> q = strategy.getNamedQuery("UserRole.getByUserName", UserRole.class);
         q.setParameter(1, user.getUserName());
         List<UserRole> roles = q.getResultList();
-        List<String> roleNames = new ArrayList<String>();
+        List<String> roleNames = new ArrayList<>();
         if (roles != null) {
             for (UserRole userRole : roles) {
                 roleNames.add(userRole.getRole());

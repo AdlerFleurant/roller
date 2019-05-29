@@ -36,7 +36,6 @@ import org.apache.roller.weblogger.ui.core.plugins.UIPluginManager;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
 import org.apache.roller.weblogger.util.Blacklist;
 import org.apache.roller.weblogger.util.cache.CacheManager;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
@@ -86,10 +85,7 @@ public class WeblogConfig extends UIAction {
             // set plugins list
             PluginManager ppmgr = WebloggerFactory.getWeblogger().getPluginManager();
             Map<String, WeblogEntryPlugin> pluginsMap = ppmgr.getWeblogEntryPlugins(getActionWeblog());
-            List<WeblogEntryPlugin> plugins = new ArrayList<WeblogEntryPlugin>();
-            for (WeblogEntryPlugin entryPlugin : pluginsMap.values()) {
-                plugins.add(entryPlugin);
-            }
+            List<WeblogEntryPlugin> plugins = new ArrayList<>(pluginsMap.values());
 
             // sort
             setPluginsList(plugins);
@@ -191,7 +187,7 @@ public class WeblogConfig extends UIAction {
             // just for testing/counting, this does not persist rules in any way
             Blacklist.populateSpamRules(getBean().getBlacklist(), stringRules, regexRules, null);
             addMessage("websiteSettings.acceptedBlacklist",
-                    Arrays.asList(new String[] {""+stringRules.size(), ""+regexRules.size()}));
+                    Arrays.asList(""+stringRules.size(), ""+regexRules.size()));
         } catch (Exception e) {
             addError("websiteSettings.error.processingBlacklist", e.getMessage());
         }

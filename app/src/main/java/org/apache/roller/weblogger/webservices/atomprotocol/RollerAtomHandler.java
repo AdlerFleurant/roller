@@ -18,6 +18,8 @@
 package org.apache.roller.weblogger.webservices.atomprotocol;
 import com.rometools.propono.atom.common.Categories;
 import com.rometools.propono.atom.server.AtomRequest;
+
+import java.nio.charset.StandardCharsets;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.binary.Base64;
@@ -91,10 +93,10 @@ import org.apache.roller.weblogger.pojos.WeblogPermission;
  * @author David M Johnson
  */
 public class RollerAtomHandler implements AtomHandler {
-    protected Weblogger roller = null;
+    protected Weblogger roller;
     protected User user = null;
     protected int maxEntries = 20;
-    protected String atomURL = null;
+    protected String atomURL;
     
     protected static final boolean THROTTLE;
     
@@ -312,10 +314,7 @@ public class RollerAtomHandler implements AtomHandler {
         if (pathInfo.length > 2 && pathInfo[1].equals("entry")) {
             return true;
         }
-        if (pathInfo.length > 2 && pathInfo[1].equals("resource") && pathInfo[pathInfo.length-1].endsWith(".media-link")) {
-            return true;
-        }
-        return false;
+        return pathInfo.length > 2 && pathInfo[1].equals("resource") && pathInfo[pathInfo.length - 1].endsWith(".media-link");
     }
         
     /**
@@ -323,10 +322,7 @@ public class RollerAtomHandler implements AtomHandler {
      */
     public boolean isMediaEditURI(AtomRequest areq) {
         String[] pathInfo = StringUtils.split(areq.getPathInfo(),"/");
-        if (pathInfo.length > 1 && pathInfo[1].equals("resource")) {
-            return true;
-        }
-        return false;
+        return pathInfo.length > 1 && pathInfo[1].equals("resource");
     }
         
     /**
@@ -340,10 +336,7 @@ public class RollerAtomHandler implements AtomHandler {
         if (pathInfo.length > 1 && pathInfo[1].equals("resources")) {
             return true;
         }
-        if (pathInfo.length > 1 && pathInfo[1].equals("categories")) {
-            return true;
-        }
-        return false;
+        return pathInfo.length > 1 && pathInfo[1].equals("categories");
     }
     
     public boolean isCategoriesURI(AtomRequest arg0) {
@@ -409,11 +402,11 @@ public class RollerAtomHandler implements AtomHandler {
         String nonce = null;
         String passwordDigest = null;
         String[] tokens = wsseHeader.split(",");
-        for (int i = 0; i < tokens.length; i++) {
-            int index = tokens[i].indexOf('=');
+        for (String token : tokens) {
+            int index = token.indexOf('=');
             if (index != -1) {
-                String key = tokens[i].substring(0, index).trim();
-                String value = tokens[i].substring(index + 1).trim();
+                String key = token.substring(0, index).trim();
+                String value = token.substring(index + 1).trim();
                 value = value.replaceAll("\"", "");
                 if (key.startsWith("UsernameToken")) {
                     userName = value;
@@ -426,13 +419,13 @@ public class RollerAtomHandler implements AtomHandler {
                 }
             }
         }
-        String digest = null;
+        String digest;
         try {
             User inUser = roller.getUserManager().getUserByUserName(userName);
             digest = WSSEUtilities.generateDigest(
                     WSSEUtilities.base64Decode(nonce),
-                    created.getBytes("UTF-8"),
-                    inUser.getPassword().getBytes("UTF-8"));
+                    created.getBytes(StandardCharsets.UTF_8),
+                    inUser.getPassword().getBytes(StandardCharsets.UTF_8));
             if (digest.equals(passwordDigest)) {
                 ret = userName;
             }
@@ -448,7 +441,7 @@ public class RollerAtomHandler implements AtomHandler {
     public String authenticateBASIC(HttpServletRequest request) {
         boolean valid = false;
         String userID = null;
-        String password = null;
+        String password;
         try {
             String authHeader = request.getHeader("Authorization");
             if (authHeader != null) {

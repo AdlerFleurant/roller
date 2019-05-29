@@ -22,9 +22,9 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.roller.weblogger.WebloggerException;
 import org.apache.roller.weblogger.config.WebloggerRuntimeConfig;
 import org.apache.roller.weblogger.pojos.WeblogEntry;
@@ -41,12 +41,7 @@ public class SmileysPlugin implements WeblogEntryPlugin {
     public static Pattern[] smileyPatterns = new Pattern[0];
     static String[] imageTags = new String[0];
     private static Properties smileyDefs = new Properties();
-    
-    private String name = "Emoticons";
-    private String description = "Change ASCII emoticons to graphics.  " +
-            ":-) becomes <img src='./images/smileys/smile.gif'>";
-    
-    
+
     static {
         try {
             smileyDefs.load(SmileysPlugin.class.getResourceAsStream("smileys.properties"));
@@ -62,12 +57,13 @@ public class SmileysPlugin implements WeblogEntryPlugin {
     
     
     public String getName() {
-        return name;
+        return "Emoticons";
     }
     
     
     public String getDescription() {
-        return StringEscapeUtils.escapeEcmaScript(description);
+        return StringEscapeUtils.escapeEcmaScript("Change ASCII emoticons to graphics.  " +
+                ":-) becomes <img src='./images/smileys/smile.gif'>");
     }
     
     
@@ -109,7 +105,7 @@ public class SmileysPlugin implements WeblogEntryPlugin {
      * Find occurences of ascii emoticons and turn them into HTML image pointers.
      */
     public String render(WeblogEntry entry, String text) {
-        Matcher matcher = null;
+        Matcher matcher;
         for (int i=0; i<smileyPatterns.length; i++) {
             matcher = smileyPatterns[i].matcher(text);
             text = matcher.replaceAll(imageTags[i]);
@@ -125,15 +121,15 @@ public class SmileysPlugin implements WeblogEntryPlugin {
     private String htmlEscape(String smiley) {
         char[] chars = smiley.toCharArray();
         StringBuilder buf = new StringBuilder();
-        for (int i=0; i<chars.length; i++) {
-            if (chars[i] == '"') {
+        for (char aChar : chars) {
+            if (aChar == '"') {
                 buf.append("&quot;");
-            } else if (chars[i] == '>') {
+            } else if (aChar == '>') {
                 buf.append("&gt;");
-            } else if (chars[i] == '<') {
+            } else if (aChar == '<') {
                 buf.append("&lt;");
             } else {
-                buf.append(chars[i]);
+                buf.append(aChar);
             }
         }
         return buf.toString();
@@ -153,14 +149,14 @@ public class SmileysPlugin implements WeblogEntryPlugin {
     private String regexEscape(String smiley) {
         char[] chars = smiley.toCharArray();
         StringBuilder buf = new StringBuilder();
-        for (int i=0; i<chars.length; i++) {
-            for (int x=0; x<escape_regex.length; x++) {
-                if (escape_regex[x] == chars[i]) {
+        for (char aChar : chars) {
+            for (char escapeRegex : escape_regex) {
+                if (escapeRegex == aChar) {
                     buf.append("\\");
                     break;
                 }
             }
-            buf.append(chars[i]);
+            buf.append(aChar);
         }
         return buf.toString();
     }

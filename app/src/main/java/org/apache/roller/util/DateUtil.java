@@ -338,11 +338,8 @@ public abstract class DateUtil {
         }
         
         // true if endDate after startDate
-        if (endDate.after(startDate)) {
-            return true;
-        }
-        
-        return false;
+        return endDate.after(startDate);
+
     }
     
     
@@ -510,11 +507,9 @@ public abstract class DateUtil {
         // to make it a valid ISO-8601 date.
         
         String str = format(date, getIso8601DateFormat());
-        StringBuilder sb = new StringBuilder();
-        sb.append( str.substring(0,str.length()-2) );
-        sb.append( ":" );
-        sb.append( str.substring(str.length()-2) );
-        return sb.toString();
+        return str.substring(0, str.length() - 2) +
+                ":" +
+                str.substring(str.length() - 2);
     }
     
     
@@ -539,7 +534,7 @@ public abstract class DateUtil {
             ret = char8DateFormat.parse(dateString, pos);
             
             // make sure the requested date is not in the future
-            Date today = null;
+            Date today;
             Calendar todayCal = Calendar.getInstance();
             todayCal = Calendar.getInstance(tz, locale);
             todayCal.setTime(new Date());

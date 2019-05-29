@@ -58,7 +58,7 @@ public class WeblogCalendarModel implements CalendarModel {
     protected Weblog            weblog = null;
     protected Date              prevMonth = null;
     protected Date              nextMonth = null;
-    protected WeblogPageRequest pageRequest = null;
+    protected WeblogPageRequest pageRequest;
     
     
     public WeblogCalendarModel(WeblogPageRequest pRequest, String catArgument) {

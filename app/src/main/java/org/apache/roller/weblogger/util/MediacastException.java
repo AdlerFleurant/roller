@@ -26,8 +26,8 @@ import org.apache.roller.weblogger.WebloggerException;
  */
 public class MediacastException extends WebloggerException {
     
-    private int errorCode = 0;
-    private String errorKey = null;
+    private int errorCode;
+    private String errorKey;
     
     
     public MediacastException(int code, String msgKey) {

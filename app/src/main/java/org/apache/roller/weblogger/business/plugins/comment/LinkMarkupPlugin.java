@@ -85,7 +85,7 @@ public class LinkMarkupPlugin implements WeblogEntryCommentPlugin {
             while (start < end) {
                 if (matcher.find()) {
                     // Copy up to the match
-                    result.append(text.substring(start, (matcher.start())));
+                    result.append(text, start, (matcher.start()));
 
                     // Copy the URL and create the hyperlink
                     // Unescape HTML as we don't know if that setting is on
@@ -105,7 +105,7 @@ public class LinkMarkupPlugin implements WeblogEntryCommentPlugin {
                 }
                 else {
                     // Copy the remainder
-                    result.append(text.substring(start, end));
+                    result.append(text, start, end);
 
                     // Increment the starting index to exit the loop
                     start = end;

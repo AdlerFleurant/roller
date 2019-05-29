@@ -39,12 +39,10 @@ public class WeblogHitCount implements Serializable {
     //------------------------------------------------------- Good citizenship
 
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("{");
-        buf.append(getId());
-        buf.append(", ").append(getDailyHits());
-        buf.append("}");
-        return buf.toString();
+        return "{" +
+                getId() +
+                ", " + getDailyHits() +
+                "}";
     }
     
     public boolean equals(Object other) {

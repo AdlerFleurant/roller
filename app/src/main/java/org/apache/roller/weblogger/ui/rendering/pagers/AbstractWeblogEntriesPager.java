@@ -42,21 +42,21 @@ import org.apache.roller.weblogger.util.I18nMessages;
 public abstract class AbstractWeblogEntriesPager implements WeblogEntriesPager {
     
     // message utils for doing i18n messages
-    I18nMessages messageUtils = null;
+    I18nMessages messageUtils;
     
     // url strategy for building urls
-    URLStrategy urlStrategy = null;
+    URLStrategy urlStrategy;
     
-    Weblog weblog = null;
-    String locale = null;
-    String pageLink = null;
-    String entryAnchor = null;
-    String dateString = null;
-    String catName = null;
+    Weblog weblog;
+    String locale;
+    String pageLink;
+    String entryAnchor;
+    String dateString;
+    String catName;
     List tags = new ArrayList();
-    int offset = 0;
+    int offset;
     int page = 0;
-    int length = 0;
+    int length;
     
     
     public AbstractWeblogEntriesPager(
@@ -221,8 +221,7 @@ public abstract class AbstractWeblogEntriesPager implements WeblogEntriesPager {
      * Return today based on current blog's timezone/locale.
      */
     protected Date getToday() {
-        Calendar todayCal = Calendar.getInstance();
-        todayCal = Calendar.getInstance(
+        Calendar todayCal = Calendar.getInstance(
                 weblog.getTimeZoneInstance(), weblog.getLocaleInstance());
         todayCal.setTime(new Date());
         return todayCal.getTime();

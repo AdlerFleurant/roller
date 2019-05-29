@@ -77,7 +77,7 @@ public class WeblogPreviewRequest extends WeblogPageRequest {
     
     
     boolean isValidDestination(String servlet) {
-        return (servlet != null && PREVIEW_SERVLET.equals(servlet));
+        return (PREVIEW_SERVLET.equals(servlet));
     }
     
     

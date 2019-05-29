@@ -85,13 +85,9 @@ public class MultiWeblogURLStrategy extends AbstractURLStrategy {
         if(weblog == null || entryAnchor == null) {
             return null;
         }
-        
-        StringBuilder url = new StringBuilder();
-        
-        url.append(getWeblogURL(weblog, locale, absolute));
-        url.append("entry/").append(URLUtilities.encode(entryAnchor));
-        
-    return url.toString();
+
+        return getWeblogURL(weblog, locale, absolute) +
+                "entry/" + URLUtilities.encode(entryAnchor);
 }
     
     
@@ -106,14 +102,11 @@ public class MultiWeblogURLStrategy extends AbstractURLStrategy {
         if(fileAnchor == null) {
             return null;
         }
-        
-        StringBuilder url = new StringBuilder();
-        url.append(getWeblogURL(weblog, null, absolute));
-        url.append("mediaresource");
-        url.append("/");
-        url.append(URLUtilities.encode(fileAnchor));
-        
-        return url.toString();
+
+        return getWeblogURL(weblog, null, absolute) +
+                "mediaresource" +
+                "/" +
+                URLUtilities.encode(fileAnchor);
     }
 
 
@@ -268,12 +261,7 @@ public class MultiWeblogURLStrategy extends AbstractURLStrategy {
         if(weblog == null) {
             return null;
         }
-        
-        StringBuilder url = new StringBuilder();
-        
-        url.append(getWeblogURL(weblog, locale, absolute));
-        url.append("feed/").append(type).append("/").append(format);
-        
+
         Map params = new HashMap();
         if(category != null && category.trim().length() > 0) {
             params.put("cat", URLUtilities.encode(category));
@@ -287,8 +275,10 @@ public class MultiWeblogURLStrategy extends AbstractURLStrategy {
         if(excerpts) {
             params.put("excerpts", "true");
         }
-        
-        return url.toString() + URLUtilities.getQueryString(params);
+
+        String url = getWeblogURL(weblog, locale, absolute) +
+                "feed/" + type + "/" + format;
+        return url + URLUtilities.getQueryString(params);
     }
     
     
@@ -305,12 +295,7 @@ public class MultiWeblogURLStrategy extends AbstractURLStrategy {
         if(weblog == null) {
             return null;
         }
-        
-        StringBuilder url = new StringBuilder();
-        
-        url.append(getWeblogURL(weblog, locale, absolute));
-        url.append("search");
-        
+
         Map params = new HashMap();
         if(query != null) {
             params.put("q", URLUtilities.encode(query));
@@ -323,8 +308,10 @@ public class MultiWeblogURLStrategy extends AbstractURLStrategy {
                 params.put("page", Integer.toString(pageNum));
             }
         }
-        
-        return url.toString() + URLUtilities.getQueryString(params);
+
+        String url = getWeblogURL(weblog, locale, absolute) +
+                "search";
+        return url + URLUtilities.getQueryString(params);
     }
     
     
@@ -405,17 +392,14 @@ public class MultiWeblogURLStrategy extends AbstractURLStrategy {
         if(weblog == null) {
             return null;
         }
-        
-        StringBuilder url = new StringBuilder();
-        
-        url.append(getWeblogURL(weblog, null, true));
-        url.append("feed/entries/atom");
-        
+
         Map params = new HashMap();
         params.put("q", "{searchTerms}");
         params.put("page", "{startPage}");
-        
-        return url.toString() + URLUtilities.getQueryString(params);
+
+        String url = getWeblogURL(weblog, null, true) +
+                "feed/entries/atom";
+        return url + URLUtilities.getQueryString(params);
     }
 
     
@@ -423,17 +407,14 @@ public class MultiWeblogURLStrategy extends AbstractURLStrategy {
         if(weblog == null) {
             return null;
         }
-        
-        StringBuilder url = new StringBuilder();
-        
-        url.append(getWeblogURL(weblog, null, true));
-        url.append("search");
-        
+
         Map params = new HashMap();
         params.put("q", "{searchTerms}");
         params.put("page", "{startPage}");
-        
-        return url.toString() + URLUtilities.getQueryString(params);
+
+        String url = getWeblogURL(weblog, null, true) +
+                "search";
+        return url + URLUtilities.getQueryString(params);
     }
 
 

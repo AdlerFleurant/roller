@@ -32,11 +32,11 @@ public class PlanetRequest extends ParsedRequest {
     
     private static Log log = LogFactory.getLog(PlanetRequest.class);
     
-    private String context = null;
-    private String type = null;
+    private String context;
+    private String type;
     private String flavor = null;
     private boolean excerpts = false;
-    private String language = null;
+    private String language;
     private String group = null;
     
     

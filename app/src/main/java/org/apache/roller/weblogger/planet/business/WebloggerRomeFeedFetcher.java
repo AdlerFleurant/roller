@@ -135,7 +135,7 @@ public class WebloggerRomeFeedFetcher extends RomeFeedFetcher {
             Map pagePlugins = ppmgr.getWeblogEntryPlugins(localWeblog);
             for ( WeblogEntry rollerEntry : entries ) {
                 SubscriptionEntry entry = new SubscriptionEntry();
-                String content = "";
+                String content;
                 if (!StringUtils.isEmpty(rollerEntry.getText())) {
                     content = rollerEntry.getText();
                 } else {

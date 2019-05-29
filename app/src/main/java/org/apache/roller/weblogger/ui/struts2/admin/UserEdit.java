@@ -39,7 +39,6 @@ import org.apache.roller.weblogger.pojos.User;
 import org.apache.roller.weblogger.pojos.WeblogPermission;
 import org.apache.roller.weblogger.ui.struts2.core.Register;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
@@ -281,7 +280,7 @@ public class UserEdit extends UIAction {
         } catch (WebloggerException ex) {
             log.error("ERROR getting permissions for user " + user.getUserName(), ex);
         }
-        return new ArrayList<WeblogPermission>();
+        return new ArrayList<>();
     }
 
     public String getAuthMethod() {

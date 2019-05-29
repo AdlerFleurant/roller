@@ -59,7 +59,7 @@ public class EntriesBean {
             try {
                 DateFormat df = new SimpleDateFormat("MM/dd/yy");
                 return df.parse(getStartDateString());
-            } catch(Exception e) { }
+            } catch(Exception ignored) { }
         }
         return null;
     }
@@ -69,7 +69,7 @@ public class EntriesBean {
             try {
                 DateFormat df = new SimpleDateFormat("MM/dd/yy");
                 return df.parse(getEndDateString());
-            } catch(Exception e) { }
+            } catch(Exception ignored) { }
         }
         return null;
     }
@@ -142,17 +142,14 @@ public class EntriesBean {
     //------------------------------------------------------- Good citizenship
     
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        
-        buf.append("startDate = ").append(getStartDate()).append("\n");
-        buf.append("endDate = ").append(getEndDate()).append("\n");
-        buf.append("status = ").append(getStatus()).append("\n");
-        buf.append("sortBy = ").append(getSortBy()).append("\n");
-        buf.append("catName = ").append(getCategoryName()).append("\n");
-        buf.append("tags = ").append(getTagsAsString()).append("\n");
-        buf.append("text = ").append(getText()).append("\n");
-        buf.append("page = ").append(getPage()).append("\n");
-        
-        return buf.toString();
+
+        return "startDate = " + getStartDate() + "\n" +
+                "endDate = " + getEndDate() + "\n" +
+                "status = " + getStatus() + "\n" +
+                "sortBy = " + getSortBy() + "\n" +
+                "catName = " + getCategoryName() + "\n" +
+                "tags = " + getTagsAsString() + "\n" +
+                "text = " + getText() + "\n" +
+                "page = " + getPage() + "\n";
     }
 }

@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import org.apache.roller.weblogger.pojos.TemplateRendition.RenditionType;
 import org.apache.roller.weblogger.pojos.ThemeResource;
@@ -42,7 +43,7 @@ public class SharedThemeFromDir extends SharedTheme {
     private static Log log = LogFactory.getLog(SharedThemeFromDir.class);
 
     // the filesystem directory where we should read this theme from
-    private String themeDir = null;
+    private String themeDir;
 
     // the theme preview image
     private ThemeResource previewImage = null;
@@ -51,17 +52,17 @@ public class SharedThemeFromDir extends SharedTheme {
     private ThemeTemplate stylesheet = null;
 
     // we keep templates in a Map for faster lookups by name
-    private Map<String, ThemeTemplate> templatesByName = new HashMap<String, ThemeTemplate>();
+    private Map<String, ThemeTemplate> templatesByName = new HashMap<>();
 
     // we keep templates in a Map for faster lookups by link
-    private Map<String, ThemeTemplate> templatesByLink = new HashMap<String, ThemeTemplate>();
+    private Map<String, ThemeTemplate> templatesByLink = new HashMap<>();
 
     // we keep templates in a Map for faster lookups by action
-    private Map<ComponentType, ThemeTemplate> templatesByAction = new HashMap<ComponentType, ThemeTemplate>();
+    private Map<ComponentType, ThemeTemplate> templatesByAction = new HashMap<>();
 
     // we keep resources in a Map for faster lookups by path
     // the Map contains ... (resource path, ThemeResource)
-    private Map<String, ThemeResource> resources = new HashMap<String, ThemeResource>();
+    private Map<String, ThemeResource> resources = new HashMap<>();
 
     public SharedThemeFromDir(String themeDirPath)
             throws ThemeInitializationException {
@@ -83,7 +84,7 @@ public class SharedThemeFromDir extends SharedTheme {
      * Get the collection of all templates associated with this Theme.
      */
     public List<ThemeTemplate> getTemplates() {
-        return new ArrayList<ThemeTemplate>(this.templatesByName.values());
+        return new ArrayList<>(this.templatesByName.values());
     }
 
     /**
@@ -132,7 +133,7 @@ public class SharedThemeFromDir extends SharedTheme {
      */
     public List<ThemeResource> getResources() {
 
-        List<ThemeResource> myResources = new ArrayList<ThemeResource>(this.resources.values());
+        List<ThemeResource> myResources = new ArrayList<>(this.resources.values());
         // make sure resources are sorted.
         Collections.sort(myResources);
 
@@ -206,7 +207,7 @@ public class SharedThemeFromDir extends SharedTheme {
         }
 
         // available types with Roller
-        List<RenditionType> availableTypesList = new ArrayList<RenditionType>();
+        List<RenditionType> availableTypesList = new ArrayList<>();
         availableTypesList.add(RenditionType.STANDARD);
         if (themeMetadata.getDualTheme()) {
             availableTypesList.add(RenditionType.MOBILE);
@@ -399,7 +400,7 @@ public class SharedThemeFromDir extends SharedTheme {
         try {
             chars = new char[(int) templateFile.length()];
             FileInputStream stream = new FileInputStream(templateFile);
-            InputStreamReader reader = new InputStreamReader(stream, "UTF-8");
+            InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
             length = reader.read(chars);
         } catch (Exception noprob) {
             log.error("Exception reading theme [" + this.getName()

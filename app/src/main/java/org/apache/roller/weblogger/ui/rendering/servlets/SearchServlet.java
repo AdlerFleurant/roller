@@ -85,8 +85,8 @@ public class SearchServlet extends HttpServlet {
 
         log.debug("Entering");
 
-        Weblog weblog = null;
-        WeblogSearchRequest searchRequest = null;
+        Weblog weblog;
+        WeblogSearchRequest searchRequest;
 
         // first off lets parse the incoming request and validate it
         try {
@@ -227,7 +227,7 @@ public class SearchServlet extends HttpServlet {
         }
 
         // lookup Renderer we are going to use
-        Renderer renderer = null;
+        Renderer renderer;
         try {
             log.debug("Looking up renderer");
             renderer = RendererManager.getRenderer(page, deviceType);

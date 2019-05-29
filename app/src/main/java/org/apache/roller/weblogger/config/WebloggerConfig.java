@@ -34,11 +34,10 @@ import org.apache.roller.util.PropertyExpander;
  */
 public final class WebloggerConfig {
     
-    private static String default_config = "/org/apache/roller/weblogger/config/roller.properties";
-    private static String custom_config = "/roller-custom.properties";
-    private static String junit_config = "/roller-junit.properties";
-    private static String custom_jvm_param = "roller.custom.config";
-    private static File custom_config_file = null;
+    private static final String default_config = "/org/apache/roller/weblogger/config/roller.properties";
+    private static final String custom_config = "/roller-custom.properties";
+    private static final String junit_config = "/roller-junit.properties";
+    private static final String custom_jvm_param = "roller.custom.config";
 
     private static Properties config;
 
@@ -94,7 +93,7 @@ public final class WebloggerConfig {
             // finally, check for an external config file
             String env_file = System.getProperty(custom_jvm_param);
             if(env_file != null && env_file.length() > 0) {
-                custom_config_file = new File(env_file);
+                File custom_config_file = new File(env_file);
 
                 // make sure the file exists, then try and load it
                 if(custom_config_file != null && custom_config_file.exists()) {
@@ -114,12 +113,12 @@ public final class WebloggerConfig {
             String expandedPropertiesDef = (String) config.get("config.expandedProperties");
             if (expandedPropertiesDef != null) {
                 String[] expandedProperties = expandedPropertiesDef.split(",");
-                for (int i = 0; i < expandedProperties.length; i++) {
-                    String propName = expandedProperties[i].trim();
+                for (String expandedProperty : expandedProperties) {
+                    String propName = expandedProperty.trim();
                     String initialValue = (String) config.get(propName);
                     if (initialValue != null) {
                         String expandedValue = PropertyExpander.expandSystemProperties(initialValue);
-                        config.put(propName,expandedValue);
+                        config.put(propName, expandedValue);
                     }
                 }
             }
@@ -133,7 +132,7 @@ public final class WebloggerConfig {
             if(log.isDebugEnabled()) {
                 log.debug("WebloggerConfig looks like this ...");
 
-                String key = null;
+                String key;
                 Enumeration keys = config.keys();
                 while(keys.hasMoreElements()) {
                     key = (String) keys.nextElement();

@@ -57,7 +57,6 @@ import org.apache.roller.weblogger.util.RollerMessages;
 import org.apache.roller.weblogger.util.RollerMessages.RollerMessage;
 import org.apache.roller.weblogger.util.Trackback;
 import org.apache.roller.weblogger.util.TrackbackNotAllowedException;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 /**
@@ -446,10 +445,7 @@ public final class EntryEdit extends UIAction {
                     .getWeblogEntryPlugins(getActionWeblog());
 
             if (plugins.size() > 0) {
-                availablePlugins = new ArrayList<WeblogEntryPlugin>();
-                for (WeblogEntryPlugin plugin : plugins.values()) {
-                    availablePlugins.add(plugin);
-                }
+                availablePlugins = new ArrayList<>(plugins.values());
             }
         } catch (Exception ex) {
             log.error("Error getting plugins list", ex);

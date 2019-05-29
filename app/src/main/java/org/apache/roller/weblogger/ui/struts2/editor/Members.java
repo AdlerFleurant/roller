@@ -31,7 +31,6 @@ import org.apache.roller.weblogger.pojos.User;
 import org.apache.roller.weblogger.pojos.WeblogPermission;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
 import org.apache.roller.weblogger.util.Utilities;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 import org.apache.struts2.interceptor.ParameterAware;
 
 
@@ -70,16 +69,14 @@ public class Members extends UIAction implements ParameterAware {
         int numAdmins = 0; // make sure at least one admin
         int removed = 0;
         int changed = 0;
-        List<WeblogPermission> permsList = new ArrayList<WeblogPermission>();
+        List<WeblogPermission> permsList = new ArrayList<>();
         try {
             UserManager userMgr = WebloggerFactory.getWeblogger().getUserManager();   
             List<WeblogPermission> permsFromDB = userMgr.getWeblogPermissionsIncludingPending(getActionWeblog());
 
             // we have to copy the permissions list so that when we remove permissions
             // below we don't get ConcurrentModificationExceptions
-            for (WeblogPermission perm : permsFromDB) {
-                permsList.add(perm);
-            }
+            permsList.addAll(permsFromDB);
 
             /* Check to see at least one admin would remain defined as a result of the save.
              * Not normally a problem, as only a blog admin can access this page and admins can't
@@ -179,6 +176,6 @@ public class Members extends UIAction implements ParameterAware {
             // serious problem, but not much we can do here
             log.error("ERROR getting weblog permissions", ex);
         }
-        return new ArrayList<WeblogPermission>();
+        return new ArrayList<>();
     }
 }

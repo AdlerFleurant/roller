@@ -36,9 +36,9 @@ import java.util.Date;
  */
 public class StaticTemplate implements Template, Serializable {
     
-    private String id = null;
-    private String name = null;
-    private String description = null;
+    private String id;
+    private String name;
+    private String description;
     private Date lastModified = new Date();
     private String  outputContentType = null;
     private TemplateRendition templateRendition;

@@ -91,7 +91,7 @@ public final class PingConfig {
     // This was introduced in order to support certain buggy (but popular) ping
     // targets that implement minor variants of the WeblogUpdates.ping call.
     // This is initialized once at startup, and referenced when pings are made.
-    private static final Map<String, Set<String>> CONFIGURED_VARIANTS = new HashMap<String, Set<String>>();
+    private static final Map<String, Set<String>> CONFIGURED_VARIANTS = new HashMap<>();
     
     // Pattern used to parse common ping targets as well as ping variants.
     // Each initial commmon ping target is specified in the format {{name}{url}}
@@ -183,9 +183,9 @@ public final class PingConfig {
         }
 
         String[] configuredTargets = configuredVal.trim().split(",");
-        for (int i = 0; i < configuredTargets.length; i++) {
+        for (String configuredTarget : configuredTargets) {
             // Trim space around the target spec
-            String thisTarget = configuredTargets[i].trim();
+            String thisTarget = configuredTarget.trim();
             // skip empty ones
             if (thisTarget.length() == 0) {
                 continue;
@@ -216,8 +216,8 @@ public final class PingConfig {
             return;
         }
         String[] variants = configuredVal.trim().split(",");
-        for (int i = 0; i < variants.length; i++) {
-            String thisVariant = variants[i].trim();
+        for (String variant : variants) {
+            String thisVariant = variant.trim();
             if (thisVariant.length() == 0) {
                 continue;
             }
@@ -225,10 +225,10 @@ public final class PingConfig {
             if (m.matches() && m.groupCount() == 2) {
                 String url = m.group(1).trim();
                 String optionsList = m.group(2).trim();
-                Set<String> variantOptions = new HashSet<String>();
+                Set<String> variantOptions = new HashSet<>();
                 String[] options = optionsList.split(",");
-                for (int j = 0; j < options.length; j++) {
-                    String option = options[j].trim().toLowerCase();
+                for (String s : options) {
+                    String option = s.trim().toLowerCase();
                     if (option.length() > 0) {
                         variantOptions.add(option);
                     }

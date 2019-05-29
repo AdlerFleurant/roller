@@ -25,7 +25,8 @@ package org.apache.roller.weblogger.ui.rendering.velocity;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+
 import org.apache.commons.collections.ExtendedProperties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -115,13 +116,7 @@ public class ThemeResourceLoader extends ResourceLoader {
             }
 
             // return the input stream
-            return new ByteArrayInputStream(contents.getBytes("UTF-8"));
-
-        } catch (UnsupportedEncodingException uex) {
-            // We expect UTF-8 in all JRE installation.
-            // This rethrows as a Runtime exception after logging.
-            logger.error(uex);
-            throw new RuntimeException(uex);
+            return new ByteArrayInputStream(contents.getBytes(StandardCharsets.UTF_8));
 
         } catch (ThemeNotFoundException tnfe) {
             String msg = "ThemeResourceLoader Error: " + tnfe.getMessage();

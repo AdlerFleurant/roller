@@ -30,7 +30,7 @@ import java.io.Serializable;
 public class ExpiringCacheEntry implements Serializable {
     
     private Object value;
-    private long timeCached = -1;
+    private long timeCached;
     private long timeout = 0;
     
     

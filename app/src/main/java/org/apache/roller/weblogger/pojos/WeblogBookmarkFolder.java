@@ -44,7 +44,7 @@ public class WeblogBookmarkFolder implements Serializable, Comparable<WeblogBook
 
     // associations
     private Weblog weblog = null;
-    private List<WeblogBookmark> bookmarks = new ArrayList<WeblogBookmark>();
+    private List<WeblogBookmark> bookmarks = new ArrayList<>();
     
     
     public WeblogBookmarkFolder() {
@@ -63,12 +63,10 @@ public class WeblogBookmarkFolder implements Serializable, Comparable<WeblogBook
     //------------------------------------------------------- Good citizenship
 
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("{");
-        buf.append(getId());
-        buf.append(", ").append(getName());
-        buf.append("}");
-        return buf.toString();
+        return "{" +
+                getId() +
+                ", " + getName() +
+                "}";
     }
     
     public boolean equals(Object other) {

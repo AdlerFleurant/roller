@@ -32,7 +32,6 @@ import org.apache.roller.weblogger.pojos.WeblogBookmark;
 import org.apache.roller.weblogger.pojos.WeblogBookmarkFolder;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
 import org.apache.roller.weblogger.util.cache.CacheManager;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 /**
@@ -90,7 +89,7 @@ public class Bookmarks extends UIAction {
     public String execute() {
 
         // build list of folders that the user can navigate to
-        List<WeblogBookmarkFolder> newFolders = new ArrayList<WeblogBookmarkFolder>();
+        List<WeblogBookmarkFolder> newFolders = new ArrayList<>();
 
         try {
             // Build list of all folders, except for current one
@@ -123,17 +122,17 @@ public class Bookmarks extends UIAction {
 
         try {
             WeblogBookmark bookmark;
-            String bookmarks[] = getSelectedBookmarks();
+            String[] bookmarks = getSelectedBookmarks();
             if (null != bookmarks && bookmarks.length > 0) {
                 if (log.isDebugEnabled()) {
                     log.debug("Processing delete of " + bookmarks.length
                             + " bookmarks.");
                 }
-                for (int j = 0; j < bookmarks.length; j++) {
+                for (String s : bookmarks) {
                     if (log.isDebugEnabled()) {
-                        log.debug("Deleting bookmark - " + bookmarks[j]);
+                        log.debug("Deleting bookmark - " + s);
                     }
-                    bookmark = bmgr.getBookmark(bookmarks[j]);
+                    bookmark = bmgr.getBookmark(s);
                     if (bookmark != null) {
                         bmgr.removeBookmark(bookmark);
                     }
@@ -220,10 +219,10 @@ public class Bookmarks extends UIAction {
 
             // Move bookmarks to new parent folder.
             WeblogBookmarkFolder newFolder = bmgr.getFolder(getTargetFolderId());
-            String bookmarks[] = getSelectedBookmarks();
+            String[] bookmarks = getSelectedBookmarks();
             if (null != bookmarks && bookmarks.length > 0) {
-                for (int j = 0; j < bookmarks.length; j++) {
-                    WeblogBookmark bd = bmgr.getBookmark(bookmarks[j]);
+                for (String bookmark : bookmarks) {
+                    WeblogBookmark bd = bmgr.getBookmark(bookmark);
                     newFolder.addBookmark(bd);
                     bd.setFolder(newFolder);
                     bmgr.saveBookmark(bd);

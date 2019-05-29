@@ -37,7 +37,7 @@ import org.apache.roller.weblogger.pojos.MediaFile;
 public class MediaFilesPager extends AbstractPager {
     
     private static Log log = LogFactory.getLog(MediaFilesPager.class);
-    private int length = 0;
+    private int length;
     
     // the collection for the pager
     private List<MediaFile> mediaFiles;
@@ -65,7 +65,7 @@ public class MediaFilesPager extends AbstractPager {
             // calculate offset
             //int offset = getPage() * length;
             
-            List<MediaFile> results = new ArrayList<MediaFile>();
+            List<MediaFile> results = new ArrayList<>();
             
             try {
                 MediaFileManager mgr = WebloggerFactory.getWeblogger().getMediaFileManager();

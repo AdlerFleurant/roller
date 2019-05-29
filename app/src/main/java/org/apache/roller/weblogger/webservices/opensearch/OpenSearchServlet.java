@@ -45,7 +45,7 @@ public class OpenSearchServlet extends HttpServlet {
             throws ServletException, IOException {
         
         String[] pathInfo = new String[0];
-        String handle = null;
+        String handle;
         
         // Will return descriptor for searching specified blog
         if (request.getPathInfo() != null) {
@@ -65,14 +65,14 @@ public class OpenSearchServlet extends HttpServlet {
             return;
         }
 
-        String shortName = null;
-        String description = null;
-        String contact = null;
-        String searchFeed = null;
-        String searchPage = null;
+        String shortName;
+        String description;
+        String contact;
+        String searchFeed;
+        String searchPage;
         
         URLStrategy strat = WebloggerFactory.getWeblogger().getUrlStrategy();
-        Weblog weblog = null;
+        Weblog weblog;
         try {
             weblog = WebloggerFactory.getWeblogger().getWeblogManager().getWeblogByHandle(handle);
         } catch (WebloggerException ex) {

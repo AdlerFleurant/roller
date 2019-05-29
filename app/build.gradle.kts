@@ -519,6 +519,8 @@ tasks.named<ProcessResources>("processTestResources") {
 }
 
 dependencies {
+    implementation("org.apache.commons:commons-text:1.6")
+    implementation("jakarta.json:jakarta.json-api:1.1.5")
     compile("javax.servlet:jstl:1.2")
     compile("com.sun.activation:javax.activation:1.2.0")
     compile("javax.xml.bind:jaxb-api:2.3.1")

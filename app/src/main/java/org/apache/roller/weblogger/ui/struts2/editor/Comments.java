@@ -47,7 +47,6 @@ import org.apache.roller.weblogger.ui.struts2.util.UIAction;
 import org.apache.roller.weblogger.util.I18nMessages;
 import org.apache.roller.weblogger.util.MailUtil;
 import org.apache.roller.weblogger.util.Utilities;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 
 /**
  * Action for managing weblog comments.
@@ -117,8 +116,7 @@ public class Comments extends UIAction {
             csc.setMaxResults(COUNT + 1);
 
             List<WeblogEntryComment> rawComments = wmgr.getComments(csc);
-            comments = new ArrayList<WeblogEntryComment>();
-            comments.addAll(rawComments);
+            comments = new ArrayList<>(rawComments);
             if (comments.size() > 0) {
                 if (comments.size() > COUNT) {
                     comments.remove(comments.size() - 1);
@@ -144,7 +142,7 @@ public class Comments extends UIAction {
     // query data
     private String buildBaseUrl() {
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
 
         if (!StringUtils.isEmpty(getBean().getEntryId())) {
             params.put("bean.entryId", getBean().getEntryId());
@@ -227,7 +225,7 @@ public class Comments extends UIAction {
 
             // if search is enabled, we will need to re-index all entries with
             // comments that have been deleted, so build a list of those entries
-            Set<WeblogEntry> reindexEntries = new HashSet<WeblogEntry>();
+            Set<WeblogEntry> reindexEntries = new HashSet<>();
             if (WebloggerConfig.getBooleanProperty("search.enabled")) {
 
                 CommentSearchCriteria csc = new CommentSearchCriteria();
@@ -283,19 +281,19 @@ public class Comments extends UIAction {
             WeblogEntryManager wmgr = WebloggerFactory.getWeblogger()
                     .getWeblogEntryManager();
 
-            List<WeblogEntryComment> flushList = new ArrayList<WeblogEntryComment>();
+            List<WeblogEntryComment> flushList = new ArrayList<>();
 
             // if search is enabled, we will need to re-index all entries with
             // comments that have been approved, so build a list of those
             // entries
-            Set<WeblogEntry> reindexList = new HashSet<WeblogEntry>();
+            Set<WeblogEntry> reindexList = new HashSet<>();
 
             // delete all comments with delete box checked
             List<String> deletes = Arrays.asList(getBean().getDeleteComments());
             if (deletes.size() > 0) {
                 log.debug("Processing deletes - " + deletes.size());
 
-                WeblogEntryComment deleteComment = null;
+                WeblogEntryComment deleteComment;
                 for (String deleteId : deletes) {
                     deleteComment = wmgr.getComment(deleteId);
 
@@ -316,26 +314,26 @@ public class Comments extends UIAction {
             log.debug(spamIds.size() + " comments marked as spam");
 
             // track comments approved via moderation
-            List<WeblogEntryComment> approvedComments = new ArrayList<WeblogEntryComment>();
+            List<WeblogEntryComment> approvedComments = new ArrayList<>();
 
             String[] ids = Utilities.stringToStringArray(getBean().getIds(),
                     ",");
-            for (int i = 0; i < ids.length; i++) {
-                log.debug("processing id - " + ids[i]);
+            for (String id : ids) {
+                log.debug("processing id - " + id);
 
                 // if we already deleted it then skip forward
-                if (deletes.contains(ids[i])) {
-                    log.debug("Already deleted, skipping - " + ids[i]);
+                if (deletes.contains(id)) {
+                    log.debug("Already deleted, skipping - " + id);
                     continue;
                 }
 
-                WeblogEntryComment comment = wmgr.getComment(ids[i]);
+                WeblogEntryComment comment = wmgr.getComment(id);
 
                 // make sure comment is tied to action weblog
                 if (getActionWeblog().equals(
                         comment.getWeblogEntry().getWebsite())) {
                     // comment approvals and mark/unmark spam
-                    if (approvedIds.contains(ids[i])) {
+                    if (approvedIds.contains(id)) {
                         // if a comment was previously PENDING then this is
                         // its first approval, so track it for notification
                         if (ApprovalStatus.PENDING.equals(comment
@@ -350,7 +348,7 @@ public class Comments extends UIAction {
                         flushList.add(comment);
                         reindexList.add(comment.getWeblogEntry());
 
-                    } else if (spamIds.contains(ids[i])) {
+                    } else if (spamIds.contains(id)) {
                         log.debug("Marking as spam - " + comment.getId());
                         comment.setStatus(ApprovalStatus.SPAM);
                         wmgr.saveComment(comment);
@@ -423,7 +421,7 @@ public class Comments extends UIAction {
 
     public List<KeyValueObject> getCommentStatusOptions() {
 
-        List<KeyValueObject> opts = new ArrayList<KeyValueObject>();
+        List<KeyValueObject> opts = new ArrayList<>();
 
         opts.add(new KeyValueObject("ALL", getText("generic.all")));
         opts.add(new KeyValueObject("ONLY_PENDING",

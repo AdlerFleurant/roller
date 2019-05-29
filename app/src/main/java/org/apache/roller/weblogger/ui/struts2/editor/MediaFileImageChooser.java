@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.roller.weblogger.business.FileIOException;
 import org.apache.roller.weblogger.business.MediaFileManager;
 import org.apache.roller.weblogger.business.WebloggerFactory;
 import org.apache.roller.weblogger.pojos.MediaFile;
@@ -33,7 +32,6 @@ import org.apache.roller.weblogger.pojos.MediaFileDirectoryComparator;
 import org.apache.roller.weblogger.pojos.MediaFileDirectoryComparator.DirectoryComparatorType;
 import org.apache.roller.weblogger.pojos.WeblogPermission;
 import org.apache.roller.weblogger.ui.struts2.util.KeyValueObject;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 /**
@@ -91,42 +89,35 @@ public class MediaFileImageChooser extends MediaFileBase {
                 this.directoryId = directory.getId();
             }
 
-            this.childFiles = new ArrayList<MediaFile>();
+            this.childFiles = new ArrayList<>();
 
-            for (MediaFile mf : directory.getMediaFiles()) {
-                this.childFiles.add(mf);
-            }
+            this.childFiles.addAll(directory.getMediaFiles());
 
-            Collections.sort(this.childFiles, new MediaFileComparator(
+            this.childFiles.sort(new MediaFileComparator(
                     MediaFileComparatorType.NAME));
 
             this.currentDirectory = directory;
 
             // List of available directories
-            List<MediaFileDirectory> sortedDirList = new ArrayList<MediaFileDirectory>();
+            List<MediaFileDirectory> sortedDirList = new ArrayList<>();
             List<MediaFileDirectory> directories = manager
                     .getMediaFileDirectories(getActionWeblog());
             for (MediaFileDirectory mediaFileDirectory : directories) {
-                if (!"default".equals(mediaFileDirectory.getName())
-                        && "default".equals(directory.getName())
-                        || !"default".equals(directory.getName())) {
+                if (!"default".equals(mediaFileDirectory.getName()) || !"default".equals(directory.getName())) {
                     sortedDirList.add(mediaFileDirectory);
                 }
             }
 
-            Collections.sort(sortedDirList, new MediaFileDirectoryComparator(
+            sortedDirList.sort(new MediaFileDirectoryComparator(
                     DirectoryComparatorType.NAME));
             setAllDirectories(sortedDirList);
 
             return SUCCESS;
 
-        } catch (FileIOException ex) {
+        } catch (Exception ex) {
             log.error("Error viewing media file directory ", ex);
             addError("MediaFile.error.view");
 
-        } catch (Exception e) {
-            log.error("Error viewing media file directory ", e);
-            addError("MediaFile.error.view");
         }
         return SUCCESS;
     }
@@ -136,7 +127,7 @@ public class MediaFileImageChooser extends MediaFileBase {
      * displaying path information as breadcrumb.
      */
     public List<KeyValueObject> getCurrentDirectoryHierarchy() {
-        List<KeyValueObject> directoryHierarchy = new ArrayList<KeyValueObject>();
+        List<KeyValueObject> directoryHierarchy = new ArrayList<>();
 
         String fullPath = "/" + this.currentDirectory.getName();
         if (fullPath.length() > 1) {

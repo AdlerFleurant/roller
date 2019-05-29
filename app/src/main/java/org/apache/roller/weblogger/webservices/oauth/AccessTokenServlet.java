@@ -67,8 +67,7 @@ public class AccessTokenServlet extends HttpServlet {
             
             // make sure token is authorized
             if (!Boolean.TRUE.equals(accessor.getProperty("authorized"))) {
-                 OAuthProblemException problem = new OAuthProblemException("permission_denied");
-                throw problem;
+                throw new OAuthProblemException("permission_denied");
             }
             // generate access token and secret
             if (accessor.accessToken == null) {

@@ -41,7 +41,6 @@ import org.apache.roller.weblogger.ui.struts2.util.KeyValueObject;
 import org.apache.roller.weblogger.util.cache.CacheManager;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
 import org.apache.roller.weblogger.util.Utilities;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 
@@ -112,8 +111,7 @@ public class GlobalCommentManagement extends UIAction implements ServletRequestA
             csc.setMaxResults(COUNT+1);
 
             List<WeblogEntryComment> rawComments = wmgr.getComments(csc);
-            comments = new ArrayList<WeblogEntryComment>();
-            comments.addAll(rawComments);   
+            comments = new ArrayList<>(rawComments);
             
             if(comments.size() > 0) {
                 if(comments.size() > COUNT) {
@@ -138,7 +136,7 @@ public class GlobalCommentManagement extends UIAction implements ServletRequestA
     // use the action data to build a url representing this action, including query data
     private String buildBaseUrl() {
         
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         
         if(!StringUtils.isEmpty(getBean().getSearchString())) {
             params.put("bean.searchString", getBean().getSearchString());
@@ -249,7 +247,7 @@ public class GlobalCommentManagement extends UIAction implements ServletRequestA
         try {
             WeblogEntryManager wmgr = WebloggerFactory.getWeblogger().getWeblogEntryManager();
             
-            List<Weblog> flushList = new ArrayList<Weblog>();
+            List<Weblog> flushList = new ArrayList<>();
             
             // delete all comments with delete box checked
             List<String> deletes = Arrays.asList(getBean().getDeleteComments());
@@ -325,7 +323,7 @@ public class GlobalCommentManagement extends UIAction implements ServletRequestA
     
     public List<KeyValueObject> getCommentStatusOptions() {
         
-        List<KeyValueObject> opts = new ArrayList<KeyValueObject>();
+        List<KeyValueObject> opts = new ArrayList<>();
         
         opts.add(new KeyValueObject("ALL", getText("generic.all")));
         opts.add(new KeyValueObject("ONLY_PENDING", getText("commentManagement.onlyPending")));

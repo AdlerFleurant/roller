@@ -81,7 +81,7 @@ public final class TestUtils {
 
             // Reset data for local tests see
             // docs/testing/roller-junit.properties for howto
-            Boolean local = WebloggerConfig.getBooleanProperty(
+            boolean local = WebloggerConfig.getBooleanProperty(
                     "junit.testdata.reset", false);
 
             if (local) {
@@ -136,16 +136,15 @@ public final class TestUtils {
         ClasspathDatabaseScriptProvider scriptProvider = new ClasspathDatabaseScriptProvider();
         InputStream script = scriptProvider.getDatabaseScript(scriptFile);
 
-        if (script == null) {
-
-            System.out.println("File /dbscripts/" + scriptFile
-                    + " not found on class path.");
-            return;
-
-        }
-
         // Run script to remove the junit test user
-        try {
+        try (script) {
+            if (script == null) {
+
+                System.out.println("File /dbscripts/" + scriptFile
+                        + " not found on class path.");
+                return;
+
+            }
 
             DatabaseProvider dbp = WebloggerStartup.getDatabaseProvider();
             Connection con = dbp.getConnection();
@@ -158,7 +157,7 @@ public final class TestUtils {
                         + scriptProvider.getScriptURL(scriptFile));
 
                 // Loop script and remove invalid lines
-                List<String> updatedCommands = new ArrayList<String>();
+                List<String> updatedCommands = new ArrayList<>();
                 List<String> commands = runner.getCommands();
                 for (String command : commands) {
                     if (!command.startsWith("--")) {
@@ -176,13 +175,8 @@ public final class TestUtils {
 
             }
 
-        } finally {
-            try {
-                script.close();
-            } catch (Exception e) {
-                // ignored
-            }
         }
+        // ignored
     }
 
     /**

@@ -47,7 +47,7 @@ public class UISecurityInterceptor extends MethodFilterInterceptor {
         final Object action = invocation.getAction();
 
         // is this one of our own UIAction classes?
-        if (action instanceof UISecurityEnforced && action instanceof UIAction) {
+        if (action instanceof UIAction) {
 
             if (log.isDebugEnabled()) {
                 log.debug("action is UISecurityEnforced ... enforcing security rules");

@@ -19,8 +19,8 @@
 package org.apache.roller.weblogger.pojos;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -102,11 +102,11 @@ public class WeblogEntry implements Serializable {
     private WeblogCategory category = null;
     
     // Collection of name/value entry attributes
-    private Set<WeblogEntryAttribute> attSet = new TreeSet<WeblogEntryAttribute>();
+    private Set<WeblogEntryAttribute> attSet = new TreeSet<>();
     
-    private Set<WeblogEntryTag> tagSet = new HashSet<WeblogEntryTag>();
-    private Set<WeblogEntryTag> removedTags = new HashSet<WeblogEntryTag>();
-    private Set<WeblogEntryTag> addedTags = new HashSet<WeblogEntryTag>();
+    private Set<WeblogEntryTag> tagSet = new HashSet<>();
+    private Set<WeblogEntryTag> removedTags = new HashSet<>();
+    private Set<WeblogEntryTag> addedTags = new HashSet<>();
     
     //----------------------------------------------------------- Construction
     
@@ -173,14 +173,12 @@ public class WeblogEntry implements Serializable {
     //------------------------------------------------------- Good citizenship
 
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("{");
-        buf.append(getId());
-        buf.append(", ").append(this.getAnchor());
-        buf.append(", ").append(this.getTitle());
-        buf.append(", ").append(this.getPubTime());
-        buf.append("}");
-        return buf.toString();
+        return "{" +
+                getId() +
+                ", " + this.getAnchor() +
+                ", " + this.getTitle() +
+                ", " + this.getPubTime() +
+                "}";
     }
 
     public boolean equals(Object other) {
@@ -231,7 +229,7 @@ public class WeblogEntry implements Serializable {
      * Added for symmetry with PlanetEntryData object.
      */
     public List<WeblogCategory> getCategories() {
-        List<WeblogCategory> cats = new ArrayList<WeblogCategory>();
+        List<WeblogCategory> cats = new ArrayList<>();
         cats.add(getCategory());
         return cats;
     }
@@ -533,8 +531,8 @@ public class WeblogEntry implements Serializable {
     @SuppressWarnings("unused")
     private void setTags(Set<WeblogEntryTag> tagSet) throws WebloggerException {
          this.tagSet = tagSet;
-         this.removedTags = new HashSet<WeblogEntryTag>();
-         this.addedTags = new HashSet<WeblogEntryTag>();
+         this.removedTags = new HashSet<>();
+         this.addedTags = new HashSet<>();
     }
      
     /**
@@ -578,7 +576,7 @@ public class WeblogEntry implements Serializable {
     public String getTagsAsString() {
         StringBuilder sb = new StringBuilder();
         // Sort by name
-        Set<WeblogEntryTag> tmp = new TreeSet<WeblogEntryTag>(new WeblogEntryTagComparator());
+        Set<WeblogEntryTag> tmp = new TreeSet<>(new WeblogEntryTagComparator());
         tmp.addAll(getTags());
         for (WeblogEntryTag entryTag : tmp) {
             sb.append(entryTag.getName()).append(" ");
@@ -598,7 +596,7 @@ public class WeblogEntry implements Serializable {
         }
 
         List<String> updatedTags = Utilities.splitStringAsTags(tags);
-        Set<String> newTags = new HashSet<String>(updatedTags.size());
+        Set<String> newTags = new HashSet<>(updatedTags.size());
         Locale localeObject = getWebsite() != null ? getWebsite().getLocaleInstance() : Locale.getDefault();
 
         for (String name : updatedTags) {
@@ -721,7 +719,7 @@ public class WeblogEntry implements Serializable {
      * TODO: why is this method exposed to users with ability to get spam/non-approved comments?
      */
     public List<WeblogEntryComment> getComments(boolean ignoreSpam, boolean approvedOnly) {
-        List<WeblogEntryComment> list = new ArrayList<WeblogEntryComment>();
+        List<WeblogEntryComment> list = new ArrayList<>();
         try {
             WeblogEntryManager wmgr = WebloggerFactory.getWeblogger().getWeblogEntryManager();
 
@@ -730,7 +728,7 @@ public class WeblogEntry implements Serializable {
             csc.setEntry(this);
             csc.setStatus(approvedOnly ? WeblogEntryComment.ApprovalStatus.APPROVED : null);
             return wmgr.getComments(csc);
-        } catch (WebloggerException alreadyLogged) {}
+        } catch (WebloggerException ignored) {}
         return list;
     }
     
@@ -754,12 +752,8 @@ public class WeblogEntry implements Serializable {
      */
     @Deprecated(forRemoval = true, since = "6.0.0")
     public String getPermaLink() {
-        String lAnchor = this.getAnchor();        
-        try {
-            lAnchor = URLEncoder.encode(getAnchor(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            // go with the "no encoding" version
-        }        
+        String lAnchor;
+        lAnchor = URLEncoder.encode(getAnchor(), StandardCharsets.UTF_8);
         return "/" + getWebsite().getHandle() + "/entry/" + lAnchor;
     }
     
@@ -879,7 +873,7 @@ public class WeblogEntry implements Serializable {
         if (getPlugins() != null) {
             return Arrays.asList( StringUtils.split(getPlugins(), ",") );
         }
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 
     /** Convenience method for checking status */
@@ -925,7 +919,7 @@ public class WeblogEntry implements Serializable {
             return true;
         }
         
-        WeblogPermission perm = null;
+        WeblogPermission perm;
         try {
             // if user is an author then post status defaults to PUBLISHED, otherwise PENDING
             UserManager umgr = WebloggerFactory.getWeblogger().getUserManager();
@@ -985,7 +979,7 @@ public class WeblogEntry implements Serializable {
      */
     public String displayContent(String readMoreLink) {
         
-        String displayContent = null;
+        String displayContent;
         
         if(readMoreLink == null || readMoreLink.trim().length() < 1 || 
                 "nil".equals(readMoreLink)) {
@@ -1003,7 +997,7 @@ public class WeblogEntry implements Serializable {
                 displayContent = this.getTransformedSummary();
                 if(StringUtils.isNotEmpty(this.getText())) {
                     // add read more
-                    List<String> args = new ArrayList<String>();
+                    List<String> args = new ArrayList<>();
                     args.add(readMoreLink);
                     
                     // TODO: we need a more appropriate way to get the view locale here

@@ -18,8 +18,8 @@
 
 package org.apache.roller.weblogger.ui.rendering.util.cache;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +47,7 @@ public final class WeblogFeedCache {
     public static final String CACHE_ID = "cache.weblogfeed";
     
     // keep cached content
-    private boolean cacheEnabled = true;
+    private boolean cacheEnabled;
     private Cache contentCache = null;
     
     // reference to our singleton instance
@@ -61,7 +61,7 @@ public final class WeblogFeedCache {
         Map cacheProps = new HashMap();
         cacheProps.put("id", CACHE_ID);
         Enumeration allProps = WebloggerConfig.keys();
-        String prop = null;
+        String prop;
         while(allProps.hasMoreElements()) {
             prop = (String) allProps.nextElement();
             
@@ -164,7 +164,7 @@ public final class WeblogFeedCache {
         
         StringBuilder key = new StringBuilder();
         
-        key.append(this.CACHE_ID).append(":");
+        key.append(CACHE_ID).append(":");
         key.append(feedRequest.getWeblogHandle());
         
         key.append("/").append(feedRequest.getType());
@@ -176,18 +176,14 @@ public final class WeblogFeedCache {
         
         if(feedRequest.getWeblogCategoryName() != null) {
             String cat = feedRequest.getWeblogCategoryName();
-            try {
-                cat = URLEncoder.encode(cat, "UTF-8");
-            } catch (UnsupportedEncodingException ex) {
-                // should never happen, utf-8 is always supported
-            }
-            
+            cat = URLEncoder.encode(cat, StandardCharsets.UTF_8);
+
             key.append("/").append(cat);
         }
         
         if(feedRequest.getTags() != null && feedRequest.getTags().size() > 0) {
           Set ordered = new TreeSet(feedRequest.getTags());
-          String[] tags = (String[]) ordered.toArray(new String[ordered.size()]);  
+          String[] tags = (String[]) ordered.toArray(new String[0]);
           key.append("/tags/").append(Utilities.stringArrayToString(tags,"+"));
         }        
         

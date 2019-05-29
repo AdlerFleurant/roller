@@ -267,12 +267,12 @@ public class WeblogPageRequest extends WeblogRequest {
     }
 
     boolean isValidDestination(String servlet) {
-        return (servlet != null && PAGE_SERVLET.equals(servlet));
+        return (PAGE_SERVLET.equals(servlet));
     }
 
     private boolean isValidDateString(String dateString) {
         // string must be all numeric and 6 or 8 characters
-        return (dateString != null && StringUtils.isNumeric(dateString) && (dateString
+        return (StringUtils.isNumeric(dateString) && (dateString
                 .length() == 6 || dateString.length() == 8));
     }
 

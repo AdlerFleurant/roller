@@ -19,7 +19,6 @@
 package org.apache.roller.weblogger.ui.rendering.plugins.comments;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ResourceBundle;
 
 import org.apache.roller.util.RollerConstants;
@@ -59,9 +58,9 @@ public class TrackbackLinkbackCommentValidator implements CommentValidator {
                     null,
                     comment.getWeblogEntry().getAnchor(),
                     true));
-        } catch (MalformedURLException ignored1) {
-        } catch (IOException ignored2) {}
-        
+        } catch (IOException ignored1) {
+        }
+
         if (linkback != null && linkback.getExcerpt() != null) {
             ret = RollerConstants.PERCENT_100;
         } else {

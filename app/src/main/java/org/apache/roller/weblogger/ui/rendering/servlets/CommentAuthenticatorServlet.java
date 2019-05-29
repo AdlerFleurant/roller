@@ -78,7 +78,7 @@ public class CommentAuthenticatorServlet extends HttpServlet {
             String name = WebloggerConfig.getProperty("comment.authenticator.classname");
             
             Class clazz = Class.forName(name);
-            this.authenticator = (CommentAuthenticator) clazz.newInstance();
+            this.authenticator = (CommentAuthenticator) clazz.getConstructor().newInstance();
             
         } catch(Exception e) {
             mLogger.error(e);

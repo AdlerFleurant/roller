@@ -39,7 +39,7 @@ public class ThemeMetadataTemplate {
 
     // Hash table to keep metadata about parsed template code files
     private Map<RenditionType, ThemeMetadataTemplateRendition> templateRenditionTable
-            = new HashMap<RenditionType, ThemeMetadataTemplateRendition>();
+            = new HashMap<>();
 
     public ComponentType getAction() {
         return action;

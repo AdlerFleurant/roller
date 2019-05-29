@@ -71,7 +71,7 @@ public class UIActionInterceptor extends MethodFilterInterceptor implements
             // extract the work weblog and set it
             String weblogHandle = theAction.getWeblog();
             if (!StringUtils.isEmpty(weblogHandle)) {
-                Weblog weblog = null;
+                Weblog weblog;
                 try {
                     weblog = WebloggerFactory.getWeblogger().getWeblogManager()
                             .getWeblogByHandle(weblogHandle);

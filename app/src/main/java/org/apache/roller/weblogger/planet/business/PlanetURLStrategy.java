@@ -33,9 +33,7 @@ public class PlanetURLStrategy extends MultiPlanetURLStrategy {
      * @param planet There's only one planet in Roller, so this is ignored.
      */
     public String getPlanetURL(String planet) {
-        StringBuilder url = new StringBuilder();
-        url.append(WebloggerRuntimeConfig.getProperty("site.absoluteurl"));
-        return url.toString();
+        return WebloggerRuntimeConfig.getProperty("site.absoluteurl");
     }
     
     

@@ -174,7 +174,7 @@ public class CreateUserBean {
             this.administrator = WebloggerFactory.getWeblogger().getUserManager()
                     .checkPermission(adminPerm, dataHolder);
 
-        } catch (WebloggerException ex) {}
+        } catch (WebloggerException ignored) {}
     }
     
 }

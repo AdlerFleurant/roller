@@ -80,7 +80,7 @@ public class PlanetFeedServlet extends HttpServlet {
         PlanetManager planet = WebloggerFactory.getWeblogger()
                 .getPlanetManager();
 
-        PlanetRequest planetRequest = null;
+        PlanetRequest planetRequest;
         try {
             planetRequest = new PlanetRequest(request);
         } catch (Exception e) {
@@ -128,7 +128,7 @@ public class PlanetFeedServlet extends HttpServlet {
         }
 
         // looks like we need to render content
-        HashMap<String, Object> model = new HashMap<String, Object>();
+        HashMap<String, Object> model = new HashMap<>();
         try {
 
             // populate the rendering model
@@ -194,7 +194,7 @@ public class PlanetFeedServlet extends HttpServlet {
         }
 
         // lookup Renderer we are going to use
-        Renderer renderer = null;
+        Renderer renderer;
         try {
             log.debug("Looking up renderer");
             Template template = new StaticTemplate(

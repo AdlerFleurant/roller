@@ -31,7 +31,6 @@ import org.apache.roller.weblogger.business.BookmarkManager;
 import org.apache.roller.weblogger.business.WebloggerFactory;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
 import org.apache.roller.weblogger.util.cache.CacheManager;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 
 
 /**
@@ -86,7 +85,7 @@ public final class BookmarksImport extends UIAction {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
                     byte[] buffer = new byte[RollerConstants.EIGHT_KB_IN_BYTES];
-                    int bytesRead = 0;
+                    int bytesRead;
                     while ((bytesRead=stream.read(buffer,0,RollerConstants.EIGHT_KB_IN_BYTES)) != -1) {
                         baos.write(buffer, 0, bytesRead);
                     }

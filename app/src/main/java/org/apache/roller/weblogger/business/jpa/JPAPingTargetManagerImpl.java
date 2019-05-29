@@ -130,9 +130,7 @@ public class JPAPingTargetManagerImpl implements PingTargetManager {
             }
             InetAddress addr = InetAddress.getByName(host);
             return true;
-        } catch (MalformedURLException e) {
-            return false;
-        } catch (UnknownHostException e) {
+        } catch (MalformedURLException | UnknownHostException e) {
             return false;
         }
     }

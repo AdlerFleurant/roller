@@ -76,24 +76,21 @@ public class LdapCommentAuthenticator implements CommentAuthenticator {
 
 		Locale locale = CommentAuthenticatorUtils.getLocale(request);
 		I18nMessages messages = I18nMessages.getMessages(locale);
-		StringBuilder sb = new StringBuilder();
 
-		sb.append("<p>");
-		sb.append(messages.getString("comments.ldapAuthenticatorUserName"));
-		sb.append("</p>");
-		sb.append("<p>");
-		sb.append("<input name=\"ldapUser\" value=\"");
-		sb.append(ldapUser + "\">");
-		sb.append("</p>");
-		sb.append("<p>");
-		sb.append(messages.getString("comments.ldapAuthenticatorPassword"));
-		sb.append("</p>");
-		sb.append("<p>");
-		sb.append("<input type=\"password\" name=\"ldapPass\" value=\"");
-		sb.append(ldapPass + "\">");
-		sb.append("</p>");
-
-		return sb.toString();
+        return "<p>" +
+                messages.getString("comments.ldapAuthenticatorUserName") +
+                "</p>" +
+                "<p>" +
+                "<input name=\"ldapUser\" value=\"" +
+                ldapUser + "\">" +
+                "</p>" +
+                "<p>" +
+                messages.getString("comments.ldapAuthenticatorPassword") +
+                "</p>" +
+                "<p>" +
+                "<input type=\"password\" name=\"ldapPass\" value=\"" +
+                ldapPass + "\">" +
+                "</p>";
 	}
 
 	public boolean authenticate(HttpServletRequest request) {
@@ -115,7 +112,7 @@ public class LdapCommentAuthenticator implements CommentAuthenticator {
 		
 		if(rollerPropertiesValid && userDataValid){
 			try {
-				Hashtable<String,String> env = new Hashtable<String,String>();
+				Hashtable<String,String> env = new Hashtable<>();
 				env.put(Context.INITIAL_CONTEXT_FACTORY,  
 						"com.sun.jndi.ldap.LdapCtxFactory"); 
 				if(ldapSecurityLevel != null 
@@ -154,12 +151,12 @@ public class LdapCommentAuthenticator implements CommentAuthenticator {
 	 * @return
 	 */
 	private String getQualifedDc(String ldapDc, String ldapOu, String ldapUser) {
-		String qualifedDc = "";
+		StringBuilder qualifedDc = new StringBuilder();
 		for (String token : StringUtils.delimitedListToStringArray(ldapDc, ",")) {
-			if (!qualifedDc.isEmpty()) {
-				qualifedDc += ",";
+			if (qualifedDc.length() > 0) {
+				qualifedDc.append(",");
 			}
-			qualifedDc += "dc=" + token;
+			qualifedDc.append("dc=").append(token);
 		}
 		
 		return "uid=" + ldapUser + ", ou=" + ldapOu + "," + qualifedDc;

@@ -40,14 +40,14 @@ public class MailProvider {
     
     private enum ConfigurationType {JNDI_NAME, MAIL_PROPERTIES }
     
-    private Session session = null;
+    private Session session;
     
     private ConfigurationType type = ConfigurationType.JNDI_NAME;
     
-    private String mailHostname = null;
+    private String mailHostname;
     private int    mailPort = -1;
-    private String mailUsername = null;
-    private String mailPassword = null;
+    private String mailUsername;
+    private String mailPassword;
 
     
     public MailProvider() throws StartupException {

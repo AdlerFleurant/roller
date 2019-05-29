@@ -66,8 +66,8 @@ public final class BlacklistChecker {
      */
     public static boolean checkReferrer(Weblog website, String referrerURL) {
         if (WebloggerConfig.getBooleanProperty("site.blacklist.enable.referrers")) {
-            List<String> stringRules = new ArrayList<String>();
-            List<Pattern> regexRules = new ArrayList<Pattern>();
+            List<String> stringRules = new ArrayList<>();
+            List<Pattern> regexRules = new ArrayList<>();
             Blacklist.populateSpamRules(
                 website.getBlacklist(), stringRules, regexRules, null);
             if (WebloggerRuntimeConfig.getProperty("spam.blacklist") != null) {
@@ -85,8 +85,8 @@ public final class BlacklistChecker {
      */
     private static boolean testComment(WeblogEntryComment c) {
         boolean ret = false;
-        List<String> stringRules = new ArrayList<String>();
-        List<Pattern> regexRules = new ArrayList<Pattern>();
+        List<String> stringRules = new ArrayList<>();
+        List<Pattern> regexRules = new ArrayList<>();
         Weblog website = c.getWeblogEntry().getWebsite();
         Blacklist.populateSpamRules(
             website.getBlacklist(), stringRules, regexRules, 

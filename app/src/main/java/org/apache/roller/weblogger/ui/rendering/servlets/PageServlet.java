@@ -435,7 +435,7 @@ public class PageServlet extends HttpServlet {
             }
         }
 
-        HashMap<String, Object> model = new HashMap<String, Object>();
+        HashMap<String, Object> model = new HashMap<>();
         try {
             PageContext pageContext = JspFactory.getDefaultFactory()
                     .getPageContext(this, request, response, "", false,
@@ -445,7 +445,7 @@ public class PageServlet extends HttpServlet {
             request.setAttribute("pageRequest", pageRequest);
 
             // populate the rendering model
-            Map<String, Object> initData = new HashMap<String, Object>();
+            Map<String, Object> initData = new HashMap<>();
             initData.put("requestParameters", request.getParameterMap());
             initData.put("parsedRequest", pageRequest);
             initData.put("pageContext", pageContext);
@@ -654,10 +654,8 @@ public class PageServlet extends HttpServlet {
                     }
                     String requestSite = requestUrl.substring(0, lastSlash);
 
-                    if (!referrerUrl.matches(requestSite + ".*\\.rol.*") &&
-                            BlacklistChecker.checkReferrer(pageRequest.getWeblog(), referrerUrl)) {
-                        return true;
-                    }
+                    return !referrerUrl.matches(requestSite + ".*\\.rol.*") &&
+                            BlacklistChecker.checkReferrer(pageRequest.getWeblog(), referrerUrl);
                 }
             } else {
                 log.debug("Ignoring referer = " + referrerUrl);

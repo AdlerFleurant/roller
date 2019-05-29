@@ -96,8 +96,7 @@ public class PropertyDef {
     public void setRows(String rows) {
         //convert to int
         try {
-            int r = Integer.parseInt(rows);
-            this.rows = r;
+            this.rows = Integer.parseInt(rows);
         } catch(Exception e) {
             // hmmm ... bogus value
         }
@@ -113,8 +112,7 @@ public class PropertyDef {
     public void setCols(String cols) {
         //convert to int
         try {
-            int c = Integer.parseInt(cols);
-            this.cols = c;
+            this.cols = Integer.parseInt(cols);
         } catch(Exception e) {
             // hmmm ... bogus value
         }

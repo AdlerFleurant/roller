@@ -75,13 +75,11 @@ public class UserRole implements Serializable {
     //------------------------------------------------------- Good citizenship
     
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("{");
-        buf.append(getId());
-        buf.append(", ").append(getUserName());
-        buf.append(", ").append(getRole());
-        buf.append("}");
-        return buf.toString();
+        return "{" +
+                getId() +
+                ", " + getUserName() +
+                ", " + getRole() +
+                "}";
     }
     
     public boolean equals(Object other) {

@@ -180,9 +180,8 @@ public class MediaFileBase extends UIAction {
             MediaFileManager mgr = WebloggerFactory.getWeblogger()
                     .getMediaFileManager();
             List<MediaFileDirectory> directories = mgr.getMediaFileDirectories(getActionWeblog());
-            List<MediaFileDirectory> sortedDirList = new ArrayList<MediaFileDirectory>();
-            sortedDirList.addAll(directories);
-            Collections.sort(sortedDirList, new MediaFileDirectoryComparator(
+            List<MediaFileDirectory> sortedDirList = new ArrayList<>(directories);
+            sortedDirList.sort(new MediaFileDirectoryComparator(
                     DirectoryComparatorType.NAME));
             setAllDirectories(sortedDirList);
         } catch (WebloggerException ex) {

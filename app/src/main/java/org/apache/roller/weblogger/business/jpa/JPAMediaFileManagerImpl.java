@@ -28,13 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
@@ -76,7 +70,7 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
      */
     @com.google.inject.Inject
     protected JPAMediaFileManagerImpl(Weblogger roller,
-            JPAPersistenceStrategy persistenceStrategy) {
+                                      JPAPersistenceStrategy persistenceStrategy) {
         this.roller = roller;
         this.strategy = persistenceStrategy;
     }
@@ -103,10 +97,9 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
      * {@inheritDoc}
      */
     public void moveMediaFiles(Collection<MediaFile> mediaFiles,
-            MediaFileDirectory targetDirectory) throws WebloggerException {
+                               MediaFileDirectory targetDirectory) throws WebloggerException {
 
-        List<MediaFile> moved = new ArrayList<MediaFile>();
-        moved.addAll(mediaFiles);
+        List<MediaFile> moved = new ArrayList<>(mediaFiles);
 
         for (MediaFile mediaFile : moved) {
             mediaFile.getDirectory().getMediaFiles().remove(mediaFile);
@@ -134,8 +127,8 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
      * {@inheritDoc}
      */
     public void moveMediaFile(MediaFile mediaFile,
-            MediaFileDirectory targetDirectory) throws WebloggerException {
-        moveMediaFiles(Arrays.asList(mediaFile), targetDirectory);
+                              MediaFileDirectory targetDirectory) throws WebloggerException {
+        moveMediaFiles(Collections.singletonList(mediaFile), targetDirectory);
     }
 
     /**
@@ -156,7 +149,7 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
      * {@inheritDoc}
      */
     public MediaFileDirectory createMediaFileDirectory(Weblog weblog,
-            String requestedName) throws WebloggerException {
+                                                       String requestedName) throws WebloggerException {
 
         requestedName = requestedName.startsWith("/") ? requestedName.substring(1) : requestedName;
 
@@ -196,7 +189,7 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
      * {@inheritDoc}
      */
     public void createMediaFile(Weblog weblog, MediaFile mediaFile,
-            RollerMessages errors) throws WebloggerException {
+                                RollerMessages errors) throws WebloggerException {
 
         FileContentManager cmgr = WebloggerFactory.getWeblogger()
                 .getFileContentManager();
@@ -283,7 +276,7 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
      * {@inheritDoc}
      */
     public void updateMediaFile(Weblog weblog, MediaFile mediaFile,
-            InputStream is) throws WebloggerException {
+                                InputStream is) throws WebloggerException {
         mediaFile.setLastUpdated(new Timestamp(System.currentTimeMillis()));
         strategy.store(mediaFile);
 
@@ -350,7 +343,7 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
      * {@inheritDoc}
      */
     public MediaFileDirectory getMediaFileDirectoryByName(Weblog weblog,
-            String name) throws WebloggerException {
+                                                          String name) throws WebloggerException {
 
         name = name.startsWith("/") ? name.substring(1) : name;
 
@@ -490,10 +483,9 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
     /**
      * {@inheritDoc}
      */
-    public List<MediaFile> searchMediaFiles(Weblog weblog,
-            MediaFileFilter filter) throws WebloggerException {
+    public List<MediaFile> searchMediaFiles(Weblog weblog, MediaFileFilter filter) throws WebloggerException {
 
-        List<Object> params = new ArrayList<Object>();
+        List<Object> params = new ArrayList<>();
         int size = 0;
         String queryString = "SELECT m FROM MediaFile m WHERE ";
         StringBuilder whereClause = new StringBuilder();
@@ -516,24 +508,21 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
             params.add(size++, filter.getSize());
             whereClause.append(" AND m.length ");
             switch (filter.getSizeFilterType()) {
-            case GT:
-                whereClause.append(">");
-                break;
-            case GTE:
-                whereClause.append(">=");
-                break;
-            case EQ:
-                whereClause.append("=");
-                break;
-            case LT:
-                whereClause.append("<");
-                break;
-            case LTE:
-                whereClause.append("<=");
-                break;
-            default:
-                whereClause.append("=");
-                break;
+                case GT:
+                    whereClause.append(">");
+                    break;
+                case GTE:
+                    whereClause.append(">=");
+                    break;
+                case LT:
+                    whereClause.append("<");
+                    break;
+                case LTE:
+                    whereClause.append("<=");
+                    break;
+                case EQ:
+                default:
+                    whereClause.append("=");
             }
             whereClause.append(" ?").append(size);
         }
@@ -572,16 +561,16 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
 
         if (filter.getOrder() != null) {
             switch (filter.getOrder()) {
-            case NAME:
-                orderBy.append(" order by m.name");
-                break;
-            case DATE_UPLOADED:
-                orderBy.append(" order by m.dateUploaded");
-                break;
-            case TYPE:
-                orderBy.append(" order by m.contentType");
-                break;
-            default:
+                case NAME:
+                    orderBy.append(" order by m.name");
+                    break;
+                case DATE_UPLOADED:
+                    orderBy.append(" order by m.dateUploaded");
+                    break;
+                case TYPE:
+                    orderBy.append(" order by m.contentType");
+                    break;
+                default:
             }
         } else {
             orderBy.append(" order by m.name");
@@ -617,9 +606,7 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
                 } catch (IOException ex) {
                     return true;
                 }
-                if (props.getProperty("complete") != null) {
-                    return false;
-                }
+                return props.getProperty("complete") == null;
             }
         }
         return true;
@@ -630,7 +617,7 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
      * creates migration status file only when work is complete.
      */
     public List<String> upgradeFileStorage() {
-        List<String> msgs = new ArrayList<String>();
+        List<String> msgs = new ArrayList<>();
         String oldDirName = WebloggerConfig.getProperty("uploads.dir");
         String FS = File.separator;
 
@@ -703,7 +690,7 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
     }
 
     private void upgradeUploadsDir(Weblog weblog, User user, File oldDir,
-            MediaFileDirectory newDir) {
+                                   MediaFileDirectory newDir) {
         RollerMessages messages = new RollerMessages();
 
         log.debug("Upgrading dir: " + oldDir.getAbsolutePath());
@@ -717,7 +704,7 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
         int fileCount = 0;
         File[] files = oldDir.listFiles();
         if (files != null) {
-            for (File file: files) {
+            for (File file : files) {
 
                 // a directory: go recursive
                 if (file.isDirectory()) {
@@ -846,7 +833,7 @@ public class JPAMediaFileManagerImpl implements MediaFileManager {
     public void removeMediaFileTag(String name, MediaFile entry)
             throws WebloggerException {
 
-        for (Iterator it = entry.getTags().iterator(); it.hasNext();) {
+        for (Iterator it = entry.getTags().iterator(); it.hasNext(); ) {
             MediaFileTag tag = (MediaFileTag) it.next();
             if (tag.getName().equals(name)) {
 

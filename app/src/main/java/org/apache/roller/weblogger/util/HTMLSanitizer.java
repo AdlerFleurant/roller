@@ -122,7 +122,7 @@ public class HTMLSanitizer {
 
     public static SanitizeResult sanitizer(String html, Pattern allowedTags, Pattern forbiddenTags) {
         SanitizeResult ret = new SanitizeResult();
-        Stack<String> openTags = new Stack<String>();
+        Stack<String> openTags = new Stack<>();
 
 
         List<String> tokens = tokenize(html);
@@ -159,7 +159,7 @@ public class HTMLSanitizer {
                 } else if (allowedTags.matcher(tag).find()) {
 
 
-                    String cleanToken = "<" + tag;
+                    StringBuilder cleanToken = new StringBuilder("<" + tag);
                     String tokenBody = startMatcher.group(2);
 
 
@@ -234,7 +234,7 @@ public class HTMLSanitizer {
                             // <tag style="......">
                             // then test properties
                             Matcher styles = stylePattern.matcher(val);
-                            String cleanStyle = "";
+                            StringBuilder cleanStyle = new StringBuilder();
 
                             while (styles.find()) {
                                 String styleName = styles.group(1).toLowerCase();
@@ -257,10 +257,10 @@ public class HTMLSanitizer {
                                     }
                                 }
 
-                                cleanStyle = cleanStyle + styleName + ":" + encode(styleValue) + ";";
+                                cleanStyle.append(styleName).append(":").append(encode(styleValue)).append(";");
 
                             }
-                            val = cleanStyle;
+                            val = cleanStyle.toString();
 
                         } else if (attr.startsWith("on")) {
                             // skip all javascript events
@@ -272,19 +272,19 @@ public class HTMLSanitizer {
                             val = encode(val);
                         }
 
-                        cleanToken = cleanToken + " " + attr + "=\"" + val + "\"";
+                        cleanToken.append(" ").append(attr).append("=\"").append(val).append("\"");
                     }
-                    cleanToken = cleanToken + ">";
+                    cleanToken.append(">");
 
                     isAcceptedToken = true;
 
                     // for <img> and <a>
                     if (tag.matches("a|img|embed") && !foundURL) {
                         isAcceptedToken = false;
-                        cleanToken = "";
+                        cleanToken = new StringBuilder();
                     }
 
-                    token = cleanToken;
+                    token = cleanToken.toString();
 
 
                     // push the tag if require closure and it is accepted (otherwise is encoded)
@@ -321,7 +321,7 @@ public class HTMLSanitizer {
                 } else {
 
 
-                    String cleanToken = "";
+                    StringBuilder cleanToken = new StringBuilder();
 
                     // check tag position in the stack
                     int pos = openTags.search(tag);
@@ -329,11 +329,11 @@ public class HTMLSanitizer {
                     for (int i = 1; i <= pos; i++) {
                         //pop all elements before tag and close it
                         String poppedTag = openTags.pop();
-                        cleanToken = cleanToken + "</" + poppedTag + ">";
+                        cleanToken.append("</").append(poppedTag).append(">");
                         isAcceptedToken = true;
                     }
 
-                    token = cleanToken;
+                    token = cleanToken.toString();
                 }
 
             }
@@ -372,10 +372,10 @@ public class HTMLSanitizer {
      * @param html
      * @return a list of token
      */
-    private static List<String> tokenize(String html) {
+    private static ArrayList tokenize(String html) {
         ArrayList tokens = new ArrayList();
         int pos = 0;
-        String token = "";
+        StringBuilder token = new StringBuilder();
         int len = html.length();
         while (pos < len) {
             char c = html.charAt(pos);
@@ -386,11 +386,11 @@ public class HTMLSanitizer {
             if ("<!--".equals(ahead)) {
                 //store the current token
                 if (token.length() > 0) {
-                    tokens.add(token);
+                    tokens.add(token.toString());
                 }
 
                 //clear the token
-                token = "";
+                token = new StringBuilder();
 
                 // search the end of <......>
                 int end = moveToMarkerEnd(pos, "-->", html);
@@ -403,11 +403,11 @@ public class HTMLSanitizer {
 
                 //store the current token
                 if (token.length() > 0) {
-                    tokens.add(token);
+                    tokens.add(token.toString());
                 }
 
                 //clear the token
-                token = "";
+                token = new StringBuilder();
 
                 // serch the end of <......>
                 int end = moveToMarkerEnd(pos, ">", html);
@@ -415,7 +415,7 @@ public class HTMLSanitizer {
                 pos = end;
 
             } else {
-                token = token + c;
+                token.append(c);
                 pos++;
             }
 
@@ -423,7 +423,7 @@ public class HTMLSanitizer {
 
         //store the last token
         if (token.length() > 0) {
-            tokens.add(token);
+            tokens.add(token.toString());
         }
 
         return tokens;
@@ -453,18 +453,18 @@ public class HTMLSanitizer {
         public String text = "";
         public String val = "";
         public boolean isValid = true;
-        public List<String> invalidTags = new ArrayList<String>();
+        public List<String> invalidTags = new ArrayList<>();
     }
 
     public static String encode(String s) {
         return convertLineFeedToBR(htmlEncodeApexesAndTags(s == null ? "" : s));
     }
 
-    public static final String htmlEncodeApexesAndTags(String source) {
+    public static String htmlEncodeApexesAndTags(String source) {
         return htmlEncodeTag(htmlEncodeApexes(source));
     }
 
-    public static final String htmlEncodeApexes(String source) {
+    public static String htmlEncodeApexes(String source) {
         if (source != null) {
             return replaceAllNoRegex(source, new String[]{"\"", "'"}, new String[]{"&quot;", "&#39;"});
         } else {
@@ -472,7 +472,7 @@ public class HTMLSanitizer {
         }
     }
 
-    public static final String htmlEncodeTag(String source) {
+    public static String htmlEncodeTag(String source) {
         if (source != null) {
             return replaceAllNoRegex(source, new String[]{"<", ">"}, new String[]{"&lt;", "&gt;"});
         } else {
@@ -497,7 +497,7 @@ public class HTMLSanitizer {
         }
     }
 
-    public static final String replaceAllNoRegex(String source, String searches[], String replaces[]) {
+    public static String replaceAllNoRegex(String source, String[] searches, String[] replaces) {
         int k;
         String tmp = source;
         for (k = 0; k < searches.length; k++) {
@@ -506,7 +506,7 @@ public class HTMLSanitizer {
         return tmp;
     }
 
-    public static final String replaceAllNoRegex(String source, String search, String replace) {
+    public static String replaceAllNoRegex(String source, String search, String replace) {
         StringBuilder buffer = new StringBuilder();
         if (source != null) {
             if (search.length() == 0) {
@@ -515,7 +515,7 @@ public class HTMLSanitizer {
             int oldPos, pos;
             for (oldPos = 0, pos = source.indexOf(search, oldPos); pos != -1; oldPos = pos + search.length(),
                     pos = source.indexOf(search, oldPos)) {
-                buffer.append(source.substring(oldPos, pos));
+                buffer.append(source, oldPos, pos);
                 buffer.append(replace);
             }
             if (oldPos < source.length()) {

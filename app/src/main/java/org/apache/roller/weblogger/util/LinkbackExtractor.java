@@ -112,14 +112,11 @@ public class LinkbackExtractor
         // Read HTML file into string
         StringBuilder sb = new StringBuilder();
         InputStreamReader isr = new InputStreamReader(is);
-        BufferedReader br = new BufferedReader(isr);
-        try {
+        try (BufferedReader br = new BufferedReader(isr)) {
             String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
-        } finally {
-            br.close();
         }
 
         // Parse HTML string to find title and start and end position

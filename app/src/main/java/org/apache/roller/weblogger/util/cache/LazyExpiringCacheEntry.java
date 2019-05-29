@@ -44,8 +44,8 @@ import java.io.Serializable;
  */
 public class LazyExpiringCacheEntry implements Serializable {
     
-    private Object value = null;
-    private long timeCached = -1;
+    private Object value;
+    private long timeCached;
     
     
     public LazyExpiringCacheEntry(Object item) {

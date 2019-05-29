@@ -47,7 +47,7 @@ public final class IPBanList {
     private ModifiedFile bannedIpsFile = null;
     
     // reference to our singleton instance
-    private static IPBanList instance = null;
+    private static IPBanList instance;
     
     
     static {
@@ -152,7 +152,7 @@ public final class IPBanList {
                 // TODO: optimize this
                 BufferedReader in = new BufferedReader(new FileReader(this.bannedIpsFile));
                 
-                String ip = null;
+                String ip;
                 while((ip = in.readLine()) != null) {
                     newBannedIpList.add(ip);
                 }
@@ -176,7 +176,7 @@ public final class IPBanList {
     // changed since the last time we checked
     private class ModifiedFile extends java.io.File {
         
-        private long myLastModified = 0;
+        private long myLastModified;
         
         public ModifiedFile(String filePath) {
             super(filePath);

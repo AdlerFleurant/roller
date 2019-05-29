@@ -31,8 +31,8 @@ import org.apache.roller.util.RollerConstants;
  */
 public class LRUCacheImpl implements Cache {
     
-    private String id = null;
-    private Map cache = null;
+    private String id;
+    private Map cache;
     
     // for metrics
     protected double hits = 0;
@@ -111,7 +111,7 @@ public class LRUCacheImpl implements Cache {
     
     public Map<String, Object> getStats() {
         
-        Map<String, Object> stats = new HashMap<String, Object>();
+        Map<String, Object> stats = new HashMap<>();
         stats.put("startTime", this.startTime);
         stats.put("hits", this.hits);
         stats.put("misses", this.misses);

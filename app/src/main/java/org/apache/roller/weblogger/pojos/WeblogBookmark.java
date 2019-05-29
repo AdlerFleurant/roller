@@ -157,12 +157,10 @@ public class WeblogBookmark implements Serializable, Comparable<WeblogBookmark> 
     //------------------------------------------------------- Good citizenship
     
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("{");
-        buf.append(getId());
-        buf.append(", ").append(getUrl());
-        buf.append("}");
-        return buf.toString();
+        return "{" +
+                getId() +
+                ", " + getUrl() +
+                "}";
     }
     
     public boolean equals(Object other) {

@@ -82,7 +82,7 @@ public class JPAWeblogManagerImpl implements WeblogManager {
     private final JPAPersistenceStrategy strategy;
     
     // cached mapping of weblogHandles -> weblogIds
-    private Map<String,String> weblogHandleToIdMap = new Hashtable<String,String>();
+    private Map<String,String> weblogHandleToIdMap = new Hashtable<>();
 
     @com.google.inject.Inject
     protected JPAWeblogManagerImpl(Weblogger roller, JPAPersistenceStrategy strat) {
@@ -268,7 +268,7 @@ public class JPAWeblogManagerImpl implements WeblogManager {
     throws WebloggerException {
         
         // grant weblog creator ADMIN permission
-        List<String> actions = new ArrayList<String>();
+        List<String> actions = new ArrayList<>();
         actions.add(WeblogPermission.ADMIN);
         roller.getUserManager().grantWeblogPermission(
                 newWeblog, newWeblog.getCreator(), actions);
@@ -409,7 +409,7 @@ public class JPAWeblogManagerImpl implements WeblogManager {
         
         //if (endDate == null) endDate = new Date();
                       
-        List<Object> params = new ArrayList<Object>();
+        List<Object> params = new ArrayList<>();
         int size = 0;
         String queryString;
         StringBuilder whereClause = new StringBuilder();
@@ -464,7 +464,7 @@ public class JPAWeblogManagerImpl implements WeblogManager {
     }
 
     public List<Weblog> getUserWeblogs(User user, boolean enabledOnly) throws WebloggerException {
-        List<Weblog> weblogs = new ArrayList<Weblog>();
+        List<Weblog> weblogs = new ArrayList<>();
         if (user == null) {
             return weblogs;
         }
@@ -479,7 +479,7 @@ public class JPAWeblogManagerImpl implements WeblogManager {
     }
     
     public List<User> getWeblogUsers(Weblog weblog, boolean enabledOnly) throws WebloggerException {
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         List<WeblogPermission> perms = roller.getUserManager().getWeblogPermissions(weblog);
         for (WeblogPermission perm : perms) {
             User user = perm.getUser();
@@ -594,7 +594,7 @@ public class JPAWeblogManagerImpl implements WeblogManager {
     
     public Map<String, Long> getWeblogHandleLetterMap() throws WebloggerException {
         String lc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        Map<String, Long> results = new TreeMap<String, Long>();
+        Map<String, Long> results = new TreeMap<>();
         TypedQuery<Long> query = strategy.getNamedQuery(
                 "Weblog.getCountByHandleLike", Long.class);
         for (int i=0; i<26; i++) {
@@ -651,7 +651,7 @@ public class JPAWeblogManagerImpl implements WeblogManager {
             query.setMaxResults(length);
         }
         List queryResults = query.getResultList();
-        List<StatCount> results = new ArrayList<StatCount>();
+        List<StatCount> results = new ArrayList<>();
         if (queryResults != null) {
             for (Object obj : queryResults) {
                 Object[] row = (Object[]) obj;
@@ -668,7 +668,7 @@ public class JPAWeblogManagerImpl implements WeblogManager {
 
         // Original query ordered by desc # comments.
         // JPA QL doesn't allow queries to be ordered by aggregates; do it in memory
-        Collections.sort(results, STAT_COUNT_COUNT_REVERSE_COMPARATOR);
+        results.sort(STAT_COUNT_COUNT_REVERSE_COMPARATOR);
         
         return results;
     }

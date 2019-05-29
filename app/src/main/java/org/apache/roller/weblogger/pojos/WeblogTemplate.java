@@ -41,7 +41,7 @@ public class WeblogTemplate implements ThemeTemplate, Serializable {
     public static final long serialVersionUID = -613737191638263428L;
     public static final String DEFAULT_PAGE = "Weblog";
     
-    private static Set<String> requiredTemplates = null;
+    private static Set<String> requiredTemplates;
     
     // attributes
     private String id = UUIDGenerator.generateUUID();
@@ -58,7 +58,7 @@ public class WeblogTemplate implements ThemeTemplate, Serializable {
     private Weblog weblog = null;
 
     static {
-        requiredTemplates = new HashSet<String>();
+        requiredTemplates = new HashSet<>();
         requiredTemplates.add("Weblog");
         requiredTemplates.add("_day");
     }
@@ -148,7 +148,7 @@ public class WeblogTemplate implements ThemeTemplate, Serializable {
         this.outputContentType = outputContentType;
     }
 
-    private List<CustomTemplateRendition> templateRenditions = new ArrayList<CustomTemplateRendition>();
+    private List<CustomTemplateRendition> templateRenditions = new ArrayList<>();
 
     /**
      * Determine if this WeblogTemplate is required or not.

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -66,8 +67,8 @@ public class Trackback {
             // for only specific URLs, set it to false by default
             allowTrackback = false;
             String[] splitURLs = allowedURLs.split("\\|\\|");
-            for (int i=0; i < splitURLs.length; i++) {
-                Matcher m = Pattern.compile(splitURLs[i]).matcher(tURL);
+            for (String splitURL : splitURLs) {
+                Matcher m = Pattern.compile(splitURL).matcher(tURL);
                 if (m.matches()) {
                     allowTrackback = true;
                     break;
@@ -132,7 +133,7 @@ public class Trackback {
             
             // read response
             byte[] response = method.getResponseBody();
-            String responseString = Utilities.escapeHTML(new String(response, "UTF-8"));
+            String responseString = Utilities.escapeHTML(new String(response, StandardCharsets.UTF_8));
             
             LOG.debug("result = " + statusCode + " " + method.getStatusText());
             LOG.debug("response:\n" + responseString);
@@ -140,7 +141,7 @@ public class Trackback {
             if(statusCode == HttpStatus.SC_OK) {
                 // trackback request succeeded, message will give details
                 try {
-                    messages = parseTrackbackResponse(new String(response, "UTF-8"), messages);
+                    messages = parseTrackbackResponse(new String(response, StandardCharsets.UTF_8), messages);
                 } catch (Exception e) {
                     // Cannot parse response, indicates failure
                     messages.addError("weblogEdit.trackbackErrorParsing", responseString);
@@ -184,7 +185,7 @@ public class Trackback {
             int code = -99;
             try {
                 code = Integer.parseInt(root.getChildText("error"));
-            } catch (NumberFormatException ignoredByDesign) {}
+            } catch (NumberFormatException ignored) {}
             
             String message = root.getChildText("message");
             if (code != 0) {

@@ -44,7 +44,7 @@ public class FileContentManagerImpl implements FileContentManager {
 
     private static Log log = LogFactory.getLog(FileContentManagerImpl.class);
 
-    private String storageDir = null;
+    private String storageDir;
 
     /**
      * Create file content manager.
@@ -256,7 +256,7 @@ public class FileContentManagerImpl implements FileContentManager {
         long size = 0;
 
         if (dir.exists() && dir.isDirectory() && dir.canRead()) {
-            long dirSize = 0l;
+            long dirSize = 0L;
             File[] files = dir.listFiles();
             if (files != null) {
                 for (File file : files) {
@@ -306,13 +306,13 @@ public class FileContentManagerImpl implements FileContentManager {
 
         // check file against allowed file extensions
         if (allowFiles != null && allowFiles.length > 0) {
-            for (int y = 0; y < allowFiles.length; y++) {
+            for (String file : allowFiles) {
                 // oops, this allowed rule is a content-type, skip it
-                if (allowFiles[y].indexOf('/') != -1) {
+                if (file.indexOf('/') != -1) {
                     continue;
                 }
                 if (fileName.toLowerCase()
-                        .endsWith(allowFiles[y].toLowerCase())) {
+                        .endsWith(file.toLowerCase())) {
                     allowFile = true;
                     break;
                 }
@@ -321,12 +321,12 @@ public class FileContentManagerImpl implements FileContentManager {
 
         // check file against allowed contentTypes
         if (allowFiles != null && allowFiles.length > 0) {
-            for (int y = 0; y < allowFiles.length; y++) {
+            for (String file : allowFiles) {
                 // oops, this allowed rule is NOT a content-type, skip it
-                if (allowFiles[y].indexOf('/') == -1) {
+                if (file.indexOf('/') == -1) {
                     continue;
                 }
-                if (matchContentType(allowFiles[y], contentType)) {
+                if (matchContentType(file, contentType)) {
                     allowFile = true;
                     break;
                 }
@@ -337,13 +337,13 @@ public class FileContentManagerImpl implements FileContentManager {
 
         // check file against forbidden file extensions, overrides any allows
         if (forbidFiles != null && forbidFiles.length > 0) {
-            for (int x = 0; x < forbidFiles.length; x++) {
+            for (String forbidFile : forbidFiles) {
                 // oops, this forbid rule is a content-type, skip it
-                if (forbidFiles[x].indexOf('/') != -1) {
+                if (forbidFile.indexOf('/') != -1) {
                     continue;
                 }
                 if (fileName.toLowerCase().endsWith(
-                        forbidFiles[x].toLowerCase())) {
+                        forbidFile.toLowerCase())) {
                     allowFile = false;
                     break;
                 }
@@ -352,12 +352,12 @@ public class FileContentManagerImpl implements FileContentManager {
 
         // check file against forbidden contentTypes, overrides any allows
         if (forbidFiles != null && forbidFiles.length > 0) {
-            for (int x = 0; x < forbidFiles.length; x++) {
+            for (String forbidFile : forbidFiles) {
                 // oops, this forbid rule is NOT a content-type, skip it
-                if (forbidFiles[x].indexOf('/') == -1) {
+                if (forbidFile.indexOf('/') == -1) {
                     continue;
                 }
-                if (matchContentType(forbidFiles[x], contentType)) {
+                if (matchContentType(forbidFile, contentType)) {
                     allowFile = false;
                     break;
                 }
@@ -377,13 +377,10 @@ public class FileContentManagerImpl implements FileContentManager {
         if (rangeRule.equals(contentType)) {
             return true;
         }
-        String ruleParts[] = rangeRule.split("/");
-        String typeParts[] = contentType.split("/");
-        if (ruleParts[0].equals(typeParts[0]) && ruleParts[1].equals("*")) {
-            return true;
-        }
+        String[] ruleParts = rangeRule.split("/");
+        String[] typeParts = contentType.split("/");
+        return ruleParts[0].equals(typeParts[0]) && ruleParts[1].equals("*");
 
-        return false;
     }
 
     /**

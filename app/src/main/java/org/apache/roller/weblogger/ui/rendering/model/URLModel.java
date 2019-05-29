@@ -19,6 +19,7 @@
 package org.apache.roller.weblogger.ui.rendering.model;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.logging.Log;
@@ -120,12 +121,12 @@ public class URLModel implements Model {
     /** URL for a specific UI action */
     public String action(String action, String namespace) {
         if(namespace != null) {
-            if("/roller-ui".equals(namespace)) {
-                return urlStrategy.getActionURL(action, namespace, null, null, true);
-            } else if("/roller-ui/authoring".equals(namespace)) {
-                return urlStrategy.getActionURL(action, namespace, weblog.getHandle(), null, true);
-            } else if("/roller-ui/admin".equals(namespace)) {
-                return urlStrategy.getActionURL(action, namespace, null, null, true);
+            switch (namespace) {
+                case "/roller-ui":
+                case "/roller-ui/admin":
+                    return urlStrategy.getActionURL(action, namespace, null, null, true);
+                case "/roller-ui/authoring":
+                    return urlStrategy.getActionURL(action, namespace, weblog.getHandle(), null, true);
             }
         }
         return null;
@@ -208,12 +209,12 @@ public class URLModel implements Model {
     
     
     public String tag(String tag) {
-        return urlStrategy.getWeblogCollectionURL(weblog, locale, null, null, Arrays.asList(new String[]{tag}) , -1, true);
+        return urlStrategy.getWeblogCollectionURL(weblog, locale, null, null, Collections.singletonList(tag), -1, true);
     }
     
     
     public String tag(String tag, int pageNum) {
-        return urlStrategy.getWeblogCollectionURL(weblog, locale, null, null, Arrays.asList(new String[]{tag}), pageNum, true);
+        return urlStrategy.getWeblogCollectionURL(weblog, locale, null, null, Collections.singletonList(tag), pageNum, true);
     }    
     
     

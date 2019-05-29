@@ -41,14 +41,14 @@ public class WeblogEntriesListPager extends AbstractPager {
     
     private static Log log = LogFactory.getLog(WeblogEntriesListPager.class);
     
-    private String locale = null;
-    private int sinceDays = -1;
-    private int length = 0;
+    private String locale;
+    private int sinceDays;
+    private int length;
     
-    private Weblog queryWeblog = null;
-    private User queryUser = null;
-    private String queryCat = null;
-    private List<String> queryTags = null;
+    private Weblog queryWeblog;
+    private User queryUser;
+    private String queryCat;
+    private List<String> queryTags;
     
     // entries for the pager
     private List<WeblogEntryWrapper> entries;
@@ -94,7 +94,7 @@ public class WeblogEntriesListPager extends AbstractPager {
             // calculate offset
             int offset = getPage() * length;
 
-            List<WeblogEntryWrapper> results = new ArrayList<WeblogEntryWrapper>();
+            List<WeblogEntryWrapper> results = new ArrayList<>();
             
             Date startDate = null;
             if(sinceDays > 0) {
