@@ -42,7 +42,7 @@ public final class SaltCache {
     // roller config properties that apply to this cache
     public static final String CACHE_ID = "cache.salt";
     
-    private Cache contentCache = null;
+    private Cache contentCache;
     
     // reference to our singleton instance
     private static SaltCache singletonInstance = new SaltCache();
@@ -52,7 +52,7 @@ public final class SaltCache {
         Map cacheProps = new HashMap();
         cacheProps.put("id", CACHE_ID);
         Enumeration allProps = WebloggerConfig.keys();
-        String prop = null;
+        String prop;
         while(allProps.hasMoreElements()) {
             prop = (String) allProps.nextElement();
             

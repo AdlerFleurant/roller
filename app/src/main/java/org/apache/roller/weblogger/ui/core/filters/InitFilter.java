@@ -87,9 +87,9 @@ public class InitFilter implements Filter {
 
     protected static String getAbsoluteUrl(boolean secure, String serverName, String contextPath, String requestURI, String requestURL){
 
-        String url = null;
+        String url;
 
-        String fullUrl = null;
+        String fullUrl;
 
         if (!secure) {
             fullUrl = requestURL;

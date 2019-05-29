@@ -36,7 +36,6 @@ import org.apache.roller.weblogger.pojos.MediaFileDirectory;
 import org.apache.roller.weblogger.util.RollerMessages;
 import org.apache.roller.weblogger.util.RollerMessages.RollerMessage;
 import org.apache.roller.weblogger.util.Utilities;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 /**
@@ -59,9 +58,9 @@ public class MediaFileAdd extends MediaFileBase {
     // an array of filenames for uploaded files
     private String[] uploadedFilesFileName = null;
 
-    private List<MediaFile> newImages = new ArrayList<MediaFile>();
+    private List<MediaFile> newImages = new ArrayList<>();
 
-    private List<MediaFile> newFiles = new ArrayList<MediaFile>();
+    private List<MediaFile> newFiles = new ArrayList<>();
 
     private String directoryName = null;
 

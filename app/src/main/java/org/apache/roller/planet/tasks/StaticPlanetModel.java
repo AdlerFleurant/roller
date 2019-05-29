@@ -32,7 +32,7 @@ import org.apache.roller.weblogger.business.WebloggerFactory;
  * to be duck-type compatible with old PlanetTool templates.
  */
 public class StaticPlanetModel {
-    PlanetManager planetManager = null;
+    PlanetManager planetManager;
     
     
     public StaticPlanetModel() throws RollerException {

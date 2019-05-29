@@ -123,7 +123,7 @@ public abstract class RollerTask implements Runnable {
         
         Properties taskProps = new Properties();
         
-        String key = null;
+        String key;
         Enumeration keys = WebloggerConfig.keys();
         while(keys.hasMoreElements()) {
             key = (String) keys.nextElement();

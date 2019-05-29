@@ -30,7 +30,6 @@ import org.apache.roller.planet.pojos.PlanetGroup;
 import org.apache.roller.planet.pojos.Subscription;
 import org.apache.roller.weblogger.business.WebloggerFactory;
 import org.apache.roller.weblogger.pojos.GlobalPermission;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 
 
 /**
@@ -197,7 +196,7 @@ public class PlanetSubscriptions extends PlanetUIAction {
             Set<Subscription> subsSet = getGroup().getSubscriptions();
             
             // iterate over list and build display list
-            subs = new ArrayList<Subscription>();
+            subs = new ArrayList<>();
             for (Subscription sub : subsSet) {
                 // only include external subs for display
                 if(!sub.getFeedURL().startsWith("weblogger:")) {

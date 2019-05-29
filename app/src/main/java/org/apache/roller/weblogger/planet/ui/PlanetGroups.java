@@ -24,9 +24,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.roller.planet.business.PlanetManager;
 import org.apache.roller.planet.pojos.Planet;
 import org.apache.roller.planet.pojos.PlanetGroup;
-import org.apache.roller.weblogger.business.Weblogger;
 import org.apache.roller.weblogger.business.WebloggerFactory;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 
 
 /**
@@ -175,7 +173,7 @@ public class PlanetGroups extends PlanetUIAction {
     
     
     public List<PlanetGroup> getGroups() {
-        List<PlanetGroup> displayGroups = new ArrayList<PlanetGroup>();
+        List<PlanetGroup> displayGroups = new ArrayList<>();
         
         for (PlanetGroup planetGroup : getPlanet().getGroups()) {
             // The "all" group is considered a special group and cannot be

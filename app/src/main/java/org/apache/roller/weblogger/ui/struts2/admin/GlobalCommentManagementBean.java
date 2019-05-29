@@ -50,8 +50,8 @@ public class GlobalCommentManagementBean {
     
     public void loadCheckboxes(List<WeblogEntryComment> comments) {
         
-        List<String> allComments = new ArrayList<String>();
-        List<String> spamList = new ArrayList<String>();
+        List<String> allComments = new ArrayList<>();
+        List<String> spamList = new ArrayList<>();
         
         for (WeblogEntryComment comment : comments) {
             allComments.add(comment.getId());
@@ -61,26 +61,15 @@ public class GlobalCommentManagementBean {
             }
         }
 
-        String[] idArray = allComments.toArray(new String[allComments.size()]);
+        String[] idArray = allComments.toArray(new String[0]);
         this.setIds(Utilities.stringArrayToString(idArray,","));
         
-        spamComments = spamList.toArray(new String[spamList.size()]);
+        spamComments = spamList.toArray(new String[0]);
     }
     
     
     public ApprovalStatus getStatus() {
-        if (approvedString.equals("ONLY_APPROVED")) {
-            return ApprovalStatus.APPROVED;
-        } else if (approvedString.equals("ONLY_DISAPPROVED")) {
-            return ApprovalStatus.DISAPPROVED;
-        } else if (approvedString.equals("ONLY_PENDING")) {
-            return ApprovalStatus.PENDING;
-        } else if (approvedString.equals("ONLY_SPAM")) {
-            return ApprovalStatus.SPAM;
-        } else {
-            // shows *all* comments, regardless of status
-            return null;
-        }
+        return ApprovalStatus.fromString(approvedString);
     }
     
     public Date getStartDate() {
@@ -88,7 +77,7 @@ public class GlobalCommentManagementBean {
             try {
                 DateFormat df = new SimpleDateFormat("MM/dd/yy");
                 return df.parse(getStartDateString());
-            } catch(Exception e) { }
+            } catch(Exception ignored) { }
         }
         return null;
     }
@@ -99,7 +88,7 @@ public class GlobalCommentManagementBean {
                 DateFormat df = new SimpleDateFormat("MM/dd/yy");
                 Date day = df.parse(getEndDateString());
                 return DateUtil.getEndOfDay(day);
-            } catch (Exception e) {}
+            } catch (Exception ignored) {}
         }
         return null;
     }

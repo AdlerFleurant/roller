@@ -17,6 +17,7 @@ package org.apache.roller.weblogger.util;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -31,7 +32,7 @@ import org.apache.commons.codec.binary.Base64;
 public class WSSEUtilities {
     public static synchronized String generateDigest(
             byte[] nonce, byte[] created, byte[] password) {
-        String result = null;
+        String result;
         try {
             MessageDigest digester = MessageDigest.getInstance("SHA");
             digester.reset();
@@ -47,7 +48,7 @@ public class WSSEUtilities {
         return result;
     }
     public static byte[] base64Decode(String value) throws IOException {
-        return Base64.decodeBase64(value.getBytes("UTF-8"));
+        return Base64.decodeBase64(value.getBytes(StandardCharsets.UTF_8));
     }
     public static String base64Encode(byte[] value) {
         return new String(Base64.encodeBase64(value));
@@ -62,20 +63,18 @@ public class WSSEUtilities {
         String created = sdf.format(new Date());
         
         String digest = WSSEUtilities.generateDigest(
-                nonceBytes, created.getBytes("UTF-8"), password.getBytes("UTF-8"));
-        
-        StringBuilder header = new StringBuilder("UsernameToken Username=\"");
-        header.append(userName);
-        header.append("\", ");
-        header.append("PasswordDigest=\"");
-        header.append(digest);
-        header.append("\", ");
-        header.append("Nonce=\"");
-        header.append(nonce);
-        header.append("\", ");
-        header.append("Created=\"");
-        header.append(created);
-        header.append("\"");
-        return header.toString();
+                nonceBytes, created.getBytes(StandardCharsets.UTF_8), password.getBytes(StandardCharsets.UTF_8));
+
+        return "UsernameToken Username=\"" + userName +
+                "\", " +
+                "PasswordDigest=\"" +
+                digest +
+                "\", " +
+                "Nonce=\"" +
+                nonce +
+                "\", " +
+                "Created=\"" +
+                created +
+                "\"";
     }
 }

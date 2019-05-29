@@ -27,7 +27,6 @@ import org.apache.roller.weblogger.pojos.TemplateRendition.TemplateLanguage;
 import org.apache.roller.weblogger.pojos.WeblogTemplate;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
 import org.apache.roller.weblogger.util.cache.CacheManager;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import java.util.Date;
@@ -174,7 +173,7 @@ public class TemplateEdit extends UIAction {
     }
 
     public Map<TemplateLanguage, String> getTemplateLanguages() {
-        Map<TemplateLanguage, String> langMap = new EnumMap<TemplateLanguage, String>(TemplateLanguage.class);
+        Map<TemplateLanguage, String> langMap = new EnumMap<>(TemplateLanguage.class);
         for (TemplateLanguage lang : TemplateLanguage.values()) {
             langMap.put(lang, lang.getReadableName());
         }

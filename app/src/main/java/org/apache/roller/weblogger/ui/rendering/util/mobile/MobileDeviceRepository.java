@@ -57,17 +57,13 @@ public class MobileDeviceRepository {
 		} else if (device.isNormal()) {
 			// log.info("Device is normal");
 			return false;
-		} else if (device.isMobile()) {
+		} else // log.info("Device is tablet");
+            // System.out.println(userAgent);
+            if (device.isMobile()) {
 			// log.info("Device is mobile");
 			// System.out.println(userAgent);
 			return true;
-		} else if (device.isTablet()) {
-			// log.info("Device is tablet");
-			// System.out.println(userAgent);
-			return true;
-		} else {
-			return false;
-		}
+		} else return device.isTablet();
 
 	}
 

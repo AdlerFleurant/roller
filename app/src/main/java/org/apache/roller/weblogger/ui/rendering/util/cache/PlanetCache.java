@@ -44,7 +44,7 @@ public final class PlanetCache {
     public static final String CACHE_ID = "cache.planet";
     
     // keep cached content
-    private boolean cacheEnabled = true;
+    private boolean cacheEnabled;
     private Cache contentCache = null;
     
     // keep a cached version of last expired time
@@ -58,7 +58,7 @@ public final class PlanetCache {
         
         cacheEnabled = WebloggerConfig.getBooleanProperty(CACHE_ID + ".enabled");
         
-        Map<String, String> cacheProps = new HashMap<String, String>();
+        Map<String, String> cacheProps = new HashMap<>();
         cacheProps.put("id", CACHE_ID);
         Enumeration allProps = WebloggerConfig.keys();
         String prop;

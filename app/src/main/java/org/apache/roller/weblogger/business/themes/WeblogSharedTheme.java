@@ -41,7 +41,7 @@ public class WeblogSharedTheme extends WeblogTheme {
     
     private static Log log = LogFactory.getLog(WeblogSharedTheme.class);
     
-    private SharedTheme theme = null;
+    private SharedTheme theme;
 
     public WeblogSharedTheme(Weblog weblog, SharedTheme theme) {
         super(weblog);
@@ -78,7 +78,7 @@ public class WeblogSharedTheme extends WeblogTheme {
      */
     public List<ThemeTemplate> getTemplates() throws WebloggerException {
         
-        Map<String, ThemeTemplate> pages = new TreeMap<String, ThemeTemplate>();
+        Map<String, ThemeTemplate> pages = new TreeMap<>();
         
         // first get the pages from the db
         try {
@@ -103,7 +103,7 @@ public class WeblogSharedTheme extends WeblogTheme {
             log.error(e);
         }
         
-        return new ArrayList<ThemeTemplate>(pages.values());
+        return new ArrayList<>(pages.values());
     }
     
     

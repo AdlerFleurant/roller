@@ -28,7 +28,6 @@ import org.apache.roller.weblogger.business.WebloggerFactory;
 import org.apache.roller.weblogger.pojos.AutoPing;
 import org.apache.roller.weblogger.pojos.PingTarget;
 import org.apache.roller.weblogger.business.pings.WeblogUpdatePinger;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 import org.apache.xmlrpc.XmlRpcException;
 import java.io.IOException;
 import java.net.SocketException;
@@ -175,11 +174,7 @@ public class Pings extends UIAction {
                         addMessage("ping.successful");
                     }
                 }
-            } catch (IOException ex) {
-                log.debug(ex);
-                addError("ping.transmissionFailed");
-                addSpecificMessages(ex);
-            } catch (XmlRpcException ex) {
+            } catch (IOException | XmlRpcException ex) {
                 log.debug(ex);
                 addError("ping.transmissionFailed");
                 addSpecificMessages(ex);
@@ -209,7 +204,7 @@ public class Pings extends UIAction {
         AutoPingManager autoPingMgr = WebloggerFactory.getWeblogger().getAutopingManager();
         
         // Build isEnabled map (keyed by ping target id and values Boolean.TRUE/Boolean.FALSE)
-        Map<String, Boolean> isEnabled = new HashMap<String, Boolean>();
+        Map<String, Boolean> isEnabled = new HashMap<>();
         
         List<AutoPing> autoPings = Collections.emptyList();
         try {
@@ -225,9 +220,7 @@ public class Pings extends UIAction {
         
         // Add disabled ping targets ones with FALSE
         for (PingTarget inPingTarget : getCommonPingTargets()) {
-            if (isEnabled.get(inPingTarget.getId()) == null) {
-                isEnabled.put(inPingTarget.getId(), Boolean.FALSE);
-            }
+            isEnabled.putIfAbsent(inPingTarget.getId(), Boolean.FALSE);
         }
 
         if (isEnabled.size() > 0) {

@@ -54,7 +54,7 @@ public class MathCommentAuthenticator implements CommentAuthenticator {
             String answerString = request.getParameter("answer");
             try {
                 answer = Integer.parseInt(answerString);
-            } catch (Throwable intentionallyIgnored) {}
+            } catch (Throwable ignored) {}
         }
 
         // pull existing values out of session
@@ -63,20 +63,17 @@ public class MathCommentAuthenticator implements CommentAuthenticator {
 
         Locale locale = CommentAuthenticatorUtils.getLocale(request);
         I18nMessages messages = I18nMessages.getMessages(locale);
-        StringBuilder sb = new StringBuilder();
-        
-        sb.append("<p>");
-        sb.append(messages.getString("comments.mathAuthenticatorQuestion"));
-        sb.append("</p><p>");
-        sb.append(value1o);
-        sb.append(" + ");
-        sb.append(value2o);
-        sb.append(" = ");
-        sb.append("<input name=\"answer\" value=\"");
-        sb.append(answer);
-        sb.append("\" /></p>");
-        
-        return sb.toString();
+
+        return "<p>" +
+                messages.getString("comments.mathAuthenticatorQuestion") +
+                "</p><p>" +
+                value1o +
+                " + " +
+                value2o +
+                " = " +
+                "<input name=\"answer\" value=\"" +
+                answer +
+                "\" /></p>";
     }
     
     

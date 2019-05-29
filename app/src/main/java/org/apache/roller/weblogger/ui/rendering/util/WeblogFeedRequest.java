@@ -81,7 +81,7 @@ public class WeblogFeedRequest extends WeblogRequest {
         log.debug("parsing path "+pathInfo);
         
         // was this request bound for the feed servlet?
-        if(servlet == null || !FEED_SERVLET.equals(servlet)) {
+        if(!FEED_SERVLET.equals(servlet)) {
             throw new InvalidRequestException("not a weblog feed request, "+
                     request.getRequestURL());
         }

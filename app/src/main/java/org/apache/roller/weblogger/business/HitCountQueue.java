@@ -45,10 +45,10 @@ public final class HitCountQueue {
     
     private static Log log = LogFactory.getLog(HitCountQueue.class);
     
-    private static HitCountQueue instance = null;
+    private static HitCountQueue instance;
     
-    private WorkerThread worker = null;
-    private List<String> queue = null;
+    private WorkerThread worker;
+    private List<String> queue;
     
     
     static {
@@ -69,7 +69,7 @@ public final class HitCountQueue {
         }
         
         // create the hits queue
-        this.queue = Collections.synchronizedList(new ArrayList<String>());
+        this.queue = Collections.synchronizedList(new ArrayList<>());
         
         // start up a worker to process the hits at intervals
         HitCountProcessingJob job = new HitCountProcessingJob();
@@ -94,7 +94,7 @@ public final class HitCountQueue {
     
     
     public List<String> getHits() {
-        return new ArrayList<String>(this.queue);
+        return new ArrayList<>(this.queue);
     }
     
     
@@ -102,7 +102,7 @@ public final class HitCountQueue {
      * Reset the queued hits.
      */
     public synchronized void resetHits() {
-        this.queue = Collections.synchronizedList(new ArrayList<String>());
+        this.queue = Collections.synchronizedList(new ArrayList<>());
     }
     
     

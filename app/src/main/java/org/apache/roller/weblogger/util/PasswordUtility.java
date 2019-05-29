@@ -87,25 +87,25 @@ public class PasswordUtility
         }
         else 
         {
-            System.out.println("");
+            System.out.println();
             System.out.println("USAGE: save passwords to a properties file");
             System.out.println("   rollerpw -save <file-name>");
-            System.out.println("");
+            System.out.println();
             System.out.println("USAGE: turn ON password encryption and encrypt existing passwords");
             System.out.println("   rollerpw -encrypt");
-            System.out.println("");
+            System.out.println();
             System.out.println("USAGE: turn OFF password encryption and restore saved passwords");
             System.out.println("   rollerpw -restore <file-name>");
-            System.out.println("");
+            System.out.println();
             System.out.println("USAGE: reset a user password");
             System.out.println("   rollerpw -password <username> <new-password>");
-            System.out.println("");
+            System.out.println();
             System.out.println("USAGE: grant admin rights to user");
             System.out.println("   rollerpw -grant_admin <username>");
-            System.out.println("");
+            System.out.println();
             System.out.println("USAGE: revoke admin right from user");
             System.out.println("   rollerpw -revoke_admin <username>");
-            System.out.println("");
+            System.out.println();
         }
     }
     

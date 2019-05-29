@@ -59,10 +59,10 @@ public final class CacheManager {
     private static CacheFactory cacheFactory = null;
     
     // a set of all registered cache handlers
-    private static Set<CacheHandler> cacheHandlers = new HashSet<CacheHandler>();
+    private static Set<CacheHandler> cacheHandlers = new HashSet<>();
     
     // a map of all registered caches
-    private static Map<String, Cache> caches = new HashMap<String, Cache>();
+    private static Map<String, Cache> caches = new HashMap<>();
     
     
     static {
@@ -72,7 +72,7 @@ public final class CacheManager {
         // use reflection to instantiate our factory class
         try {
             Class factoryClass = Class.forName(classname);
-            cacheFactory = (CacheFactory) factoryClass.newInstance();
+            cacheFactory = (CacheFactory) factoryClass.getConstructor().newInstance();
         } catch(ClassCastException cce) {
             log.error("It appears that your factory does not implement "+
                     "the CacheFactory interface",cce);
@@ -86,7 +86,7 @@ public final class CacheManager {
                 // hmm ... failed to load the specified cache factory
                 // lets try our default
                 Class factoryClass = Class.forName(DEFAULT_FACTORY);
-                cacheFactory = (CacheFactory) factoryClass.newInstance();
+                cacheFactory = (CacheFactory) factoryClass.getConstructor().newInstance();
             } catch(Exception e) {
                 log.fatal("Failed to instantiate a cache factory", e);
                 throw new RuntimeException(e);
@@ -107,7 +107,7 @@ public final class CacheManager {
                 try {
                     Class handlerClass = Class.forName(cHandler);
                     CacheHandler customHandler = 
-                            (CacheHandler) handlerClass.newInstance();
+                            (CacheHandler) handlerClass.getConstructor().newInstance();
                     
                     cacheHandlers.add(customHandler);
                 } catch(ClassCastException cce) {
@@ -156,7 +156,7 @@ public final class CacheManager {
             try {
                 // use reflection to instantiate the factory class
                 Class factoryClass = Class.forName(classname);
-                CacheFactory factory = (CacheFactory) factoryClass.newInstance();
+                CacheFactory factory = (CacheFactory) factoryClass.getConstructor().newInstance();
                 
                 // now ask for a new cache
                 cache = factory.constructCache(properties);
@@ -309,7 +309,7 @@ public final class CacheManager {
      * something a bit more elaborate, like JMX.
      */
     public static Map<String, Map<String, Object>> getStats() {
-        Map<String, Map<String, Object>> allStats = new HashMap<String, Map<String, Object>>();
+        Map<String, Map<String, Object>> allStats = new HashMap<>();
         for (Cache cache : caches.values()) {
             allStats.put(cache.getId(), cache.getStats());
         }

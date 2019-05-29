@@ -64,7 +64,6 @@ public abstract class RollerTaskWithLeasing extends RollerTask {
                 this.runTask();
             } else {
                 log.debug(getName()+": Lease NOT acquired, cannot continue");
-                return;
             }
             
         } catch (Exception ex) {

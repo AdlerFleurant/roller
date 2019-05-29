@@ -65,13 +65,10 @@ public class MediacastResource {
     
     
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        
-        buf.append("url = ").append(getUrl()).append("\n");
-        buf.append("contentType = ").append(getContentType()).append("\n");
-        buf.append("length = ").append(getLength()).append("\n");
-        
-        return buf.toString();
+
+        return "url = " + getUrl() + "\n" +
+                "contentType = " + getContentType() + "\n" +
+                "length = " + getLength() + "\n";
     }
     
 }

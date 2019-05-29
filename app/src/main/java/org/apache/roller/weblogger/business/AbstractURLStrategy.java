@@ -111,7 +111,7 @@ public abstract class AbstractURLStrategy implements URLStrategy {
         url.append("/").append(action).append(".rol");
         
         // put weblog handle parameter, if necessary
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         if(weblogHandle != null) {
             params.put("weblog", weblogHandle);
         }
@@ -145,7 +145,7 @@ public abstract class AbstractURLStrategy implements URLStrategy {
         
         url.append("/roller-ui/authoring/entryAdd.rol");
         
-        Map params = new HashMap();
+        Map<String, String> params = new HashMap<>();
         params.put("weblog", weblogHandle);
         
         return url.toString() + URLUtilities.getQueryString(params);
@@ -169,7 +169,7 @@ public abstract class AbstractURLStrategy implements URLStrategy {
         
         url.append("/roller-ui/authoring/entryEdit.rol");
         
-        Map params = new HashMap();
+        Map<String, String> params = new HashMap<>();
         params.put("weblog", weblogHandle);
         params.put("bean.id", entryId);
         
@@ -193,7 +193,7 @@ public abstract class AbstractURLStrategy implements URLStrategy {
         
         url.append("/roller-ui/authoring/weblogConfig.rol");
         
-        Map params = new HashMap();
+        Map<String, String> params = new HashMap<>();
         params.put("weblog", weblogHandle);
         
         return url.toString() + URLUtilities.getQueryString(params);

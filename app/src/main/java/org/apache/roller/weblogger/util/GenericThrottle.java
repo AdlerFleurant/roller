@@ -42,7 +42,7 @@ public class GenericThrottle {
     private int interval = 0;
     
     // a cache to maintain the data
-    Cache clientHistoryCache = null;
+    Cache clientHistoryCache;
     
     
     public GenericThrottle(int thresh, int inter, int maxEntries) {
@@ -63,7 +63,7 @@ public class GenericThrottle {
         }
         
         // cache props
-        Map<String,String> cacheProps = new HashMap<String,String>();
+        Map<String,String> cacheProps = new HashMap<>();
         cacheProps.put("id", "throttle");
         cacheProps.put("size", ""+maxEntries);
         cacheProps.put("timeout", ""+this.interval);
@@ -110,9 +110,7 @@ public class GenericThrottle {
             log.debug("STATUS "+clientId+" - "+client.hits+" hits since "+client.start);
             
             // abusive client
-            if(client.hits > this.threshold) {
-                return true;
-            }
+            return client.hits > this.threshold;
             
         } else {
             log.debug("NEW "+clientId);

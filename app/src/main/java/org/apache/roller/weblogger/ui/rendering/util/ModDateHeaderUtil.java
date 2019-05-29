@@ -98,8 +98,8 @@ public final class ModDateHeaderUtil {
 		}
 
 		String previousToken = request.getHeader("If-None-Match");
-		if (eTag != null && previousToken != null && eTag.equals(previousToken)
-				&& lastModifiedTimeMillis <= sinceDate
+		if (eTag != null && eTag.equals(previousToken)
+                && lastModifiedTimeMillis <= sinceDate
 				|| (eTag == null || previousToken == null)
 				&& lastModifiedTimeMillis <= sinceDate) {
 

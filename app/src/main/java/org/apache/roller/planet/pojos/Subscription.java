@@ -40,8 +40,8 @@ public class Subscription implements Serializable, Comparable<Subscription> {
     private int inboundblogs = 0;
 
     // associations
-    private Set<PlanetGroup> groups = new HashSet<PlanetGroup>();
-    private Set<SubscriptionEntry> entries = new HashSet<SubscriptionEntry>();
+    private Set<PlanetGroup> groups = new HashSet<>();
+    private Set<SubscriptionEntry> entries = new HashSet<>();
     
     
     public Subscription() {}
@@ -76,17 +76,14 @@ public class Subscription implements Serializable, Comparable<Subscription> {
     }
     
     public String toString() {
-        StringBuilder buf = new StringBuilder();
 
-        buf.append("{");
-        buf.append(getFeedURL()).append(", ");
-        buf.append(getSiteURL()).append(", ");
-        buf.append(getTitle()).append(", ");
-        buf.append(getAuthor()).append(", ");
-        buf.append(getLastUpdated());
-        buf.append("}");
-        
-        return buf.toString();
+        return "{" +
+                getFeedURL() + ", " +
+                getSiteURL() + ", " +
+                getTitle() + ", " +
+                getAuthor() + ", " +
+                getLastUpdated() +
+                "}";
     }
     
     

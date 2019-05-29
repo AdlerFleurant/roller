@@ -31,7 +31,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class MailUtil extends Object {
+public class MailUtil {
 
     private static Log mLogger =
             LogFactory.getFactory().getInstance(MailUtil.class);
@@ -112,7 +112,7 @@ public class MailUtil extends Object {
 
         // First collect all the addresses together.
         Address[] remainingAddresses = message.getAllRecipients();
-        int nAddresses = remainingAddresses.length;
+        int nAddresses;
         boolean bFailedToSome = false;
 
         SendFailedException sendex = new SendFailedException("Unable to send message to some recipients");

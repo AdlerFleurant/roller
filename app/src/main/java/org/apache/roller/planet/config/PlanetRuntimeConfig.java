@@ -81,7 +81,7 @@ public class PlanetRuntimeConfig {
         if(value == null)
             return false;
         
-        return (new Boolean(value)).booleanValue();
+        return Boolean.valueOf(value);
     }
     
     
@@ -148,7 +148,7 @@ public class PlanetRuntimeConfig {
             StringWriter configString = new StringWriter();
             
             char[] buf = new char[8196];
-            int length = 0;
+            int length;
             while((length = reader.read(buf)) > 0)
                 configString.write(buf, 0, length);
             

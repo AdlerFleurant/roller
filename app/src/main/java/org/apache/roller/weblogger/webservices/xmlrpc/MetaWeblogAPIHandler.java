@@ -132,22 +132,21 @@ public class MetaWeblogAPIHandler extends BloggerAPIHandler {
         WeblogEntry entry = weblogMgr.getWeblogEntry(postid);
         
         validate(entry.getWebsite().getHandle(), userid,password);
-        
-        Hashtable postcontent = struct;
-        String description = (String)postcontent.get("description");
-        String title = (String)postcontent.get("title");
+
+        String description = (String) struct.get("description");
+        String title = (String) struct.get("title");
         if (title == null) {
             title = "";
         }
         
-        Date dateCreated = (Date)postcontent.get("dateCreated");
+        Date dateCreated = (Date) struct.get("dateCreated");
         if (dateCreated == null) {
-            dateCreated = (Date)postcontent.get("pubDate");
+            dateCreated = (Date) struct.get("pubDate");
         }
         
         String cat = null;
-        if ( postcontent.get("categories") != null ) {
-            Object[] cats = (Object[])postcontent.get("categories");
+        if ( struct.get("categories") != null ) {
+            Object[] cats = (Object[]) struct.get("categories");
             if (cats.length > 0) {
             	cat = (String)cats[0];
             }
@@ -228,10 +227,9 @@ public class MetaWeblogAPIHandler extends BloggerAPIHandler {
         mLogger.debug("    Publish: " + publish);
         
         Weblog website = validate(blogid, userid, password);
-        
-        Hashtable postcontent = struct;
-        String description = (String)postcontent.get("description");
-        String title = (String)postcontent.get("title");
+
+        String description = (String) struct.get("description");
+        String title = (String) struct.get("title");
         if (StringUtils.isEmpty(title) && StringUtils.isEmpty(description)) {
             throw new XmlRpcException(
                     BLOGGERAPI_INCOMPLETE_POST, "Must specify title or description");
@@ -240,9 +238,9 @@ public class MetaWeblogAPIHandler extends BloggerAPIHandler {
             title = Utilities.truncateNicely(description, 15, 15, "...");
         }
         
-        Date dateCreated = (Date)postcontent.get("dateCreated");
+        Date dateCreated = (Date) struct.get("dateCreated");
         if (dateCreated == null) {
-            dateCreated = (Date)postcontent.get("pubDate");
+            dateCreated = (Date) struct.get("pubDate");
         }
         if (dateCreated == null) {
             dateCreated = new Date();
@@ -275,14 +273,13 @@ public class MetaWeblogAPIHandler extends BloggerAPIHandler {
             // MetaWeblog supports multiple cats, Weblogger supports one/entry
             // so here we take accept the first category that exists
             WeblogCategory rollerCat = null;
-            if ( postcontent.get("categories") != null ) {
-                Object[] cats = (Object[])postcontent.get("categories");
+            if ( struct.get("categories") != null ) {
+                Object[] cats = (Object[]) struct.get("categories");
                 if (cats != null && cats.length > 0) {
                     mLogger.debug("cats type - "+cats[0].getClass().getName());
                     mLogger.debug("cat to string - "+cats[0].toString());
-                    for (int i=0; i<cats.length; i++) {
-                        Object cat = cats[i];
-                        rollerCat = weblogMgr.getWeblogCategoryByName(website, (String)cat);
+                    for (Object cat : cats) {
+                        rollerCat = weblogMgr.getWeblogCategoryByName(website, (String) cat);
                         if (rollerCat != null) {
                             entry.setCategory(rollerCat);
                             break;

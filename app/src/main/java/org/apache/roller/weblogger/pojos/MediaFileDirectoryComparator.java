@@ -33,9 +33,9 @@ public class MediaFileDirectoryComparator implements Comparator<MediaFileDirecto
 	 * Comparator types that define all possible attributes for comparing media file directories. 
 	 *
 	 */
-	public enum DirectoryComparatorType {NAME};
-	
-	// Comparator type associated with this instance of media directory comparator
+	public enum DirectoryComparatorType {NAME}
+
+    // Comparator type associated with this instance of media directory comparator
 	DirectoryComparatorType type;
 	
 	public MediaFileDirectoryComparator(DirectoryComparatorType type) {
@@ -47,10 +47,10 @@ public class MediaFileDirectoryComparator implements Comparator<MediaFileDirecto
 	 * 
 	 */
 	public int compare(MediaFileDirectory dir1, MediaFileDirectory dir2) {
-		switch (this.type) {
-		    case NAME: return dir1.getName().compareTo(dir2.getName());
-		    default: return 0;
-		}
-	}
+        if (this.type == DirectoryComparatorType.NAME) {
+            return dir1.getName().compareTo(dir2.getName());
+        }
+        return 0;
+    }
 
 }

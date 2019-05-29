@@ -35,7 +35,7 @@ import org.apache.roller.weblogger.business.OAuthManager;
 import org.apache.roller.weblogger.business.WebloggerFactory;
 
 /**
- * Autherization request handler.
+ * Authorization request handler.
  *
  * @author Praveen Alavilli
  * @author Dave Johnson (adapted for Roller)
@@ -82,7 +82,7 @@ public class AuthorizationServlet extends HttpServlet {
             }
             
             if (userId == null) {
-                // no user associted with the key, must be site-wide key,
+                // no user associated with the key, must be site-wide key,
                 // so get user to login and do the authorization process
                 sendToAuthorizePage(request, response, accessor);
             

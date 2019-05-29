@@ -18,9 +18,9 @@
 
 package org.apache.roller.planet.business;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.apache.roller.weblogger.config.WebloggerRuntimeConfig;
 
@@ -38,12 +38,9 @@ public class MultiPlanetURLStrategy implements PlanetURLStrategy {
         if(planet == null) {
             return null;
         }
-        
-        StringBuilder url = new StringBuilder();
-        url.append(WebloggerRuntimeConfig.getProperty("site.absoluteurl"));
-        url.append("/").append(planet).append("/");
-        
-        return url.toString();
+
+        return WebloggerRuntimeConfig.getProperty("site.absoluteurl") +
+                "/" + planet + "/";
     }
     
     
@@ -136,12 +133,8 @@ public class MultiPlanetURLStrategy implements PlanetURLStrategy {
      * URL encode a string using UTF-8.
      */
     public String encode(String str) {
-        String encodedStr = str;
-        try {
-            encodedStr = URLEncoder.encode(str, "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            // ignored
-        }
+        String encodedStr;
+        encodedStr = URLEncoder.encode(str, StandardCharsets.UTF_8);
         return encodedStr;
     }
     
@@ -150,12 +143,8 @@ public class MultiPlanetURLStrategy implements PlanetURLStrategy {
      * URL decode a string using UTF-8.
      */
     public String decode(String str) {
-        String decodedStr = str;
-        try {
-            decodedStr = URLDecoder.decode(str, "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            // ignored
-        }
+        String decodedStr;
+        decodedStr = URLDecoder.decode(str, StandardCharsets.UTF_8);
         return decodedStr;
     }
     

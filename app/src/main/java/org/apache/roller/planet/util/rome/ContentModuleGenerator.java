@@ -16,8 +16,6 @@
  */
 package org.apache.roller.planet.util.rome;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.jdom2.Element;
@@ -37,9 +35,7 @@ public class ContentModuleGenerator implements ModuleGenerator {
     private static final Set NAMESPACES;
 
     static {
-        Set nss = new HashSet();
-        nss.add(CONTENT_NS);
-        NAMESPACES = Collections.unmodifiableSet(nss);
+        NAMESPACES = Set.of(CONTENT_NS);
     }
 
     public Set getNamespaces() {

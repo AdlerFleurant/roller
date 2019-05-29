@@ -175,16 +175,14 @@ public class PlanetModel implements Model {
      * @param length         Max number of results to return
      */
     public List<Subscription> getRankedSubscriptions(String groupHandle, int sinceDays, int length) {
-        List<Subscription> list = new ArrayList<Subscription>();
+        List<Subscription> list = new ArrayList<>();
         try {
             PlanetManager planetManager = WebloggerFactory.getWeblogger().getPlanetManager();
             Planet defaultPlanet = planetManager.getWeblogger(DEFAULT_PLANET_HANDLE);
             PlanetGroup planetGroup = planetManager.getGroup(defaultPlanet, groupHandle);
             List<Subscription> subs = planetManager.getTopSubscriptions(planetGroup, 0, length);
-            for (Subscription sub : subs) {
-                // TODO needs pojo wrapping from planet
-                list.add(sub);
-            }
+            // TODO needs pojo wrapping from planet
+            list.addAll(subs);
         } catch (Exception e) {
             log.error("ERROR: get ranked blogs", e);
         }
@@ -196,16 +194,14 @@ public class PlanetModel implements Model {
      * Get PlanetGroups defined.
      * @return List of Planet groups defined.
      */
-    public List<PlanetGroup> getGroups() {
+    public List getGroups() {
         List list = new ArrayList<PlanetGroup>();
         try {
             PlanetManager planetManager = WebloggerFactory.getWeblogger().getPlanetManager();
             Planet defaultPlanet = planetManager.getWeblogger(DEFAULT_PLANET_HANDLE);
             Set<PlanetGroup> groups = defaultPlanet.getGroups();
-            for (PlanetGroup group : groups) {
-                // TODO needs pojo wrapping from planet
-                list.add(group); 
-            }
+            // TODO needs pojo wrapping from planet
+            list.addAll(groups);
         } catch (Exception e) {
             log.error("ERROR: getting groups", e);
         }

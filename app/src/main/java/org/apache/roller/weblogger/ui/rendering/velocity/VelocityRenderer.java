@@ -32,8 +32,6 @@ import org.apache.roller.weblogger.ui.rendering.mobile.MobileDeviceRepository;
 import org.apache.roller.weblogger.ui.rendering.model.UtilitiesModel;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.exception.VelocityException;
 
@@ -45,11 +43,11 @@ public class VelocityRenderer implements Renderer {
     private static Log log = LogFactory.getLog(VelocityRenderer.class);
 
     // the original template we are supposed to render
-    private Template renderTemplate = null;
-    private MobileDeviceRepository.DeviceType deviceType = null;
+    private Template renderTemplate;
+    private MobileDeviceRepository.DeviceType deviceType;
 
     // the velocity templates
-    private org.apache.velocity.Template velocityTemplate = null;
+    private org.apache.velocity.Template velocityTemplate;
     private org.apache.velocity.Template velocityDecorator = null;
 
     // a possible exception
@@ -77,16 +75,7 @@ public class VelocityRenderer implements Renderer {
             // failed
             throw ex;
 
-        } catch (ParseErrorException ex) {
-            // in the case of a parsing error we want to render an
-            // error page instead so the user knows what was wrong
-            velocityException = ex;
-
-            // need to lookup error page template
-            velocityTemplate = RollerVelocity.getTemplate("error-page.vm",
-                    deviceType);
-
-        } catch (MethodInvocationException ex) {
+        } catch (VelocityException ex) {
 
             // in the case of a invocation error we want to render an
             // error page instead so the user knows what was wrong
@@ -96,17 +85,10 @@ public class VelocityRenderer implements Renderer {
             velocityTemplate = RollerVelocity.getTemplate("error-page.vm",
                     deviceType);
 
-        } catch (VelocityException ex) {
-
-            // in the case of a parsing error including a macro we want to
-            // render an error page instead so the user knows what was wrong
-            velocityException = ex;
-
-            // need to lookup error page template
-            velocityTemplate = RollerVelocity.getTemplate("error-page.vm",
-                    deviceType);
-
-        } catch (Exception ex) {
+        }// in the case of a parsing error we want to render an
+// in the case of a parsing error including a macro we want to
+// render an error page instead so the user knows what was wrong
+        catch (Exception ex) {
             // some kind of generic/unknown exception, dump it to the logs
             log.error(
                     "Unknown exception creating renderer for "
@@ -171,34 +153,18 @@ public class VelocityRenderer implements Renderer {
             log.debug("Rendered [" + renderTemplate.getId() + "] in "
                     + renderTime + " secs");
 
-        } catch (ParseErrorException ex) {
-
-            // in the case of a parsing error including a page we want to render
-            // an error on the page instead so the user knows what was wrong
-            velocityException = ex;
-
-            // need to lookup parse error template
-            renderException(model, out, "error-parse.vm");
-
-        } catch (MethodInvocationException ex) {
-
-            // in the case of a parsing error including a page we want to render
-            // an error on the page instead so the user knows what was wrong
-            velocityException = ex;
-
-            // need to lookup parse error template
-            renderException(model, out, "error-parse.vm");
-
         } catch (VelocityException ex) {
 
-            // in the case of a parsing error including a macro we want to
-            // render an error page instead so the user knows what was wrong
+            // in the case of a parsing error including a page we want to render
+            // an error on the page instead so the user knows what was wrong
             velocityException = ex;
 
             // need to lookup parse error template
             renderException(model, out, "error-parse.vm");
 
-        } catch (Exception ex) {
+        }// in the case of a parsing error including a macro we want to
+// render an error page instead so the user knows what was wrong
+        catch (Exception ex) {
             // wrap and rethrow so caller can deal with it
             throw new RenderingException("Error during rendering", ex);
         }

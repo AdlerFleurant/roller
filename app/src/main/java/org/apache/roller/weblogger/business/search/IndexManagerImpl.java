@@ -83,7 +83,7 @@ public class IndexManagerImpl implements IndexManager {
 
     private RAMDirectory fRAMindex;
 
-    private String indexDir = null;
+    private String indexDir;
 
     private boolean inconsistentAtStartup = false;
 
@@ -239,7 +239,7 @@ public class IndexManagerImpl implements IndexManager {
      * 
      * @return Analyzer to be used in manipulating the database.
      */
-    public static final Analyzer getAnalyzer() {
+    public static Analyzer getAnalyzer() {
         return instantiateAnalyzer(FieldConstants.LUCENE_VERSION);
     }
 
@@ -298,7 +298,7 @@ public class IndexManagerImpl implements IndexManager {
         if (reader == null) {
             try {
                 reader = DirectoryReader.open(getIndexDirectory());
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
         }
         return reader;
@@ -339,10 +339,10 @@ public class IndexManagerImpl implements IndexManager {
             if (delete && directory != null) {
                 // clear old files
                 String[] files = directory.listAll();
-                for (int i = 0; i < files.length; i++) {
-                    File file = new File(indexDir, files[i]);
+                for (String s : files) {
+                    File file = new File(indexDir, s);
                     if (!file.delete()) {
-                        throw new IOException("couldn't delete " + files[i]);
+                        throw new IOException("couldn't delete " + s);
                     }
                 }
             }
@@ -374,7 +374,7 @@ public class IndexManagerImpl implements IndexManager {
                 if (writer != null) {
                     writer.close();
                 }
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
         }
     }
@@ -390,7 +390,7 @@ public class IndexManagerImpl implements IndexManager {
                             new LimitTokenCountAnalyzer(IndexManagerImpl.getAnalyzer(),
                                     IndexWriterConfig.DEFAULT_TERM_INDEX_INTERVAL));
                     writer = new IndexWriter(fsdir, config);
-                    writer.addIndexes(new Directory[] { dir });
+                    writer.addIndexes(dir);
                     writer.commit();
                     indexConsistencyMarker.delete();
                 } catch (IOException e) {

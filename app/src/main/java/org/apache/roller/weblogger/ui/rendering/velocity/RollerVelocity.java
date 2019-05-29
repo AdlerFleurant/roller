@@ -42,7 +42,7 @@ public class RollerVelocity {
     
     private static Log log = LogFactory.getLog(RollerVelocity.class);
     
-    private static VelocityEngine velocityEngine = null;
+    private static VelocityEngine velocityEngine;
     
     
     static {

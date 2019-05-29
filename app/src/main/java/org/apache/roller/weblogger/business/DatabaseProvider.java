@@ -64,15 +64,15 @@ public class DatabaseProvider  {
 
     public enum ConfigurationType {JNDI_NAME, JDBC_PROPERTIES}
     private ConfigurationType type = ConfigurationType.JNDI_NAME;
-    private List<String> startupLog = new ArrayList<String>();
+    private List<String> startupLog = new ArrayList<>();
     
     private DataSource dataSource = null;    
-    private String jndiName = null; 
+    private String jndiName;
     
-    private String jdbcDriverClass = null;
-    private String jdbcConnectionURL = null;
-    private String jdbcPassword = null;
-    private String jdbcUsername = null;
+    private String jdbcDriverClass;
+    private String jdbcConnectionURL;
+    private String jdbcPassword;
+    private String jdbcUsername;
     private Properties props = null;
     
     

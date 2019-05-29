@@ -40,7 +40,7 @@ public class UsersPager extends AbstractPager {
     private static Log log = LogFactory.getLog(UsersPager.class);
     
     private String letter = null;
-    private int length = 0;
+    private int length;
     
     // collection for the pager
     private List<UserWrapper> users;
@@ -125,7 +125,7 @@ public class UsersPager extends AbstractPager {
             // calculate offset
             int offset = getPage() * length;
             
-            List<UserWrapper> results = new ArrayList<UserWrapper>();
+            List<UserWrapper> results = new ArrayList<>();
             try {
                 Weblogger roller = WebloggerFactory.getWeblogger();
                 UserManager umgr = roller.getUserManager();

@@ -36,7 +36,6 @@ import org.apache.roller.weblogger.pojos.WeblogPermission;
 import org.apache.roller.weblogger.ui.struts2.pagers.EntriesPager;
 import org.apache.roller.weblogger.ui.struts2.util.KeyValueObject;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 
 
 /**
@@ -100,8 +99,7 @@ public class Entries extends UIAction {
             wesc.setOffset(getBean().getPage() * COUNT);
             wesc.setMaxResults(COUNT + 1);
             List<WeblogEntry> rawEntries = wmgr.getWeblogEntries(wesc);
-            entries = new ArrayList<WeblogEntry>();
-            entries.addAll(rawEntries);
+            entries = new ArrayList<>(rawEntries);
             if (entries.size() > 0) {
                 log.debug("query found "+rawEntries.size()+" results");
                 
@@ -129,7 +127,7 @@ public class Entries extends UIAction {
     // use the action data to build a url representing this action, including query data
     private String buildBaseUrl() {
         
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         
         if(!StringUtils.isEmpty(getBean().getCategoryName())) {
             params.put("bean.categoryPath", getBean().getCategoryName());
@@ -164,7 +162,7 @@ public class Entries extends UIAction {
     public List<WeblogCategory> getCategories() {
         // make list of categories with first option being being a transient
         // category just meant to represent the default option of any category
-        List<WeblogCategory> cats = new ArrayList<WeblogCategory>();
+        List<WeblogCategory> cats = new ArrayList<>();
         
         WeblogCategory tmpCat = new WeblogCategory();
         tmpCat.setName("Any");
@@ -185,7 +183,7 @@ public class Entries extends UIAction {
     
     
     public List<KeyValueObject> getSortByOptions() {
-        List<KeyValueObject> opts = new ArrayList<KeyValueObject>();
+        List<KeyValueObject> opts = new ArrayList<>();
         
         opts.add(new KeyValueObject(WeblogEntrySearchCriteria.SortBy.PUBLICATION_TIME.name(), getText("weblogEntryQuery.label.pubTime")));
         opts.add(new KeyValueObject(WeblogEntrySearchCriteria.SortBy.UPDATE_TIME.name(), getText("weblogEntryQuery.label.updateTime")));
@@ -194,7 +192,7 @@ public class Entries extends UIAction {
     }
     
     public List<KeyValueObject> getStatusOptions() {
-        List<KeyValueObject> opts = new ArrayList<KeyValueObject>();
+        List<KeyValueObject> opts = new ArrayList<>();
         
         opts.add(new KeyValueObject("ALL", getText("weblogEntryQuery.label.allEntries")));
         opts.add(new KeyValueObject("DRAFT", getText("weblogEntryQuery.label.draftOnly")));

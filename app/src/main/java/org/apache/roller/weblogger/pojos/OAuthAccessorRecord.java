@@ -127,11 +127,9 @@ public class OAuthAccessorRecord implements Serializable {
     //------------------------------------------------------- Good citizenship
 
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("{");
-        buf.append(this.getConsumerKey());
-        buf.append("}");
-        return buf.toString();
+        return "{" +
+                this.getConsumerKey() +
+                "}";
     }
 
     public boolean equals(Object other) {

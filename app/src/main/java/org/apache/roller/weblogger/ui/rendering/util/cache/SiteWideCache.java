@@ -18,8 +18,8 @@
 
 package org.apache.roller.weblogger.ui.rendering.util.cache;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -60,7 +60,7 @@ public final class SiteWideCache implements CacheHandler {
     public static final String CACHE_ID = "cache.sitewide";
     
     // keep cached content
-    private boolean cacheEnabled = true;
+    private boolean cacheEnabled;
     private Cache contentCache = null;
     
     // keep a cached version of last expired time
@@ -74,10 +74,10 @@ public final class SiteWideCache implements CacheHandler {
         
         cacheEnabled = WebloggerConfig.getBooleanProperty(CACHE_ID+".enabled");
         
-        Map<String, String> cacheProps = new HashMap<String, String>();
+        Map<String, String> cacheProps = new HashMap<>();
         cacheProps.put("id", CACHE_ID);
         Enumeration allProps = WebloggerConfig.keys();
-        String prop = null;
+        String prop;
         while(allProps.hasMoreElements()) {
             prop = (String) allProps.nextElement();
             
@@ -200,14 +200,10 @@ public final class SiteWideCache implements CacheHandler {
         key.append(pageRequest.getWeblogHandle());
         
         if(pageRequest.getWeblogAnchor() != null) {
-            String anchor = null;
-            try {
-                // may contain spaces or other bad chars
-                anchor = URLEncoder.encode(pageRequest.getWeblogAnchor(), "UTF-8");
-            } catch(UnsupportedEncodingException ex) {
-                // ignored
-            }
-            
+            String anchor;
+            // may contain spaces or other bad chars
+            anchor = URLEncoder.encode(pageRequest.getWeblogAnchor(), StandardCharsets.UTF_8);
+
             key.append("/entry/").append(anchor);
         } else {
             
@@ -220,14 +216,10 @@ public final class SiteWideCache implements CacheHandler {
             }
             
             if(pageRequest.getWeblogCategoryName() != null) {
-                String cat = null;
-                try {
-                    // may contain spaces or other bad chars
-                    cat = URLEncoder.encode(pageRequest.getWeblogCategoryName(), "UTF-8");
-                } catch(UnsupportedEncodingException ex) {
-                    // ignored
-                }
-                
+                String cat;
+                // may contain spaces or other bad chars
+                cat = URLEncoder.encode(pageRequest.getWeblogCategoryName(), StandardCharsets.UTF_8);
+
                 key.append("/").append(cat);
             }
             
@@ -235,7 +227,7 @@ public final class SiteWideCache implements CacheHandler {
                 key.append("/tags/");
                 if(pageRequest.getTags() != null && pageRequest.getTags().size() > 0) {
                     Set ordered = new TreeSet(pageRequest.getTags());
-                    String[] tags = (String[]) ordered.toArray(new String[ordered.size()]);
+                    String[] tags = (String[]) ordered.toArray(new String[0]);
                     key.append(Utilities.stringArrayToString(tags,"+"));
                 }
             }
@@ -298,12 +290,8 @@ public final class SiteWideCache implements CacheHandler {
         
         if(feedRequest.getWeblogCategoryName() != null) {
             String cat = feedRequest.getWeblogCategoryName();
-            try {
-                cat = URLEncoder.encode(cat, "UTF-8");
-            } catch (UnsupportedEncodingException ex) {
-                // should never happen, utf-8 is always supported
-            }
-            
+            cat = URLEncoder.encode(cat, StandardCharsets.UTF_8);
+
             key.append("/").append(cat);
         }
         

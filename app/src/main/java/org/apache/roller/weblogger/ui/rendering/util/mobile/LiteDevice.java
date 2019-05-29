@@ -56,11 +56,9 @@ class LiteDevice implements Device {
 	}
 
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("[LiteDevice ");
-		builder.append("type").append("=").append(this.deviceType);
-		builder.append("]");
-		return builder.toString();
+        return "[LiteDevice " +
+                "type" + "=" + this.deviceType +
+                "]";
 	}
 
 	private final DeviceType deviceType;

@@ -117,11 +117,9 @@ public class AutoPing implements Serializable {
     //------------------------------------------------------- Good citizenship
 
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("{");
-        buf.append(getId());
-        buf.append("}");
-        return buf.toString();
+        return "{" +
+                getId() +
+                "}";
     }
     
     public boolean equals(Object other) {

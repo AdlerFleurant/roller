@@ -43,9 +43,9 @@ public class CommentsPager extends AbstractPager {
     
     private static Log log = LogFactory.getLog(CommentsPager.class);
     
-    private Weblog weblog = null;
-    private int sinceDays = -1;
-    private int length = 0;
+    private Weblog weblog;
+    private int sinceDays;
+    private int length;
     
     // the collection for the pager
     private List<WeblogEntryCommentWrapper> comments = null;
@@ -81,7 +81,7 @@ public class CommentsPager extends AbstractPager {
             // calculate offset
             int offset = getPage() * length;
             
-            List<WeblogEntryCommentWrapper> results = new ArrayList<WeblogEntryCommentWrapper>();
+            List<WeblogEntryCommentWrapper> results = new ArrayList<>();
             
             Date startDate = null;
             if(sinceDays > 0) {

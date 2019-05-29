@@ -170,13 +170,11 @@ public class PingQueueEntry implements Serializable {
     //------------------------------------------------------- Good citizenship
 
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("{");
-        buf.append(getId());
-        buf.append(", ").append(getEntryTime());
-        buf.append(", ").append(getAttempts());
-        buf.append("}");
-        return buf.toString();
+        return "{" +
+                getId() +
+                ", " + getEntryTime() +
+                ", " + getAttempts() +
+                "}";
     }
     
     public boolean equals(Object other) {

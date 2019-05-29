@@ -32,7 +32,6 @@ import org.apache.roller.weblogger.pojos.WeblogTemplate;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
 import org.apache.roller.weblogger.util.Utilities;
 import org.apache.roller.weblogger.util.cache.CacheManager;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 
 /**
  * Remove templates.
@@ -68,8 +67,8 @@ public class TemplatesRemove extends UIAction {
                 WeblogManager mgr = WebloggerFactory.getWeblogger()
                         .getWeblogManager();
 
-                List<WeblogTemplate> pages = new ArrayList<WeblogTemplate>();
-                WeblogTemplate template = null;
+                List<WeblogTemplate> pages = new ArrayList<>();
+                WeblogTemplate template;
 
                 String[] idsToDelete = getIdSelections();
                 if (idsToDelete != null && idsToDelete.length > 0) {

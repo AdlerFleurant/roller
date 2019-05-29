@@ -216,7 +216,7 @@ public class FeedServlet extends HttpServlet {
         }
 
         // looks like we need to render content
-        HashMap<String, Object> model = new HashMap<String, Object>();
+        HashMap<String, Object> model = new HashMap<>();
         String pageId;
         try {
             // determine what template to render with
@@ -240,7 +240,7 @@ public class FeedServlet extends HttpServlet {
             }
 
             // populate the rendering model
-            Map<String, Object> initData = new HashMap<String, Object>();
+            Map<String, Object> initData = new HashMap<>();
             initData.put("parsedRequest", feedRequest);
 
             // define url strategy

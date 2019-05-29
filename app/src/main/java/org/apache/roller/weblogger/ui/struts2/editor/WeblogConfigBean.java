@@ -41,7 +41,6 @@ public class WeblogConfigBean {
     private String emailAddress = null;
     private String locale = null;
     private String timeZone = null;
-    private String defaultPlugins = null;
     private int entryDisplayCount = 15;
     private boolean active = true;
     private boolean commentModerationRequired = false;
@@ -272,7 +271,7 @@ public class WeblogConfigBean {
         this.emailAddress = dataHolder.getEmailAddress();
         this.locale = dataHolder.getLocale();
         this.timeZone = dataHolder.getTimeZone();
-        this.defaultPlugins = dataHolder.getDefaultPlugins();
+        String defaultPlugins = dataHolder.getDefaultPlugins();
         this.entryDisplayCount = dataHolder.getEntryDisplayCount();
         setActive(dataHolder.getActive());
         this.commentModerationRequired = dataHolder.getCommentModerationRequired();

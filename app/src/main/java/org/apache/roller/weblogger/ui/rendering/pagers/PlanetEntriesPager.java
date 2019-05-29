@@ -40,10 +40,10 @@ public class PlanetEntriesPager extends AbstractPager {
     
     private static Log log = LogFactory.getLog(PlanetEntriesPager.class);
     
-    private String feedURL = null;
-    private String groupHandle = null;
-    private int sinceDays = -1;
-    private int length = 0;
+    private String feedURL;
+    private String groupHandle;
+    private int sinceDays;
+    private int length;
     
     // the collection for the pager
     private List<SubscriptionEntry> entries = null;
@@ -87,7 +87,7 @@ public class PlanetEntriesPager extends AbstractPager {
                 startDate = cal.getTime();
             }
             
-            List<SubscriptionEntry> results = new ArrayList<SubscriptionEntry>();
+            List<SubscriptionEntry> results = new ArrayList<>();
             try {
                 PlanetManager planetManager = WebloggerFactory.getWeblogger().getPlanetManager();
                 Planet planet = planetManager.getWeblogger("default");

@@ -31,7 +31,7 @@ public class WorkerThread extends Thread {
     
     private static Log log = LogFactory.getLog(WorkerThread.class);
     
-    String id = null;
+    String id;
     Job job = null;
     
     

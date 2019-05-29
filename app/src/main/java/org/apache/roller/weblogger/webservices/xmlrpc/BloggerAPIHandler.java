@@ -231,7 +231,8 @@ public class BloggerAPIHandler extends BaseAPIHandler {
             User user = userMgr.getUserByUserName(userid);
             
             // parses full name into two strings, firstname and lastname
-            String firstname = "", lastname = "";
+            String firstname = "";
+            StringBuilder lastname = new StringBuilder();
             StringTokenizer toker = new StringTokenizer(user.getFullName());
             
             if (toker.hasMoreTokens()) {
@@ -239,19 +240,19 @@ public class BloggerAPIHandler extends BaseAPIHandler {
             }
             
             while (toker.hasMoreTokens()) {
-                if ( !lastname.equals("") ) {
-                    lastname += " ";
+                if ( !lastname.toString().equals("") ) {
+                    lastname.append(" ");
                 }
-                lastname += toker.nextToken();
+                lastname.append(toker.nextToken());
             }
 
             // TODO: Should screen name be renamed nickname and used here?
             // populates user information to return as a result
-            Hashtable result = new Hashtable();
+            Hashtable<String, String> result = new Hashtable<>();
             result.put("nickname", user.getUserName());
             result.put("userid", user.getUserName());
             result.put("email", "");
-            result.put("lastname", lastname);
+            result.put("lastname", lastname.toString());
             result.put("firstname", firstname);
             
             return result;
@@ -290,7 +291,7 @@ public class BloggerAPIHandler extends BaseAPIHandler {
                 for (Weblog website : websites) {
                     // only include weblog's that have client API support enabled
                     if (Boolean.TRUE.equals(website.getEnableBloggerApi())) {
-                        Hashtable blog = new Hashtable(3);
+                        Hashtable<String, String> blog = new Hashtable<>(3);
                         blog.put("url", website.getURL());
                         blog.put("blogid", website.getHandle());
                         blog.put("blogName", website.getName());

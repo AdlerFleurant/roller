@@ -102,12 +102,10 @@ public class StatCount {
     //------------------------------------------------------- Good citizenship
 
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("{");
-        buf.append(getWeblogHandle());
-        buf.append(", ").append(getCount());
-        buf.append("}");
-        return buf.toString();
+        return "{" +
+                getWeblogHandle() +
+                ", " + getCount() +
+                "}";
     }
 
     public boolean equals(Object other) {

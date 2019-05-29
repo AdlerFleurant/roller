@@ -60,12 +60,12 @@ public class WeblogRequestMapper implements RequestMapper {
     
     
     // url patterns that are not allowed to be considered weblog handles
-    Set<String> restricted = null;
+    Set<String> restricted;
     
     
     public WeblogRequestMapper() {
         
-        this.restricted = new HashSet<String>();
+        this.restricted = new HashSet<>();
         
         // build roller restricted list
         String restrictList = 
@@ -206,8 +206,7 @@ public class WeblogRequestMapper implements RequestMapper {
             response.sendRedirect(redirectUrl);
             return true;
             
-        } else if(weblogRequestContext != null &&
-                "tags".equals(weblogRequestContext)) {
+        } else if("tags".equals(weblogRequestContext)) {
             // tags section can have an index page at /<weblog>/tags/ and
             // a tags query at /<weblog>/tags/tag1+tag2, buth that's it
             if((weblogRequestData == null && !trailingSlash) ||

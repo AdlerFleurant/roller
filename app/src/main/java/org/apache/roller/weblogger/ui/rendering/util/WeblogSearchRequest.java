@@ -62,7 +62,7 @@ public class WeblogSearchRequest extends WeblogRequest {
         String pathInfo = this.getPathInfo();
         
         // was this request bound for the search servlet?
-        if(servlet == null || !SEARCH_SERVLET.equals(servlet)) {
+        if(!SEARCH_SERVLET.equals(servlet)) {
             throw new InvalidRequestException("not a weblog search request, "+
                     request.getRequestURL());
         }

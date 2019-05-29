@@ -21,7 +21,7 @@ package org.apache.roller.planet.business;
 
 /**
  * Provides base implementations for release() and shutdown() so that manager
- * implemenations can just override them if needed.
+ * implementations can just override them if needed.
  */
 public abstract class AbstractManagerImpl implements Manager {
     

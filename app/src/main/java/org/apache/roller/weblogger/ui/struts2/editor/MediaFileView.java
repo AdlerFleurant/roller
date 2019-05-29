@@ -19,14 +19,12 @@ package org.apache.roller.weblogger.ui.struts2.editor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.roller.weblogger.WebloggerException;
-import org.apache.roller.weblogger.business.FileIOException;
 import org.apache.roller.weblogger.business.MediaFileManager;
 import org.apache.roller.weblogger.business.WebloggerFactory;
 import org.apache.roller.weblogger.pojos.MediaFile;
@@ -37,7 +35,6 @@ import org.apache.roller.weblogger.pojos.MediaFileFilter;
 import org.apache.roller.weblogger.ui.struts2.pagers.MediaFilePager;
 import org.apache.roller.weblogger.ui.struts2.util.KeyValueObject;
 import org.apache.roller.weblogger.util.cache.CacheManager;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 /**
@@ -212,21 +209,21 @@ public class MediaFileView extends MediaFileBase {
             this.directoryId = directory.getId();
             this.directoryName = directory.getName();
 
-            this.childFiles = new ArrayList<MediaFile>();
+            this.childFiles = new ArrayList<>();
             this.childFiles.addAll(directory.getMediaFiles());
 
             if ("type".equals(sortBy)) {
-                Collections.sort(this.childFiles, new MediaFileComparator(
+                this.childFiles.sort(new MediaFileComparator(
                         MediaFileComparatorType.TYPE));
 
             } else if ("date_uploaded".equals(sortBy)) {
-                Collections.sort(this.childFiles, new MediaFileComparator(
+                this.childFiles.sort(new MediaFileComparator(
                         MediaFileComparatorType.DATE_UPLOADED));
 
             } else {
                 // default to sort by name
                 sortBy = "name";
-                Collections.sort(this.childFiles, new MediaFileComparator(
+                this.childFiles.sort(new MediaFileComparator(
                         MediaFileComparatorType.NAME));
             }
 
@@ -239,11 +236,8 @@ public class MediaFileView extends MediaFileBase {
 
             return SUCCESS;
 
-        } catch (FileIOException ex) {
+        } catch (Exception ex) {
             log.error("Error viewing media file directory ", ex);
-            addError("MediaFile.error.view");
-        } catch (Exception e) {
-            log.error("Error viewing media file directory ", e);
             addError("MediaFile.error.view");
         }
         return SUCCESS;
@@ -285,8 +279,7 @@ public class MediaFileView extends MediaFileBase {
                 List<MediaFile> rawResults = manager.searchMediaFiles(
                         getActionWeblog(), filter);
                 boolean hasMore = false;
-                List<MediaFile> results = new ArrayList<MediaFile>();
-                results.addAll(rawResults);
+                List<MediaFile> results = new ArrayList<>(rawResults);
                 if (results.size() > MediaFileSearchBean.PAGE_SIZE) {
                     results.remove(results.size() - 1);
                     hasMore = true;

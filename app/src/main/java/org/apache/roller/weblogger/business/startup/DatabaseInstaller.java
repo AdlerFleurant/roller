@@ -43,7 +43,7 @@ public class DatabaseInstaller {
     private final DatabaseProvider db;
     private final DatabaseScriptProvider scripts;
     private final String version;
-    private List<String> messages = new ArrayList<String>();
+    private List<String> messages = new ArrayList<>();
     
     // the name of the property which holds the dbversion value
     private static final String DBVERSION_PROP = "roller.database.version";
@@ -68,24 +68,16 @@ public class DatabaseInstaller {
      * Determine if database schema needs to be upgraded.
      */
     public boolean isCreationRequired() {
-        Connection con = null;
-        try {            
-            con = db.getConnection();
-            
+        try (Connection con = db.getConnection()) {
+
             // just check for a couple key Roller tables
             // roller_user table called rolleruser before Roller 5.1
             if (tableExists(con, "userrole") && (tableExists(con, "roller_user") || tableExists(con, "rolleruser"))) {
                 return false;
             }
-            
+
         } catch (Exception e) {
             throw new RuntimeException("Error checking for tables", e);
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (Exception ignored) {}
         }
         
         return true;
@@ -107,19 +99,10 @@ public class DatabaseInstaller {
         // if dbversion is unset then assume a new install, otherwise compare
         if (databaseVersion < 0) {
             // if this is a fresh db then we need to set the database version
-            Connection con = null;
-            try {
-                con = db.getConnection();
+            try (Connection con = db.getConnection()) {
                 setDatabaseVersion(con, version);
             } catch (Exception ioe) {
                 errorMessage("ERROR setting database version");
-            } finally {
-                try {
-                    if (con != null) {
-                        con.close();
-                    }
-                } catch (Exception ignored) {
-                }
             }
 
             return false;
@@ -158,26 +141,24 @@ public class DatabaseInstaller {
     public void createDatabase() throws StartupException {
         
         log.info("Creating Roller Weblogger database tables.");
-        
-        Connection con = null;
+
         SQLScriptRunner create = null;
-        try {
-            con = db.getConnection();
+        try (Connection con = db.getConnection()) {
             String handle = getDatabaseHandle(con);
             create = new SQLScriptRunner(scripts.getDatabaseScript(handle + "/createdb.sql"));
             create.runScript(con, true);
             messages.addAll(create.getMessages());
-            
+
             setDatabaseVersion(con, version);
-            
+
         } catch (SQLException sqle) {
             log.error("ERROR running SQL in database creation script", sqle);
             if (create != null) {
                 messages.addAll(create.getMessages());
             }
             errorMessage("ERROR running SQL in database creation script");
-            throw new StartupException("Error running sql script", sqle); 
-            
+            throw new StartupException("Error running sql script", sqle);
+
         } catch (Exception ioe) {
             log.error("ERROR running database creation script", ioe);
             if (create != null) {
@@ -186,12 +167,6 @@ public class DatabaseInstaller {
             errorMessage("ERROR reading/parsing database creation script");
             throw new StartupException("Error running SQL script", ioe);
 
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (Exception ignored) {}
         }
     }
     
@@ -206,11 +181,9 @@ public class DatabaseInstaller {
         
         log.debug("Database version = "+dbversion);
         log.debug("Desired version = "+myVersion);
-       
-        Connection con = null;
-        try {
-            con = db.getConnection();
-            if(dbversion < 0) {
+
+        try (Connection con = db.getConnection()) {
+            if (dbversion < 0) {
                 String msg = "Cannot upgrade database tables, Roller database version cannot be determined";
                 errorMessage(msg);
                 throw new StartupException(msg);
@@ -219,46 +192,39 @@ public class DatabaseInstaller {
                         "try first upgrading to an earlier version of Roller.";
                 errorMessage(msg);
                 throw new StartupException(msg);
-            } else if(dbversion >= myVersion) {
+            } else if (dbversion >= myVersion) {
                 log.info("Database is current, no upgrade needed");
                 return;
             }
 
-            log.info("Database is old, beginning upgrade to version "+myVersion);
+            log.info("Database is old, beginning upgrade to version " + myVersion);
 
             // iterate through each upgrade as needed
             // to add to the upgrade sequence simply add a new "if" statement
             // for whatever version needed and then define a new method upgradeXXX()
 
-            if(dbversion < 400) {
+            if (dbversion < 400) {
                 upgradeTo400(con, runScripts);
                 dbversion = 400;
             }
-            if(dbversion < 500) {
+            if (dbversion < 500) {
                 upgradeTo500(con, runScripts);
                 dbversion = 500;
             }
-            if(dbversion < 510) {
+            if (dbversion < 510) {
                 upgradeTo510(con, runScripts);
                 dbversion = 510;
             }
-            if(dbversion < 520) {
+            if (dbversion < 520) {
                 upgradeTo520(con, runScripts);
-                dbversion = 520;
             }
-            
+
             // make sure the database version is the exact version
             // we are upgrading too.
             updateDatabaseVersion(con, myVersion);
-        
+
         } catch (SQLException e) {
             throw new StartupException("ERROR obtaining connection");
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (Exception ignored) {}
         }
     }
 
@@ -402,7 +368,7 @@ public class DatabaseInstaller {
             // this loop allows us to run this part of the upgrade process as
             // long as is necessary based on the depth of the hierarchy, and
             // we use the do/while construct to ensure it's run at least once
-            int catNumCounted = 0;
+            int catNumCounted;
             do {
                 log.debug("Doing pass over Lx children for categories");
                 
@@ -467,7 +433,7 @@ public class DatabaseInstaller {
             // this loop allows us to run this part of the upgrade process as
             // long as is necessary based on the depth of the hierarchy, and
             // we use the do/while construct to ensure it's run at least once
-            int folderNumUpdated = 0;
+            int folderNumUpdated;
             do {
                 log.debug("Doing pass over Lx children for folders");
                 
@@ -615,20 +581,20 @@ public class DatabaseInstaller {
             
             // look in db and see if comment autoformatting is enabled
             boolean autoformatEnabled = false;
-            String autoformat = null;
+            String autoformat;
             PreparedStatement selectIsAutoformtEnabled = con.prepareStatement(
                 "select value from roller_properties where name = 'users.comments.autoformat'");
             ResultSet rs = selectIsAutoformtEnabled.executeQuery();
             if (rs.next()) {
                 autoformat = rs.getString(1);
-                if(autoformat != null && "true".equals(autoformat)) {
+                if("true".equals(autoformat)) {
                     autoformatEnabled = true;
                 }
             }
             
             // look in db and see if comment html escaping is enabled
             boolean htmlEnabled = false;
-            String escapehtml = null;
+            String escapehtml;
             PreparedStatement selectIsEscapehtmlEnabled = con.prepareStatement(
                 "select value from roller_properties where name = 'users.comments.escapehtml'");
             ResultSet rs1 = selectIsEscapehtmlEnabled.executeQuery();
@@ -831,18 +797,16 @@ public class DatabaseInstaller {
         int dbversion = -1;
         
         // get the current db version
-        Connection con = null;
-        try {
-            con = db.getConnection();
+        try (Connection con = db.getConnection()) {
             Statement stmt = con.createStatement();
-            
+
             // just check in the roller_properties table
             ResultSet rs = stmt.executeQuery(
-                    "select value from roller_properties where name = '"+DBVERSION_PROP+"'");
-            
-            if(rs.next()) {
+                    "select value from roller_properties where name = '" + DBVERSION_PROP + "'");
+
+            if (rs.next()) {
                 dbversion = Integer.parseInt(rs.getString(1));
-                
+
             } else {
                 // tough to know if this is an upgrade with no db version :/
                 // however, if roller_properties is not empty then we at least
@@ -852,17 +816,11 @@ public class DatabaseInstaller {
                     dbversion = 120;
                 }
             }
-            
-        } catch(Exception e) {
+
+        } catch (Exception e) {
             // that's strange ... hopefully we didn't need to upgrade
-            log.error("Couldn't lookup current database version", e);           
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (Exception ignored) {}
-        }       
+            log.error("Couldn't lookup current database version", e);
+        }
         return dbversion;
     }
     
@@ -888,7 +846,7 @@ public class DatabaseInstaller {
             } else {
                 myversion = parsed;
             }
-        } catch(Exception e) {}
+        } catch(Exception ignored) {}
         
         return myversion;
     }

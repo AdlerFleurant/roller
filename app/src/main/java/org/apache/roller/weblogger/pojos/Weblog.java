@@ -90,11 +90,11 @@ public class Weblog implements Serializable {
 
     private Map<String, WeblogEntryPlugin> initializedPlugins = null;
 
-    private List<WeblogCategory> weblogCategories = new ArrayList<WeblogCategory>();
+    private List<WeblogCategory> weblogCategories = new ArrayList<>();
 
-    private List<WeblogBookmarkFolder> bookmarkFolders = new ArrayList<WeblogBookmarkFolder>();
+    private List<WeblogBookmarkFolder> bookmarkFolders = new ArrayList<>();
 
-    private List<MediaFileDirectory> mediaFileDirectories = new ArrayList<MediaFileDirectory>();
+    private List<MediaFileDirectory> mediaFileDirectories = new ArrayList<>();
 
     public Weblog() {
     }
@@ -635,13 +635,13 @@ public class Weblog implements Serializable {
      * @return List of weblog entry objects.
      */
     public List<WeblogEntry> getRecentWeblogEntries(String cat, int length) {
-        if (cat != null && "nil".equals(cat)) {
+        if ("nil".equals(cat)) {
             cat = null;
         }
         if (length > MAX_ENTRIES) {
             length = MAX_ENTRIES;
         }
-        List<WeblogEntry> recentEntries = new ArrayList<WeblogEntry>();
+        List<WeblogEntry> recentEntries = new ArrayList<>();
         if (length < 1) {
             return recentEntries;
         }
@@ -666,14 +666,14 @@ public class Weblog implements Serializable {
      * @return List of weblog entry objects.
      */
     public List<WeblogEntry> getRecentWeblogEntriesByTag(String tag, int length) {
-        if (tag != null && "nil".equals(tag)) {
+        if ("nil".equals(tag)) {
             tag = null;
         }
         if (length > MAX_ENTRIES) {
             length = MAX_ENTRIES;
         }
-        List<WeblogEntry> recentEntries = new ArrayList<WeblogEntry>();
-        List<String> tags = new ArrayList<String>();
+        List<WeblogEntry> recentEntries = new ArrayList<>();
+        List<String> tags = new ArrayList<>();
         if (tag != null) {
             tags.add(tag);
         }
@@ -703,7 +703,7 @@ public class Weblog implements Serializable {
         if (length > MAX_ENTRIES) {
             length = MAX_ENTRIES;
         }
-        List<WeblogEntryComment> recentComments = new ArrayList<WeblogEntryComment>();
+        List<WeblogEntryComment> recentComments = new ArrayList<>();
         if (length < 1) {
             return recentComments;
         }
@@ -768,7 +768,7 @@ public class Weblog implements Serializable {
      * @return          Collection of WeblogEntryTag objects
      */
     public List<TagStat> getPopularTags(int sinceDays, int length) {
-        List<TagStat> results = new ArrayList<TagStat>();
+        List<TagStat> results = new ArrayList<>();
         Date startDate = null;
         if(sinceDays > 0) {
             Calendar cal = Calendar.getInstance();

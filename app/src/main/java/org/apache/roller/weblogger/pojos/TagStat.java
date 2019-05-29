@@ -54,12 +54,9 @@ public class TagStat implements java.io.Serializable {
     }
 
     public String toString() {
-        StringBuilder str = new StringBuilder("{");
 
-        str.append("name=" + name + " " + "count=" + count);
-        str.append('}');
-
-        return (str.toString());
+        return ("{" + "name=" + name + " " + "count=" + count +
+                '}');
     }
 
     public int getIntensity() {

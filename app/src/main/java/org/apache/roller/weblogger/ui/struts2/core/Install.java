@@ -31,7 +31,6 @@ import org.apache.roller.weblogger.business.startup.StartupException;
 import org.apache.roller.weblogger.business.startup.WebloggerStartup;
 import org.apache.roller.weblogger.config.WebloggerConfig;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 import org.springframework.beans.factory.access.BootstrapException;
 
 
@@ -52,7 +51,6 @@ public class Install extends UIAction {
     private boolean error = false;
     private boolean success = false;
     private List<String> messages = null;
-    private String databaseName = "Unknown";
 
 
     public boolean isUserRequired() {
@@ -190,19 +188,10 @@ public class Install extends UIAction {
     public String getDatabaseProductName() {
         String name = "unknown";
 
-        Connection con = null;
-        try {
-            con = WebloggerStartup.getDatabaseProvider().getConnection();
+        try (Connection con = WebloggerStartup.getDatabaseProvider().getConnection()) {
             name = con.getMetaData().getDatabaseProductName();
         } catch (Exception intentionallyIgnored) {
             // ignored
-        } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Exception ex) {
-                }
-            }
         }
 
         return name;
@@ -242,7 +231,7 @@ public class Install extends UIAction {
     }
 
     public String getDatabaseName() {
-        return databaseName;
+        return "Unknown";
     }
 
     public boolean isSuccess() {

@@ -20,6 +20,8 @@ package org.apache.roller.weblogger.business.startup;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+
 import org.apache.roller.weblogger.WebloggerException;
 
 
@@ -43,22 +45,14 @@ public class StartupException extends WebloggerException {
     
     public StartupException(String msg, List<String> log) {
         super(msg);
-        
-        if(log != null) {
-            this.startupLog = log;
-        } else {
-            this.startupLog = Collections.emptyList();
-        }
+
+        this.startupLog = Objects.requireNonNullElse(log, Collections.emptyList());
     }
     
     public StartupException(String msg, Throwable t, List<String> log) {
         super(msg, t);
-        
-        if(log != null) {
-            this.startupLog = log;
-        } else {
-            this.startupLog = Collections.emptyList();
-        }
+
+        this.startupLog = Objects.requireNonNullElse(log, Collections.emptyList());
     }
     
     

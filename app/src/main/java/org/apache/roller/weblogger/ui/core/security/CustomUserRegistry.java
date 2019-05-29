@@ -182,7 +182,7 @@ public class CustomUserRegistry {
             return null;
         }
         
-        Object oValue  = null;
+        Object oValue;
         try {
             oValue = attribute.get();
         } catch (NamingException e) {

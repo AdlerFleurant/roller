@@ -129,7 +129,7 @@ public abstract class UIAction extends ActionSupport
                 Collections.singletonList(GlobalPermission.ADMIN));
             UserManager umgr = WebloggerFactory.getWeblogger().getUserManager();
             return umgr.checkPermission(adminPerm, getAuthenticatedUser());
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
         return false;
     }
 
@@ -197,7 +197,7 @@ public abstract class UIAction extends ActionSupport
 
     @Override
     public String getText(String aTextName, List<?> args) {
-        List<Object> cleanedArgs = new ArrayList<Object>(args.size());
+        List<Object> cleanedArgs = new ArrayList<>(args.size());
         for (Object el : args) {
             cleanedArgs.add(el instanceof String ? cleanTextArg((String) el) : el);
         }
@@ -215,7 +215,7 @@ public abstract class UIAction extends ActionSupport
 
     @Override
     public String getText(String aTextName, String defaultValue, List<?> args) {
-        List<Object> cleanedArgs = new ArrayList<Object>(args.size());
+        List<Object> cleanedArgs = new ArrayList<>(args.size());
         for (Object el : args) {
             cleanedArgs.add(el instanceof String ? cleanTextArg((String) el) : el);
         }
@@ -379,7 +379,7 @@ public abstract class UIAction extends ActionSupport
     
     public List<KeyValueObject> getCommentDaysList() {
         
-        List<KeyValueObject> opts = new ArrayList<KeyValueObject>();
+        List<KeyValueObject> opts = new ArrayList<>();
         
         opts.add(new KeyValueObject(0, getText("weblogEdit.unlimitedCommentDays")));
         opts.add(new KeyValueObject(3, getText("weblogEdit.days3")));

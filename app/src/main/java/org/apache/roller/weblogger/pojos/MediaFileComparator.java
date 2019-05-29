@@ -33,9 +33,9 @@ public class MediaFileComparator implements Comparator<MediaFile> {
 	 * Comparator types that define all possible attributes for comparing media files. 
 	 *
 	 */
-	public enum MediaFileComparatorType {NAME, TYPE, DATE_UPLOADED};
+	public enum MediaFileComparatorType {NAME, TYPE, DATE_UPLOADED}
 
-	// Comparator type associated with this instance of media file comparator
+    // Comparator type associated with this instance of media file comparator
 	MediaFileComparatorType type;
 	
 	public MediaFileComparator(MediaFileComparatorType type) {

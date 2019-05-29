@@ -36,7 +36,6 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -91,7 +90,7 @@ public class MediaCollection {
             // get incoming slug from HTTP header
             String slug = areq.getHeader("Slug");
 
-            Content content = (Content)entry.getContents().get(0); 
+            Content content = entry.getContents().get(0);
             String contentType = content.getType();
             InputStream is = areq.getInputStream();
             String title = entry.getTitle() != null ? entry.getTitle() : slug;
@@ -172,10 +171,8 @@ public class MediaCollection {
             }
             throw new AtomException("Error saving media entry");
         
-        } catch (WebloggerException re) {
+        } catch (WebloggerException | IOException re) {
             throw new AtomException("Posting media", re);
-        } catch (IOException ioe) {
-            throw new AtomException("Posting media", ioe);
         }
     }
     
@@ -250,7 +247,7 @@ public class MediaCollection {
                     start = Integer.parseInt(rawPathInfo[rawPathInfo.length - 1]);
                     pathInfo = new String[rawPathInfo.length - 1];
                     System.arraycopy(rawPathInfo, 0, pathInfo, 0, rawPathInfo.length - 1);
-                } catch (Exception ingored) {}
+                } catch (Exception ignored) {}
             }
             String path = filePathFromPathInfo(pathInfo);
             if (!path.equals("")) {
@@ -289,29 +286,17 @@ public class MediaCollection {
             }
             Set<MediaFile> files = dir.getMediaFiles();
 
-            SortedSet sortedSet = new TreeSet(new Comparator() {
-                public int compare(Object o1, Object o2) {
-                    MediaFile f1 = (MediaFile)o1;
-                    MediaFile f2 = (MediaFile)o2;
-                    if (f1.getLastModified() < f2.getLastModified()) {
-                        return 1;
-                    }
-                    else if (f1.getLastModified() == f2.getLastModified()) {
-                        return 0;
-                    }
-                    else {
-                        return -1;
-                    }
-                }
+            SortedSet sortedSet = new TreeSet((o1, o2) -> {
+                MediaFile f1 = (MediaFile)o1;
+                MediaFile f2 = (MediaFile)o2;
+                return Long.compare(f2.getLastModified(), f1.getLastModified());
             });
                                     
             if (files != null && start < files.size()) {
-                for (MediaFile mf : files) {
-                    sortedSet.add(mf);
-                }
+                sortedSet.addAll(files);
                 int count = 0;
                 MediaFile[] sortedResources =
-                   (MediaFile[])sortedSet.toArray(new MediaFile[sortedSet.size()]);
+                   (MediaFile[])sortedSet.toArray(new MediaFile[0]);
                 List atomEntries = new ArrayList();
                 for (int i=start; i<(start + max) && i<(sortedResources.length); i++) {
                     Entry entry = createAtomResourceEntry(website, sortedResources[i]);
@@ -463,20 +448,20 @@ public class MediaCollection {
     
     
     private String filePathFromPathInfo(String[] pathInfo) {
-        String path = null;
+        StringBuilder path = null;
         if (pathInfo.length > 2) {
             for (int i = 2; i < pathInfo.length; i++) {
                 if (path != null && path.length() > 0) {
-                    path = path + File.separator + pathInfo[i];
+                    path.append(File.separator).append(pathInfo[i]);
                 }
                 else {
-                    path = pathInfo[i];
+                    path = new StringBuilder(pathInfo[i]);
                 }
             }
         } if (pathInfo.length == 2) {
-            path = "";
+            path = new StringBuilder();
         }
-        return path;
+        return path.toString();
     }
     
     private Entry createAtomResourceEntry(Weblog website, MediaFile file) {

@@ -19,12 +19,13 @@
 package org.apache.roller.weblogger.ui.struts2.ajax;
 
 import java.io.IOException;
+import javax.json.Json;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.text.WordUtils;
+
+import org.apache.commons.text.WordUtils;
 import org.apache.roller.weblogger.business.Weblogger;
 import org.apache.roller.weblogger.business.WebloggerFactory;
 import org.apache.roller.weblogger.business.WeblogEntryManager;
@@ -64,16 +65,14 @@ public class CommentDataServlet extends HttpServlet {
                 RollerSession rses = RollerSession.getRollerSession(request);
                 Weblog weblog = c.getWeblogEntry().getWebsite();
                 if (weblog.hasUserPermission(rses.getAuthenticatedUser(), WeblogPermission.POST)) {
-                    String content = Utilities.escapeHTML(c.getContent());
-                    content = WordUtils.wrap(content, 72);
-                    content = StringEscapeUtils.escapeEcmaScript(content);
-                    String json = "{ id: \"" + c.getId() + "\"," + "content: \"" + content + "\" }";
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    response.setContentType("text/html; charset=utf-8");
-                    response.getWriter().print(json);
-                    response.flushBuffer();
-                    response.getWriter().flush();
-                    response.getWriter().close();
+                    String content = sanitizeContent(c.getContent());
+                    String json = Json.createObjectBuilder()
+                            .add("id", c.getId())
+                            .add("content", content)
+                            .build()
+                            .toString();
+
+                    writeOkResponse(response, json);
                 } else {
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 }
@@ -111,17 +110,16 @@ public class CommentDataServlet extends HttpServlet {
                     roller.flush();
 
                     c = wmgr.getComment(request.getParameter("id"));
-                    content = Utilities.escapeHTML(c.getContent());
-                    content = WordUtils.wrap(content, 72);
-                    content = StringEscapeUtils.escapeEcmaScript(content);
-                    String json = "{ id: \"" + c.getId() + "\"," + "content: \"" + content + "\" }";
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    response.setContentType("text/html; charset=utf-8");
-                    response.getWriter().print(json);
-                    response.flushBuffer();
-                    response.getWriter().flush();
-                    response.getWriter().close();
-                    response.setStatus(HttpServletResponse.SC_OK);
+                    content = sanitizeContent(c.getContent());
+
+                    String json = Json.createObjectBuilder()
+                            .add("id", c.getId())
+                            .add("content", content)
+                            .build()
+                            .toString();
+
+                    writeOkResponse(response, json);
+
                 } else {
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 }
@@ -130,6 +128,19 @@ public class CommentDataServlet extends HttpServlet {
         } catch (Exception e) {
             throw new ServletException(e.getMessage());
         }
+    }
+
+    private void writeOkResponse(HttpServletResponse response, String content) throws IOException {
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("text/html; charset=utf-8");
+        response.getWriter().print(content);
+        response.flushBuffer();
+        response.getWriter().flush();
+        response.getWriter().close();
+    }
+
+    private String sanitizeContent(String content) {
+        return WordUtils.wrap(Utilities.escapeHTML(content), 72);
     }
 
     public void doPost(HttpServletRequest request,

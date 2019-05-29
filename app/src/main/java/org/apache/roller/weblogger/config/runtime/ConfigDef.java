@@ -34,12 +34,12 @@ import java.util.List;
  */
 public class ConfigDef {
     
-    private List<DisplayGroup> displayGroups = null;
+    private List<DisplayGroup> displayGroups;
     private String name = null;
     
     
     public ConfigDef() {
-        this.displayGroups = new ArrayList<DisplayGroup>();
+        this.displayGroups = new ArrayList<>();
     }
 
     public ConfigDef(List<DisplayGroup> displaygroups) {

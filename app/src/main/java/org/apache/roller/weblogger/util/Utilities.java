@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,7 +98,7 @@ public class Utilities {
                 url = url.substring(0, startPos);
             } else {
                 url = url.substring(0, startPos)
-                        + url.substring(endPos, url.length());
+                        + url.substring(endPos);
             }
         }
         return url;
@@ -167,7 +167,7 @@ public class Utilities {
 
         while (beginTag >= start) {
             if (beginTag > 0) {
-                ret.append(str.substring(start, beginTag));
+                ret.append(str, start, beginTag);
 
                 // replace each tag with a space (looks better)
                 if (addSpace) {
@@ -232,14 +232,13 @@ public class Utilities {
             int start = m.start();
             int end = m.end();
             String link = html.substring(start, end);
-            buf.append(html.substring(0, start));
+            buf.append(html, 0, start);
             if (link.contains("rel=\"nofollow\"")) {
-                buf.append(link.substring(0, link.length() - 1)
-                        + " rel=\"nofollow\">");
+                buf.append(link, 0, link.length() - 1).append(" rel=\"nofollow\">");
             } else {
                 buf.append(link);
             }
-            html = html.substring(end, html.length());
+            html = html.substring(end);
             m = mLinkPattern.matcher(html);
         }
         buf.append(html);
@@ -261,9 +260,9 @@ public class Utilities {
     public static String replaceNonAlphanumeric(String str, char subst) {
         StringBuilder ret = new StringBuilder(str.length());
         char[] testChars = str.toCharArray();
-        for (int i = 0; i < testChars.length; i++) {
-            if (Character.isLetterOrDigit(testChars[i])) {
-                ret.append(testChars[i]);
+        for (char testChar : testChars) {
+            if (Character.isLetterOrDigit(testChar)) {
+                ret.append(testChar);
             } else {
                 ret.append(subst);
             }
@@ -278,10 +277,10 @@ public class Utilities {
     public static String removeNonAlphanumeric(String str) {
         StringBuilder ret = new StringBuilder(str.length());
         char[] testChars = str.toCharArray();
-        for (int i = 0; i < testChars.length; i++) {
+        for (char testChar : testChars) {
             // MR: Allow periods in page links
-            if (Character.isLetterOrDigit(testChars[i]) || testChars[i] == '.') {
-                ret.append(testChars[i]);
+            if (Character.isLetterOrDigit(testChar) || testChar == '.') {
+                ret.append(testChar);
             }
         }
         return ret.toString();
@@ -291,11 +290,11 @@ public class Utilities {
     /** Convert string array to string with delimeters. */
     public static String stringArrayToString(String[] stringArray, String delim) {
         StringBuilder bldr = new StringBuilder();
-        for (int i = 0; i < stringArray.length; i++) {
+        for (String s : stringArray) {
             if (bldr.length() > 0) {
-                bldr.append(delim).append(stringArray[i]);
+                bldr.append(delim).append(s);
             } else {
-                bldr.append(stringArray[i]);
+                bldr.append(s);
             }
         }
         return bldr.toString();
@@ -326,7 +325,7 @@ public class Utilities {
     /** Convert string with delimiters to string list.
      */
     public static List<String> stringToStringList(String instr, String delim) {
-        List<String> stringList = new ArrayList<String>();
+        List<String> stringList = new ArrayList<>();
         String[] str = StringUtils.split(instr, delim);
         Collections.addAll(stringList, str);
         return stringList;
@@ -336,7 +335,7 @@ public class Utilities {
     /** Convert string to integer array. */
     public static int[] stringToIntArray(String instr, String delim) {
         String[] str = StringUtils.split(instr, delim);
-        int intArray[] = new int[str.length];
+        int[] intArray = new int[str.length];
         int i = 0;
         for (String string : str) {
             int nInt = Integer.parseInt(string);
@@ -351,9 +350,9 @@ public class Utilities {
         StringBuilder bldr = new StringBuilder();
         for (int s : intArray) {
             if (bldr.length() > 0) {
-                bldr.append(",").append(Integer.toString(s));
+                bldr.append(",").append(s);
             } else {
-                bldr.append(Integer.toString(s));
+                bldr.append(s);
             }
         }
         return bldr.toString();
@@ -376,7 +375,7 @@ public class Utilities {
         } catch (Exception ex) {
             try {
                 in.close();
-            } catch (IOException ex1) {
+            } catch (IOException ignored) {
             }
             throw new IOException("Utilities.copyFile: opening output stream '"
                     + to.getPath() + "', " + ex.getMessage());
@@ -424,7 +423,7 @@ public class Utilities {
                 try {
                     in.close();
                     out.close();
-                } catch (IOException ex1) {
+                } catch (IOException ignored) {
                 }
                 throw new IOException("Reading input stream, "
                         + ex.getMessage());
@@ -442,7 +441,7 @@ public class Utilities {
                 try {
                     in.close();
                     out.close();
-                } catch (IOException ex1) {
+                } catch (IOException ignored) {
                 }
                 throw new IOException("Writing output stream, "
                         + ex.getMessage());
@@ -462,7 +461,7 @@ public class Utilities {
             throws IOException {
         BufferedInputStream in = new BufferedInputStream(input);
         BufferedOutputStream out = new BufferedOutputStream(output);
-        byte buffer[] = new byte[RollerConstants.EIGHT_KB_IN_BYTES];
+        byte[] buffer = new byte[RollerConstants.EIGHT_KB_IN_BYTES];
         for (int count = 0; count != -1;) {
             count = in.read(buffer, 0, RollerConstants.EIGHT_KB_IN_BYTES);
             if (count != -1) {
@@ -515,12 +514,12 @@ public class Utilities {
 
         StringBuilder buf = new StringBuilder();
 
-        for (int i = 0; i < encodedPassword.length; i++) {
-            if ((encodedPassword[i] & 0xff) < 0x10) {
+        for (byte b : encodedPassword) {
+            if ((b & 0xff) < 0x10) {
                 buf.append("0");
             }
 
-            buf.append(Long.toString(encodedPassword[i] & 0xff, 16));
+            buf.append(Long.toString(b & 0xff, 16));
         }
 
         return buf.toString();
@@ -552,8 +551,7 @@ public class Utilities {
      * @throws IOException
      */
     public static String decodeString(String str) throws IOException {
-        String value = new String(Base64.decodeBase64(str.getBytes()));
-        return (value);
+        return (new String(Base64.decodeBase64(str.getBytes())));
     }
 
     /**
@@ -745,13 +743,13 @@ public class Utilities {
         // <img should take care of smileys, others to add?
         String[] visibleTags = { "<img" };
         int stringIndex;
-        for (int j = 0; j < visibleTags.length; j++) {
-            while ((stringIndex = lcresult.indexOf(visibleTags[j])) != -1) {
-                if (visibleTags[j].endsWith(">")) {
+        for (String visibleTag : visibleTags) {
+            while ((stringIndex = lcresult.indexOf(visibleTag)) != -1) {
+                if (visibleTag.endsWith(">")) {
                     result.delete(stringIndex,
-                            stringIndex + visibleTags[j].length());
+                            stringIndex + visibleTag.length());
                     lcresult.delete(stringIndex,
-                            stringIndex + visibleTags[j].length());
+                            stringIndex + visibleTag.length());
                 } else {
                     // need to delete everything up until next closing '>', for
                     // <img for instance
@@ -771,11 +769,11 @@ public class Utilities {
         // tags properly.
         // remove certain elements with open & close tags, more available?
         String[] openCloseTags = { "li", "a", "div", "h1", "h2", "h3", "h4" };
-        for (int j = 0; j < openCloseTags.length; j++) {
+        for (String openCloseTag : openCloseTags) {
             // could this be better done with a regular expression?
-            String closeTag = "</" + openCloseTags[j] + ">";
+            String closeTag = "</" + openCloseTag + ">";
             int lastStringIndex = 0;
-            while ((stringIndex = lcresult.indexOf("<" + openCloseTags[j],
+            while ((stringIndex = lcresult.indexOf("<" + openCloseTag,
                     lastStringIndex)) > -1) {
                 lastStringIndex = stringIndex;
                 // Try to find the matching closing tag (ignores possible
@@ -817,7 +815,7 @@ public class Utilities {
         StringBuilder ret = new StringBuilder(str.length());
         int start = 0;
         int beginTag = str.indexOf('<');
-        int endTag = 0;
+        int endTag;
         if (beginTag == -1) {
             return str;
         }
@@ -827,7 +825,7 @@ public class Utilities {
 
             // if endTag found, keep tag
             if (endTag > -1) {
-                ret.append(str.substring(beginTag, endTag + 1));
+                ret.append(str, beginTag, endTag + 1);
 
                 // move start forward and find another tag
                 start = endTag + 1;
@@ -861,16 +859,10 @@ public class Utilities {
      * @return URL encoding of s using character encoding UTF-8; null if s is
      *         null.
      */
-    public static final String encode(String s) {
-        try {
-            if (s != null) {
-                return URLEncoder.encode(s, "UTF-8");
-            } else {
-                return s;
-            }
-        } catch (UnsupportedEncodingException e) {
-            // Java Spec requires UTF-8 be in all Java environments, so this
-            // should not happen
+    public static String encode(String s) {
+        if (s != null) {
+            return URLEncoder.encode(s, StandardCharsets.UTF_8);
+        } else {
             return s;
         }
     }
@@ -883,16 +875,10 @@ public class Utilities {
      * @return URL decoded value of s using character encoding UTF-8; null if s
      *         is null.
      */
-    public static final String decode(String s) {
-        try {
-            if (s != null) {
-                return URLDecoder.decode(s, "UTF-8");
-            } else {
-                return s;
-            }
-        } catch (UnsupportedEncodingException e) {
-            // Java Spec requires UTF-8 be in all Java environments, so this
-            // should not happen
+    public static String decode(String s) {
+        if (s != null) {
+            return URLDecoder.decode(s, StandardCharsets.UTF_8);
+        } else {
             return s;
         }
     }
@@ -952,20 +938,18 @@ public class Utilities {
 
         StringBuilder sb = new StringBuilder();
         char[] charArray = tag.toCharArray();
-        for (int i = 0; i < charArray.length; i++) {
-            char c = charArray[i];
-
+        for (char c : charArray) {
             // fast-path exclusions quotes and commas are obvious
             // 34 = double-quote, 44 = comma
             switch (c) {
-            case 34:
-            case 44:
-                continue;
+                case 34:
+                case 44:
+                    continue;
             }
 
             if ((33 <= c && c <= 126) || Character.isUnicodeIdentifierPart(c)
                     || Character.isUnicodeIdentifierStart(c)) {
-                sb.append(charArray[i]);
+                sb.append(c);
             }
         }
         return sb.toString();
@@ -1030,7 +1014,7 @@ public class Utilities {
             int end = m.end();
             String link = s.substring(start, end);
             link = "<" + link.substring(4, link.length() - 4) + ">";
-            s = s.substring(0, start) + link + s.substring(end, s.length());
+            s = s.substring(0, start) + link + s.substring(end);
             m = OPENING_A_TAG_PATTERN.matcher(s);
         }
 

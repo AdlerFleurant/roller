@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -74,8 +75,8 @@ public final class Blacklist {
     private static final String BLACKLIST_URL = null;
 
     private Date lastModified = null;
-    private List<String> blacklistStr = new LinkedList<String>();
-    private List<Pattern> blacklistRegex = new LinkedList<Pattern>();
+    private List<String> blacklistStr = new LinkedList<>();
+    private List<Pattern> blacklistRegex = new LinkedList<>();
     
     // setup our singleton at class loading time
     static {
@@ -236,7 +237,7 @@ public final class Blacklist {
         BufferedReader in = null;
         try {
             in = new BufferedReader(
-                    new InputStreamReader( txtStream, "UTF-8" ) );
+                    new InputStreamReader( txtStream, StandardCharsets.UTF_8) );
             while ((line = in.readLine()) != null) {
                 if (line.startsWith("#")) {
                     readComment(line);
@@ -328,7 +329,7 @@ public final class Blacklist {
         // test plain String.indexOf
         List<String> stringRules = blacklistStr;
         if (moreStringRules != null && moreStringRules.size() > 0) {
-            stringRules = new ArrayList<String>();
+            stringRules = new ArrayList<>();
             stringRules.addAll(moreStringRules);
             stringRules.addAll(blacklistStr);
         }
@@ -339,7 +340,7 @@ public final class Blacklist {
         // test regex blacklisted
         List<Pattern> regexRules = blacklistRegex;
         if (moreRegexRules != null && moreRegexRules.size() > 0) {
-            regexRules = new ArrayList<Pattern>();
+            regexRules = new ArrayList<>();
             regexRules.addAll(moreRegexRules);
             regexRules.addAll(blacklistRegex);
         }

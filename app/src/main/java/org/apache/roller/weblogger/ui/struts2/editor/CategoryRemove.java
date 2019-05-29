@@ -32,7 +32,6 @@ import org.apache.roller.weblogger.pojos.WeblogCategory;
 import org.apache.roller.weblogger.pojos.WeblogPermission;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
 import org.apache.roller.weblogger.util.cache.CacheManager;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 
 
 /**
@@ -53,7 +52,7 @@ public class CategoryRemove extends UIAction {
     private String targetCategoryId = null;
 
     // all categories from the action weblog
-    private List<WeblogCategory> allCategories = new ArrayList<WeblogCategory>();
+    private List<WeblogCategory> allCategories = new ArrayList<>();
     
     
     public CategoryRemove() {

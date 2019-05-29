@@ -18,7 +18,7 @@
 
 package org.apache.roller.util;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -84,7 +84,7 @@ public final class RegexUtil {
      * @return List of matched groups from the pattern.
      */
     public static List<String> getMatches(Pattern pattern, String match, int group) {
-        List<String> matches = new ArrayList<String>();
+        List<String> matches = new ArrayList<>();
         Matcher matcher = pattern.matcher(match);
         while (matcher.find()) {
             matches.add( matcher.group(group) );
@@ -102,18 +102,14 @@ public final class RegexUtil {
      */
     public static String encode(String email) {
         StringBuilder result = new StringBuilder();
-        try {
-            char[] hexString = Hex.encodeHex(email.getBytes("UTF-8"));
-            for (int i = 0; i < hexString.length; i++) {
-                if (i % 2 == 0) {
-                    result.append("%");
-                }
-                result.append(hexString[i]);
+        char[] hexString = Hex.encodeHex(email.getBytes(StandardCharsets.UTF_8));
+        for (int i = 0; i < hexString.length; i++) {
+            if (i % 2 == 0) {
+                result.append("%");
             }
-        } catch (UnsupportedEncodingException e) {
-            return email;
+            result.append(hexString[i]);
         }
-        
+
         return result.toString();
     }
     

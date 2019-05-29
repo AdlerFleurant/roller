@@ -35,16 +35,16 @@ import org.apache.roller.weblogger.util.URLUtilities;
 public class SearchResultsFeedPager extends AbstractPager {
     
     // message utils for doing i18n messages
-    I18nMessages messageUtils = null;
+    I18nMessages messageUtils;
     
-    private List entries = null;
+    private List entries;
     
-    private Weblog weblog = null;
-    private boolean     moreResults = false;
+    private Weblog weblog;
+    private boolean     moreResults;
     
-    private WeblogFeedRequest feedRequest = null;
+    private WeblogFeedRequest feedRequest;
     
-    private String url = null;
+    private String url;
     
             
     public SearchResultsFeedPager(URLStrategy strat, String baseUrl, int pageNum,

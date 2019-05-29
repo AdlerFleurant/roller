@@ -23,7 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.roller.weblogger.business.MediaFileManager;
 import org.apache.roller.weblogger.business.WebloggerFactory;
 import org.apache.roller.weblogger.pojos.MediaFile;
-import org.apache.struts2.convention.annotation.AllowedMethods;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 /**
@@ -94,9 +93,8 @@ public class EntryAddWithMediaFile extends MediaFileBase {
 
             if (!StringUtils.isEmpty(bean.getEnclosureURL())) {
                 sb.append("<p>")
-                  .append(getText("mediaFileEdit.includesEnclosure"))
-                  .append("<br />")
-                  .append("<a href='" + bean.getEnclosureURL() + "'>")
+                        .append(getText("mediaFileEdit.includesEnclosure"))
+                        .append("<br />").append("<a href='").append(bean.getEnclosureURL()).append("'>")
                   .append(bean.getEnclosureURL())
                   .append("</a></p>");
             }

@@ -65,7 +65,7 @@ import org.apache.roller.weblogger.util.RollerMessages;
 @com.google.inject.Singleton
 public class ThemeManagerImpl implements ThemeManager {
 
-	static FileTypeMap map = null;
+	static FileTypeMap map;
 	static {
 		// TODO: figure out why PNG is missing from Java MIME types
 		map = FileTypeMap.getDefaultFileTypeMap();
@@ -80,7 +80,7 @@ public class ThemeManagerImpl implements ThemeManager {
 	private static Log log = LogFactory.getLog(ThemeManagerImpl.class);
 	private final Weblogger roller;
 	// directory where themes are kept
-	private String themeDir = null;
+	private String themeDir;
 	// the Map contains ... (theme id, Theme)
 	private Map<String, SharedTheme> themes = null;
 
@@ -157,7 +157,7 @@ public class ThemeManagerImpl implements ThemeManager {
 
 			// otherwise we are returning a WeblogSharedTheme
 		} else {
-			SharedTheme staticTheme = (SharedTheme) this.themes.get(weblog
+			SharedTheme staticTheme = this.themes.get(weblog
 					.getEditorTheme());
 			if (staticTheme != null) {
 				weblogTheme = new WeblogSharedTheme(weblog, staticTheme);
@@ -176,7 +176,7 @@ public class ThemeManagerImpl implements ThemeManager {
 	 * @see org.apache.roller.weblogger.business.themes.ThemeManager#getEnabledThemesList()
 	 */
 	public List<SharedTheme> getEnabledThemesList() {
-		List<SharedTheme> allThemes = new ArrayList<SharedTheme>(this.themes.values());
+		List<SharedTheme> allThemes = new ArrayList<>(this.themes.values());
 
 		// sort 'em ... default ordering for themes is by name
 		Collections.sort(allThemes);
@@ -202,7 +202,7 @@ public class ThemeManagerImpl implements ThemeManager {
             log.warn("Weblog " + weblog.getHandle() + " does not have a root MediaFile directory");
         }
 
-		Set<ComponentType> importedActionTemplates = new HashSet<ComponentType>();
+		Set<ComponentType> importedActionTemplates = new HashSet<>();
 		ThemeTemplate stylesheetTemplate = theme.getStylesheet();
 		for (ThemeTemplate themeTemplate : theme.getTemplates()) {
 			WeblogTemplate template;
@@ -224,8 +224,7 @@ public class ThemeManagerImpl implements ThemeManager {
 			if (template == null) {
 				template = new WeblogTemplate();
 				template.setWeblog(weblog);
-				newTmpl = true;
-			}
+            }
 
 			// update template attributes except leave existing custom stylesheets as-is
 			if (!themeTemplate.equals(stylesheetTemplate) || !skipStylesheet) {
@@ -375,18 +374,15 @@ public class ThemeManagerImpl implements ThemeManager {
 	 */
 	private Map<String, SharedTheme> loadAllThemesFromDisk() {
 
-		Map<String, SharedTheme> themeMap = new HashMap<String, SharedTheme>();
+		Map<String, SharedTheme> themeMap = new HashMap<>();
 
 		// first, get a list of the themes available
 		File themesdir = new File(this.themeDir);
-		FilenameFilter filter = new FilenameFilter() {
-
-			public boolean accept(File dir, String name) {
-				File file = new File(dir.getAbsolutePath() + File.separator
-						+ name);
-				return file.isDirectory() && !file.getName().startsWith(".");
-			}
-		};
+		FilenameFilter filter = (dir, name) -> {
+            File file = new File(dir.getAbsolutePath() + File.separator
+                    + name);
+            return file.isDirectory() && !file.getName().startsWith(".");
+        };
 		String[] themenames = themesdir.list(filter);
 
 		if (themenames == null) {

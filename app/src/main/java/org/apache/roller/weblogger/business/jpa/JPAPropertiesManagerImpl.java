@@ -104,7 +104,7 @@ public class JPAPropertiesManagerImpl implements PropertiesManager {
      */
     public Map<String, RuntimeConfigProperty> getProperties() throws WebloggerException {
 
-        HashMap<String, RuntimeConfigProperty> props = new HashMap<String, RuntimeConfigProperty>();
+        HashMap<String, RuntimeConfigProperty> props = new HashMap<>();
         List<RuntimeConfigProperty> list = strategy.getNamedQuery("RuntimeConfigProperty.getAll",
                 RuntimeConfigProperty.class).getResultList();
         /*
@@ -151,7 +151,7 @@ public class JPAPropertiesManagerImpl implements PropertiesManager {
     private Map initializeMissingProps(Map<String, RuntimeConfigProperty> props) {
 
         if(props == null) {
-            props = new HashMap<String, RuntimeConfigProperty>();
+            props = new HashMap<>();
         }
 
         // start by getting our runtimeConfigDefs

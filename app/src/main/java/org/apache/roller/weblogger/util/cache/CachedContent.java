@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.roller.util.RollerConstants;
@@ -26,10 +27,10 @@ public class CachedContent implements Serializable {
     private String contentType = null;
     
     // Use a byte array output stream to cached the output bytes
-    private transient ByteArrayOutputStream outstream = null;
+    private transient ByteArrayOutputStream outstream;
     
     // The PrintWriter that users will be writing to
-    private transient PrintWriter cachedWriter = null;
+    private transient PrintWriter cachedWriter;
     
     
     public CachedContent(int size) {
@@ -42,13 +43,8 @@ public class CachedContent implements Serializable {
         }
         
         // construct writer from output stream
-        try {
-            this.cachedWriter =
-                    new PrintWriter(new OutputStreamWriter(this.outstream, "UTF-8"));
-        } catch(UnsupportedEncodingException e) {
-            // shouldn't be possible, java always supports utf-8
-            throw new RuntimeException("Encoding problem", e);
-        }
+        this.cachedWriter =
+                new PrintWriter(new OutputStreamWriter(this.outstream, StandardCharsets.UTF_8));
     }
     
     public CachedContent(int size, String contentType) {
@@ -76,12 +72,7 @@ public class CachedContent implements Serializable {
      *       enclosed Writer up until the last call to flush().
      */
     public String getContentAsString() {
-        try {
-            return new String(this.content,"UTF-8");
-        } catch (UnsupportedEncodingException uex) {
-            // shouldn't ever happen - violates Java Spec.
-            throw new RuntimeException(uex);
-        }
+        return new String(this.content, StandardCharsets.UTF_8);
     }
     
     

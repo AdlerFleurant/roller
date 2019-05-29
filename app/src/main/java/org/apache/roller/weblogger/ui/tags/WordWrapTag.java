@@ -190,7 +190,7 @@ public class WordWrapTag extends StringTagSupport {
             // is the delim already on the line
             idx = substr.indexOf(delim);
             if (idx != -1) {
-                buffer.append(substr.substring(0, idx));
+                buffer.append(substr, 0, idx);
                 buffer.append(delim);
                 i -= width - idx - delim.length();
 
@@ -227,13 +227,13 @@ public class WordWrapTag extends StringTagSupport {
                     if (idx != width) {
                         idx++;
                     }
-                    buffer.append(substr.substring(0, idx));
+                    buffer.append(substr, 0, idx);
                     buffer.append(delim);
                     i -= width - idx;
                 }
             } else {
                 // insert spaces
-                buffer.append(substr.substring(0, idx));
+                buffer.append(substr, 0, idx);
                 buffer.append(StringUtils.repeat(" ", width - idx));
                 buffer.append(delim);
                 i -= width - idx;

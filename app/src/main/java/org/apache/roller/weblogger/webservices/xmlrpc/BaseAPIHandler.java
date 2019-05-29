@@ -116,7 +116,7 @@ public class BaseAPIHandler implements Serializable {
         boolean apiEnabled = false;
         boolean weblogFound = false;
         Weblog website = null;
-        User user = null;
+        User user;
         try {
             UserManager userMgr = WebloggerFactory.getWeblogger().getUserManager();
             WeblogManager weblogMgr = WebloggerFactory.getWeblogger().getWeblogManager();
@@ -175,7 +175,7 @@ public class BaseAPIHandler implements Serializable {
         boolean authenticated = false;
         boolean enabled = false;
         boolean apiEnabled = false;
-        User user = null;
+        User user;
         try {
             
             UserManager userMgr = WebloggerFactory.getWeblogger().getUserManager();

@@ -39,10 +39,10 @@ public class SharedThemeResourceFromDir
         implements ThemeResource, Serializable {
     
     // the physical java.io.File backing this resource
-    private File resourceFile = null;
+    private File resourceFile;
     
     // the relative path of the resource within the theme
-    private String relativePath = null;
+    private String relativePath;
     
     
     public SharedThemeResourceFromDir(String path, File file) {

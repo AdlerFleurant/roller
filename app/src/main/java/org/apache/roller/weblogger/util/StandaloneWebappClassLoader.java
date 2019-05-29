@@ -22,7 +22,6 @@
 package org.apache.roller.weblogger.util;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -61,21 +60,16 @@ public class StandaloneWebappClassLoader extends URLClassLoader {
         // Add additional jars
         addURLs(jarsDir, urlList);
                 
-        return (URL[])urlList.toArray(new URL[urlList.size()]);  
+        return (URL[])urlList.toArray(new URL[0]);
     }
     
     private static void addURLs(String dirPath, List urlList) throws Exception {
         File libDir = new File(dirPath);
-        String[] libJarNames = libDir.list(new FilenameFilter() {
-            public boolean accept(File dir, String pathname) {
-                if (pathname.endsWith(".jar")) {
-                    return true;
-                }
-                return false;
-            }
-        });       
-        for (int i=0; i<libJarNames.length; i++) {
-            String url = "file://" + dirPath + FS + libJarNames[i];
+        String[] libJarNames = libDir.list((dir, pathname) -> {
+            return pathname.endsWith(".jar");
+        });
+        for (String libJarName : libJarNames) {
+            String url = "file://" + dirPath + FS + libJarName;
             urlList.add(new URL(url));
         }
     }
